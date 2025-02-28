@@ -1,6 +1,6 @@
 # Minimal Clock Overlay for OBS
 
-A lightweight, customizable clock overlay for OBS inspired by the aesthetic of Polar Bear Cafe anime. Perfect for streamers who want to display the time without distracting from their content.
+A lightweight, customizable clock overlay for OBS. Perfect for streamers who want to display the time without distracting from their content.
 
 ![Default Clock](screenshots/default-clock.png)
 
@@ -19,22 +19,6 @@ A lightweight, customizable clock overlay for OBS inspired by the aesthetic of P
 - **Low Resource Usage**: Optimized for minimal CPU usage
 - **OBS Integration**: Works perfectly as a Browser Source
 
-## Screenshots
-
-### Light Mode
-![Light Mode](screenshots/light-mode.png)
-
-### Dark Mode
-![Dark Mode](screenshots/dark-mode.png)
-
-### Transparent Mode
-![Transparent Mode](screenshots/transparent-mode.png)
-
-### Roman Numerals with Serif Font
-![Roman Numerals](screenshots/roman-numerals.png)
-
-### Time Zone Display
-![Time Zone Display](screenshots/timezone-display.png)
 
 ## Installation
 
@@ -84,9 +68,6 @@ A lightweight, customizable clock overlay for OBS inspired by the aesthetic of P
 - **Settings Not Appearing**: Click directly on the gear icon that appears when hovering over the clock
 - **Settings Panel Off Screen**: Try moving the clock away from the edge of your canvas
 
-## Inspired By
-
-This overlay draws inspiration from the clean, minimal aesthetic of the anime "Polar Bear Cafe" (シロクマカフェ), with its simple shapes and warm atmosphere.
 
 ## License
 
