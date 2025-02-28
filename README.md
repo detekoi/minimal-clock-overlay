@@ -2,7 +2,9 @@
 
 A lightweight, customizable clock overlay for OBS. Perfect for streamers who want to display the time without distracting from their content.
 
+<div style="width: 50%; margin: 0 auto;">
 ![Default Clock](screenshots/default-clock.png)
+</div>
 
 ## Features
 
@@ -37,7 +39,9 @@ A lightweight, customizable clock overlay for OBS. Perfect for streamers who wan
 
 ## Customization Options
 
+<div style="width: 50%; margin: 0 auto;">
 ![Settings Panel](screenshots/settings-panel.png)
+</div>
 
 - **Second Hand**: Toggle visibility of the second hand
 - **Display Mode**: Choose between analog clock, digital time, or both
