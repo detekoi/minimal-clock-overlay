@@ -10,8 +10,8 @@ A lightweight, customizable clock overlay for OBS inspired by the aesthetic of P
   - Light, dark, and transparent modes
   - Toggle for clock numbers (Arabic or Roman numerals)
   - AM/PM or 24-hour time format
-  - Digital clock font styles
-  - Color customization
+  - Digital clock font styles (including serif option)
+  - Color and size customization
 - **Draggable**: Position anywhere on your stream
 - **Low Resource Usage**: Optimized for minimal CPU usage
 - **OBS Integration**: Works perfectly as a Browser Source
@@ -34,13 +34,16 @@ A lightweight, customizable clock overlay for OBS inspired by the aesthetic of P
 - **Second Hand**: Toggle visibility of the second hand
 - **Digital Clock**: Toggle visibility of the digital time display
 - **AM/PM Display**: Switch between 12-hour (with AM/PM) and 24-hour format
+- **Display Seconds**: Toggle seconds in the digital time display
 - **Clock Numbers**: Show or hide hour numbers on the clock face
-- **Number Style**: Choose between simple numbers, Roman numerals, or dots
-- **Digital Style**: Different font options for the digital display
+- **Number Style**: Choose between simple numbers, Roman numerals, dots, or serif
+- **Digital Style**: Different font options including rounded, simple, monospace, and serif
 - **Dark Mode**: Switch between light and dark color schemes
-- **Transparent Mode**: Make the clock face transparent (great for overlaying on gameplay)
+- **Transparent Mode**: Make the clock and ALL elements semi-transparent (great for overlaying on gameplay)
 - **Scale**: Adjust the overall size of the clock
+- **Hand Thickness**: Choose between thin, normal, or thick clock hands
 - **Accent Color**: Customize the accent color used for highlights
+- **Accent Size**: Adjust the size of accent elements (center dot, second hand tip) or hide completely
 - **Second Hand Color**: Set a custom color for the second hand
 
 ## Tips for Streamers

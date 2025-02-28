@@ -37,6 +37,13 @@
         .transparent-mode {
             --clock-face-color: rgba(255, 255, 255, 0);
             --clock-border-color: rgba(180, 180, 180, 0.4);
+            --clock-hand-hour: rgba(80, 80, 80, 0.4);
+            --clock-hand-minute: rgba(80, 80, 80, 0.4);
+            --clock-hand-second: rgba(80, 80, 80, 0.4);
+            --text-color: rgba(80, 80, 80, 0.6);
+            --accent-color: rgba(80, 80, 80, 0.4);
+            --marker-color: rgba(100, 100, 100, 0.4);
+            --number-color: rgba(80, 80, 80, 0.5);
             --shadow-color: rgba(0, 0, 0, 0);
         }
 
@@ -182,13 +189,17 @@
             font-family: var(--digital-font);
         }
 
+        .digital-time {
+            --accent-line-height: 1px;
+        }
+        
         .digital-time::after {
             content: '';
             position: absolute;
             bottom: -5px;
             left: 0;
             width: 100%;
-            height: 1px;
+            height: var(--accent-line-height);
             background-color: var(--accent-color);
             opacity: 0.5;
         }
@@ -203,6 +214,10 @@
         
         .digital-time.monospace {
             font-family: 'Courier New', monospace;
+        }
+        
+        .digital-time.serif {
+            font-family: 'Georgia', 'Times New Roman', serif;
         }
 
         .controls {
@@ -360,6 +375,13 @@
             </label>
         </div>
         <div class="control-item">
+            <span>Show Seconds</span>
+            <label class="switch">
+                <input type="checkbox" id="seconds-toggle">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="control-item">
             <span>Clock Numbers</span>
             <label class="switch">
                 <input type="checkbox" id="numbers-toggle">
@@ -372,6 +394,7 @@
                 <option value="simple">Simple</option>
                 <option value="roman">Roman</option>
                 <option value="dots">Dots</option>
+                <option value="serif">Serif</option>
             </select>
         </div>
         <div class="control-item">
@@ -380,6 +403,7 @@
                 <option value="rounded">Rounded</option>
                 <option value="simple">Simple</option>
                 <option value="monospace">Monospace</option>
+                <option value="serif">Serif</option>
             </select>
         </div>
         <div class="control-item">
@@ -401,8 +425,20 @@
             <input type="range" id="scale-slider" min="50" max="150" value="100">
         </div>
         <div class="control-item">
+            <span>Hand Thickness</span>
+            <select id="hand-thickness-select">
+                <option value="normal">Normal</option>
+                <option value="thin">Thin</option>
+                <option value="thick">Thick</option>
+            </select>
+        </div>
+        <div class="control-item">
             <span>Accent Color</span>
             <input type="color" id="accent-color-picker" value="#85A67B">
+        </div>
+        <div class="control-item">
+            <span>Accent Size</span>
+            <input type="range" id="accent-size-slider" min="0" max="15" value="10">
         </div>
         <div class="control-item">
             <span>Second Hand Color</span>
@@ -432,13 +468,16 @@
         const secondHandToggle = document.getElementById('second-hand-toggle');
         const digitalClockToggle = document.getElementById('digital-clock-toggle');
         const ampmToggle = document.getElementById('ampm-toggle');
+        const secondsToggle = document.getElementById('seconds-toggle');
         const numbersToggle = document.getElementById('numbers-toggle');
         const numberStyleSelect = document.getElementById('number-style-select');
         const digitalStyleSelect = document.getElementById('digital-style-select');
         const darkModeToggle = document.getElementById('dark-mode-toggle');
         const transparentToggle = document.getElementById('transparent-toggle');
         const scaleSlider = document.getElementById('scale-slider');
+        const handThicknessSelect = document.getElementById('hand-thickness-select');
         const accentColorPicker = document.getElementById('accent-color-picker');
+        const accentSizeSlider = document.getElementById('accent-size-slider');
         const secondHandColorPicker = document.getElementById('second-hand-color-picker');
         const closeSettingsBtn = document.getElementById('close-settings');
         const controlsToggle = document.querySelector('.controls-toggle');
@@ -485,6 +524,9 @@
                 } else if (style === 'dots') {
                     marker.textContent = '•';
                     marker.style.fontSize = '20px';
+                } else if (style === 'serif') {
+                    marker.textContent = i;
+                    marker.style.fontFamily = 'Georgia, Times New Roman, serif';
                 }
                 
                 clock.appendChild(marker);
@@ -502,9 +544,71 @@
             document.documentElement.style.setProperty('--scale', this.value / 100);
         });
         
+        handThicknessSelect.addEventListener('change', function() {
+            const thickness = this.value;
+            
+            if (thickness === 'thin') {
+                hourHand.style.width = '4px';
+                minuteHand.style.width = '2px';
+                secondHand.style.width = '1px';
+                hourHand.style.left = 'calc(50% - 2px)';
+                minuteHand.style.left = 'calc(50% - 1px)';
+                secondHand.style.left = 'calc(50% - 0.5px)';
+            } else if (thickness === 'thick') {
+                hourHand.style.width = '8px';
+                minuteHand.style.width = '6px';
+                secondHand.style.width = '3px';
+                hourHand.style.left = 'calc(50% - 4px)';
+                minuteHand.style.left = 'calc(50% - 3px)';
+                secondHand.style.left = 'calc(50% - 1.5px)';
+            } else {
+                // Normal
+                hourHand.style.width = '6px';
+                minuteHand.style.width = '4px';
+                secondHand.style.width = '2px';
+                hourHand.style.left = 'calc(50% - 3px)';
+                minuteHand.style.left = 'calc(50% - 2px)';
+                secondHand.style.left = 'calc(50% - 1px)';
+            }
+        });
+        
         accentColorPicker.addEventListener('input', function() {
             document.documentElement.style.setProperty('--accent-color', this.value + 'CC');
+            updateAccentSize();
         });
+        
+        accentSizeSlider.addEventListener('input', function() {
+            updateAccentSize();
+        });
+        
+        function updateAccentSize() {
+            const size = accentSizeSlider.value;
+            
+            // Update center dot size
+            const centerDot = document.querySelector('.center-dot');
+            centerDot.style.width = size + 'px';
+            centerDot.style.height = size + 'px';
+            
+            // Update second hand dot size
+            const secondHandStyle = document.createElement('style');
+            secondHandStyle.innerHTML = `.second-hand::after { width: ${size * 0.6}px; height: ${size * 0.6}px; left: ${-size * 0.3}px; transform: translateY(${-size * 0.3}px); }`;
+            
+            // Replace existing style or add new one
+            const existingStyle = document.getElementById('second-hand-dot-style');
+            if (existingStyle) {
+                existingStyle.innerHTML = secondHandStyle.innerHTML;
+            } else {
+                secondHandStyle.id = 'second-hand-dot-style';
+                document.head.appendChild(secondHandStyle);
+            }
+            
+            // If size is 0, completely hide accent elements
+            const visibility = size === '0' ? 'hidden' : 'visible';
+            centerDot.style.visibility = visibility;
+            
+            // Also update bottom line of digital time
+            document.querySelector('.digital-time').style.setProperty('--accent-line-height', size === '0' ? '0px' : '1px');
+        }
         
         secondHandColorPicker.addEventListener('input', function() {
             document.documentElement.style.setProperty('--clock-hand-second', this.value + 'CC');
@@ -512,6 +616,23 @@
         
         transparentToggle.addEventListener('change', function() {
             document.body.classList.toggle('transparent-mode', this.checked);
+            
+            // Disable accent color picker when in transparent mode
+            accentColorPicker.disabled = this.checked;
+            accentSizeSlider.disabled = this.checked;
+            secondHandColorPicker.disabled = this.checked;
+            
+            if (this.checked) {
+                // Store original values to restore later
+                accentColorPicker.dataset.originalValue = accentColorPicker.value;
+                secondHandColorPicker.dataset.originalValue = secondHandColorPicker.value;
+            } else if (accentColorPicker.dataset.originalValue) {
+                // Restore original values
+                document.documentElement.style.setProperty('--accent-color', accentColorPicker.dataset.originalValue + 'CC');
+                document.documentElement.style.setProperty('--clock-hand-second', secondHandColorPicker.dataset.originalValue + 'CC');
+                accentColorPicker.value = accentColorPicker.dataset.originalValue;
+                secondHandColorPicker.value = secondHandColorPicker.dataset.originalValue;
+            }
         });
         
         closeSettingsBtn.addEventListener('click', function(e) {
@@ -576,13 +697,25 @@
             // Update digital time
             const formattedHours = hours.toString().padStart(2, '0');
             const formattedMinutes = minutes.toString().padStart(2, '0');
+            const formattedSeconds = seconds.toString().padStart(2, '0');
             const ampm = hours >= 12 ? 'PM' : 'AM';
             const displayHours = ampmToggle.checked ? (hours % 12 || 12) : hours;
             const displayHoursFormatted = displayHours.toString().padStart(2, '0');
             
-            digitalTime.textContent = ampmToggle.checked 
-                ? `${displayHoursFormatted}:${formattedMinutes} ${ampm}`
-                : `${formattedHours}:${formattedMinutes}`;
+            // Build time string based on settings
+            let timeString = '';
+            
+            if (ampmToggle.checked) {
+                timeString = secondsToggle.checked
+                    ? `${displayHoursFormatted}:${formattedMinutes}:${formattedSeconds} ${ampm}`
+                    : `${displayHoursFormatted}:${formattedMinutes} ${ampm}`;
+            } else {
+                timeString = secondsToggle.checked
+                    ? `${formattedHours}:${formattedMinutes}:${formattedSeconds}`
+                    : `${formattedHours}:${formattedMinutes}`;
+            }
+            
+            digitalTime.textContent = timeString;
             
             // Call requestAnimationFrame for smooth animation
             requestAnimationFrame(updateClock);
@@ -595,6 +728,7 @@
         // Initialize options
         digitalTime.className = 'digital-time rounded';
         updateClockNumbers();
+        updateAccentSize();
         
         // Update controls position
         updateControlsPosition();
