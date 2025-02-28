@@ -459,6 +459,7 @@
             <span>Style Presets</span>
             <select id="preset-select">
                 <option value="none">Choose a preset...</option>
+                <option value="default">Default Settings</option>
                 <option value="modern">Modern Minimal</option>
                 <option value="coastal">Coastal Calm</option>
                 <option value="artdeco">Art Deco</option>
@@ -573,7 +574,6 @@
             <input type="color" id="second-hand-color-picker" value="#787878">
         </div>
         <div style="display: flex; gap: 10px; margin-top: 10px;">
-            <button id="reset-defaults" style="flex: 1; padding: 5px; background: #cc7777; border: none; border-radius: 4px; color: white; cursor: pointer;">Reset to Defaults</button>
             <button id="close-settings" style="flex: 1; padding: 5px; background: var(--accent-color); border: none; border-radius: 4px; color: white; cursor: pointer;">Close Settings</button>
         </div>
     </div>
@@ -641,7 +641,6 @@
         const secondHandColorPicker = document.getElementById('second-hand-color-picker');
         const presetSelect = document.getElementById('preset-select');
         const closeSettingsBtn = document.getElementById('close-settings');
-        const resetDefaultsBtn = document.getElementById('reset-defaults');
         const controlsToggle = document.querySelector('.controls-toggle');
         const digitalControlsToggle = document.querySelector('.digital-controls-toggle');
         const controls = document.querySelector('.controls');
@@ -803,16 +802,33 @@
         
         // Define style presets
         const presets = {
+            default: {
+                displayMode: 'both',
+                theme: 'light',
+                secondHand: true,
+                numbers: false,
+                numberStyle: 'simple',
+                handThickness: 'normal',
+                accentColor: '#85A67B',
+                accentSize: 10,
+                secondHandColor: '#787878',
+                digitalStyle: 'rounded',
+                showSeconds: false,
+                showTimezone: false,
+                ampm: true,
+                scale: 100
+            },
             modern: {
                 displayMode: 'both',
                 theme: 'light',
                 secondHand: true,
                 numbers: false,
                 handThickness: 'thin',
-                accentColor: '#3498db',
-                secondHandColor: '#e74c3c',
+                accentColor: '#dadada', // More subtle, less accent
+                secondHandColor: '#999999',
                 digitalStyle: 'simple',
-                showSeconds: false
+                showSeconds: false,
+                accentSize: 0 // No accent elements for true minimalism
             },
             coastal: {
                 displayMode: 'both',
@@ -984,6 +1000,22 @@
             
             if (preset.ampm !== undefined) {
                 ampmToggle.checked = preset.ampm;
+            }
+            
+            if (preset.accentSize !== undefined) {
+                accentSizeSlider.value = preset.accentSize;
+                updateAccentSize(); // Call the function to apply the change immediately
+            }
+            
+            if (preset.scale !== undefined) {
+                scaleSlider.value = preset.scale;
+                document.documentElement.style.setProperty('--scale', preset.scale / 100);
+            }
+            
+            if (preset.showTimezone !== undefined) {
+                showTimezoneToggle.checked = preset.showTimezone;
+                document.querySelector('.timezone-display').style.display = 
+                    preset.showTimezone ? 'block' : 'none';
             }
             
             // Update UI
@@ -1323,99 +1355,9 @@
             control.addEventListener(eventType, saveSettings);
         });
         
-        // Set default values
-        const defaultSettings = {
-            secondHand: true,
-            displayMode: 'both',
-            ampm: true,
-            showSeconds: false,
-            showTimezone: false,
-            numbers: false,
-            numberStyle: 'simple',
-            digitalStyle: 'rounded',
-            theme: 'light',
-            scale: 100,
-            handThickness: 'normal',
-            accentColor: '#85A67B',
-            accentSize: 10,
-            secondHandColor: '#787878',
-            timezone: 'local'
-        };
+        // Default values are now defined in the presets
         
-        // Reset to default settings
-        resetDefaultsBtn.addEventListener('click', function() {
-            // Apply default settings to all controls
-            secondHandToggle.checked = defaultSettings.secondHand;
-            secondHand.style.display = defaultSettings.secondHand ? 'block' : 'none';
-            
-            // Reset display mode
-            displayModeSelect.value = defaultSettings.displayMode;
-            const clockElement = document.querySelector('.clock');
-            
-            if (defaultSettings.displayMode === 'both') {
-                clockElement.style.display = 'flex';
-                digitalTime.style.display = 'block';
-            } else if (defaultSettings.displayMode === 'analog') {
-                clockElement.style.display = 'flex';
-                digitalTime.style.display = 'none';
-            } else if (defaultSettings.displayMode === 'digital') {
-                clockElement.style.display = 'none';
-                digitalTime.style.display = 'block';
-            }
-            
-            ampmToggle.checked = defaultSettings.ampm;
-            secondsToggle.checked = defaultSettings.showSeconds;
-            showTimezoneToggle.checked = defaultSettings.showTimezone;
-            document.querySelector('.timezone-display').style.display = 
-                defaultSettings.showTimezone ? 'block' : 'none';
-            
-            numbersToggle.checked = defaultSettings.numbers;
-            numberStyleSelect.value = defaultSettings.numberStyle;
-            
-            digitalStyleSelect.value = defaultSettings.digitalStyle;
-            digitalTime.className = 'digital-time ' + defaultSettings.digitalStyle;
-            
-            // Reset theme
-            themeSelect.value = defaultSettings.theme;
-            
-            // Remove all theme classes first
-            document.body.classList.remove('theme-light', 'theme-dark', 'theme-natural', 'theme-transparent');
-            
-            // Add the default theme class
-            document.body.classList.add('theme-' + defaultSettings.theme);
-            
-            scaleSlider.value = defaultSettings.scale;
-            document.documentElement.style.setProperty('--scale', defaultSettings.scale / 100);
-            
-            handThicknessSelect.value = defaultSettings.handThickness;
-            // Apply default thickness
-            hourHand.style.width = '6px';
-            minuteHand.style.width = '4px';
-            secondHand.style.width = '2px';
-            hourHand.style.left = 'calc(50% - 3px)';
-            minuteHand.style.left = 'calc(50% - 2px)';
-            secondHand.style.left = 'calc(50% - 1px)';
-            
-            accentColorPicker.value = defaultSettings.accentColor;
-            document.documentElement.style.setProperty('--accent-color', defaultSettings.accentColor + 'CC');
-            
-            accentSizeSlider.value = defaultSettings.accentSize;
-            
-            secondHandColorPicker.value = defaultSettings.secondHandColor;
-            document.documentElement.style.setProperty('--clock-hand-second', defaultSettings.secondHandColor + 'CC');
-            
-            timezoneSelect.value = defaultSettings.timezone;
-            
-            // Update UI
-            updateClockNumbers();
-            updateAccentSize();
-            
-            // Save default settings to localStorage
-            saveSettings();
-            
-            // Show confirmation
-            alert('Settings reset to defaults');
-        });
+        // Default settings are now handled by the preset "default"
         
         // Load settings on initialization
         loadSettings();
