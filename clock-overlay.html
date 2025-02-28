@@ -254,13 +254,23 @@
         }
         
         /* OBS-compatible selector styling */
+        .control-item select,
+        .control-item input[type="range"],
+        .control-item input[type="color"],
+        .control-item .switch {
+            background-color: rgba(var(--control-bg-r, 240), var(--control-bg-g, 240), var(--control-bg-b, 240), 0.4);
+            backdrop-filter: blur(1px);
+            -webkit-backdrop-filter: blur(1px);
+        }
+        
         select {
-            background-color: var(--clock-face-color);
+            background-color: rgba(var(--control-bg-r, 240), var(--control-bg-g, 240), var(--control-bg-b, 240), 0.7);
             color: var(--text-color);
             border: 1px solid var(--marker-color);
             border-radius: 4px;
             padding: 2px 4px;
             font-size: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
         }
         
         /* Direct select buttons for OBS compatibility */
@@ -272,7 +282,7 @@
         }
         
         .select-btn {
-            background-color: var(--clock-face-color);
+            background-color: rgba(var(--control-bg-r, 240), var(--control-bg-g, 240), var(--control-bg-b, 240), 0.7);
             color: var(--text-color);
             border: 1px solid var(--marker-color);
             border-radius: 4px;
@@ -282,6 +292,10 @@
             flex-grow: 1;
             text-align: center;
             min-width: 40px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+            transition: all 0.2s ease;
+            backdrop-filter: blur(1px);
+            -webkit-backdrop-filter: blur(1px);
         }
         
         .select-btn:hover {
@@ -311,9 +325,10 @@
         input[type="color"] {
             width: 30px;
             height: 20px;
-            border: none;
+            border: 1px solid rgba(var(--control-bg-r, 240), var(--control-bg-g, 240), var(--control-bg-b, 240), 0.8);
             border-radius: 4px;
             cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.1);
         }
 
         .digital-time {
@@ -408,10 +423,9 @@
         .controls {
             position: fixed;
             width: 250px;
-            background-color: var(--clock-face-color);
+            background-color: transparent;
             border-radius: 8px;
             padding: 10px;
-            box-shadow: 0 2px 6px var(--shadow-color);
             display: none;
             flex-direction: column;
             gap: 8px;
@@ -459,6 +473,66 @@
             align-items: center;
             font-size: 12px;
             color: var(--text-color);
+            padding: 6px 0;
+            margin-bottom: 2px;
+        }
+        
+        .control-item > span {
+            background-color: rgba(var(--control-bg-r, 240), var(--control-bg-g, 240), var(--control-bg-b, 240), 0.5);
+            padding: 3px 6px;
+            border-radius: 3px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(1px);
+            -webkit-backdrop-filter: blur(1px);
+        }
+        
+        /* Set control background color based on theme */
+        .theme-light {
+            --control-bg-r: 240;
+            --control-bg-g: 240;
+            --control-bg-b: 240;
+        }
+        
+        .theme-dark {
+            --control-bg-r: 40;
+            --control-bg-g: 40;
+            --control-bg-b: 40;
+        }
+        
+        .theme-natural {
+            --control-bg-r: 245;
+            --control-bg-g: 240;
+            --control-bg-b: 230;
+        }
+        
+        .theme-neon {
+            --control-bg-r: 20;
+            --control-bg-g: 20;
+            --control-bg-b: 30;
+        }
+        
+        .theme-pastel {
+            --control-bg-r: 250;
+            --control-bg-g: 240;
+            --control-bg-b: 245;
+        }
+        
+        .theme-forest {
+            --control-bg-r: 235;
+            --control-bg-g: 240;
+            --control-bg-b: 230;
+        }
+        
+        .theme-sunset {
+            --control-bg-r: 40;
+            --control-bg-g: 40;
+            --control-bg-b: 60;
+        }
+        
+        .theme-ocean {
+            --control-bg-r: 230;
+            --control-bg-g: 240;
+            --control-bg-b: 250;
         }
 
         .switch {
@@ -484,6 +558,7 @@
             background-color: #ccc;
             transition: .4s;
             border-radius: 20px;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.1);
         }
 
         .slider:before {
@@ -508,19 +583,24 @@
 
         input[type="range"] {
             width: 80px;
-            height: 4px;
+            height: 5px;
             -webkit-appearance: none;
-            background: var(--marker-color);
-            border-radius: 2px;
+            appearance: none;
+            background: rgba(var(--control-bg-r, 240), var(--control-bg-g, 240), var(--control-bg-b, 240), 0.7);
+            border-radius: 3px;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(var(--control-bg-r, 240), var(--control-bg-g, 240), var(--control-bg-b, 240), 0.8);
         }
 
         input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 12px;
-            height: 12px;
+            width: 14px;
+            height: 14px;
             background: var(--accent-color);
             border-radius: 50%;
             cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
     </style>
 </head>
@@ -541,7 +621,7 @@
         <div class="timezone-display" style="display: none;"></div>
     </div>
     <div class="controls">
-        <h3 style="margin-top: 0; margin-bottom: 10px; color: var(--text-color); font-size: 14px; text-align: center;">Clock Settings</h3>
+        <h3 style="margin-top: 0; margin-bottom: 14px; color: var(--text-color); font-size: 14px; text-align: center; background-color: rgba(var(--control-bg-r, 240), var(--control-bg-g, 240), var(--control-bg-b, 240), 0.6); padding: 6px 0; border-radius: 4px; backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(1px); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);">Clock Settings</h3>
         <div class="control-item">
             <span>Style Presets</span>
             <select id="preset-select">
@@ -736,7 +816,7 @@
         </div>
         
         <div style="display: flex; gap: 10px; margin-top: 10px;">
-            <button id="close-settings" style="flex: 1; padding: 5px; background: var(--accent-color); border: none; border-radius: 4px; color: white; cursor: pointer;">Close Settings</button>
+            <button id="close-settings" style="flex: 1; padding: 8px; background: var(--accent-color); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 4px; color: white; cursor: pointer; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.2); backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(1px);">Close Settings</button>
         </div>
     </div>
 
