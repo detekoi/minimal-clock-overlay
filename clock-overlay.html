@@ -256,7 +256,7 @@
             right: -30px;
             background-color: var(--clock-face-color);
             border-radius: 50%;
-            display: flex;
+            display: none; /* Hidden by default, shown only in digital-only mode */
             justify-content: center;
             align-items: center;
             cursor: pointer;
@@ -654,16 +654,20 @@
             const mode = this.value;
             const clockElement = document.querySelector('.clock');
             const digitalContainer = document.querySelector('.digital-container');
+            const digitalControlsToggle = document.querySelector('.digital-controls-toggle');
             
             if (mode === 'both') {
                 clockElement.style.display = 'flex';
                 digitalContainer.style.display = 'inline-block';
+                digitalControlsToggle.style.display = 'none'; // Hide digital gear in both mode
             } else if (mode === 'analog') {
                 clockElement.style.display = 'flex';
                 digitalContainer.style.display = 'none';
+                digitalControlsToggle.style.display = 'none'; // Hide digital gear in analog mode
             } else if (mode === 'digital') {
                 clockElement.style.display = 'none';
                 digitalContainer.style.display = 'inline-block';
+                digitalControlsToggle.style.display = 'flex'; // Show digital gear in digital-only mode
             }
         });
         
@@ -940,16 +944,20 @@
                 displayModeSelect.value = preset.displayMode;
                 const clockElement = document.querySelector('.clock');
                 const digitalContainer = document.querySelector('.digital-container');
+                const digitalControlsToggle = document.querySelector('.digital-controls-toggle');
                 
                 if (preset.displayMode === 'both') {
                     clockElement.style.display = 'flex';
                     digitalContainer.style.display = 'inline-block';
+                    digitalControlsToggle.style.display = 'none'; // Hide digital gear in both mode
                 } else if (preset.displayMode === 'analog') {
                     clockElement.style.display = 'flex';
                     digitalContainer.style.display = 'none';
+                    digitalControlsToggle.style.display = 'none'; // Hide digital gear in analog mode
                 } else if (preset.displayMode === 'digital') {
                     clockElement.style.display = 'none';
                     digitalContainer.style.display = 'inline-block';
+                    digitalControlsToggle.style.display = 'flex'; // Show digital gear in digital-only mode
                 }
             }
             
@@ -1234,16 +1242,20 @@
                     displayModeSelect.value = settings.displayMode;
                     const clockElement = document.querySelector('.clock');
                     const digitalContainer = document.querySelector('.digital-container');
+                    const digitalControlsToggle = document.querySelector('.digital-controls-toggle');
                     
                     if (settings.displayMode === 'both') {
                         clockElement.style.display = 'flex';
                         digitalContainer.style.display = 'inline-block';
+                        digitalControlsToggle.style.display = 'none'; // Hide digital gear in both mode
                     } else if (settings.displayMode === 'analog') {
                         clockElement.style.display = 'flex';
                         digitalContainer.style.display = 'none';
+                        digitalControlsToggle.style.display = 'none'; // Hide digital gear in analog mode
                     } else if (settings.displayMode === 'digital') {
                         clockElement.style.display = 'none';
                         digitalContainer.style.display = 'inline-block';
+                        digitalControlsToggle.style.display = 'flex'; // Show digital gear in digital-only mode
                     }
                 }
                 
