@@ -243,6 +243,40 @@
             --accent-line-height: 1px;
         }
         
+        .digital-container {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .digital-controls-toggle {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            top: 0;
+            right: -30px;
+            background-color: var(--clock-face-color);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 2px 6px var(--shadow-color);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 99;
+        }
+        
+        .digital-container:hover .digital-controls-toggle,
+        .digital-controls-toggle:hover {
+            opacity: 0.8;
+        }
+
+        .digital-controls-toggle::after {
+            content: '⚙';
+            color: var(--text-color);
+            font-size: 14px;
+        }
+        
         .timezone-display {
             font-size: 14px;
             color: var(--text-color);
@@ -413,11 +447,29 @@
             <!-- Hour markers will be added by JavaScript -->
             <div class="controls-toggle"></div>
         </div>
-        <div class="digital-time">00:00</div>
+        <div class="digital-container">
+            <div class="digital-time">00:00</div>
+            <div class="digital-controls-toggle"></div>
+        </div>
         <div class="timezone-display" style="display: none;"></div>
     </div>
     <div class="controls">
         <h3 style="margin-top: 0; margin-bottom: 10px; color: var(--text-color); font-size: 14px; text-align: center;">Clock Settings</h3>
+        <div class="control-item">
+            <span>Style Presets</span>
+            <select id="preset-select">
+                <option value="none">Choose a preset...</option>
+                <option value="modern">Modern Minimal</option>
+                <option value="coastal">Coastal Calm</option>
+                <option value="artdeco">Art Deco</option>
+                <option value="digital">Digital Display</option>
+                <option value="traditional">Traditional</option>
+                <option value="gaming">Gaming HUD</option>
+                <option value="retro">Retro Vibe</option>
+                <option value="dark-tech">Dark Tech</option>
+                <option value="elegant">Elegant Serif</option>
+            </select>
+        </div>
         <div class="control-item">
             <span>Second Hand</span>
             <label class="switch">
@@ -520,21 +572,6 @@
             <span>Second Hand Color</span>
             <input type="color" id="second-hand-color-picker" value="#787878">
         </div>
-        <div class="control-item">
-            <span>Style Presets</span>
-            <select id="preset-select">
-                <option value="none">Choose a preset...</option>
-                <option value="modern">Modern Minimal</option>
-                <option value="coastal">Coastal Calm</option>
-                <option value="artdeco">Art Deco</option>
-                <option value="digital">Digital Display</option>
-                <option value="traditional">Traditional</option>
-                <option value="gaming">Gaming HUD</option>
-                <option value="retro">Retro Vibe</option>
-                <option value="dark-tech">Dark Tech</option>
-                <option value="elegant">Elegant Serif</option>
-            </select>
-        </div>
         <div style="display: flex; gap: 10px; margin-top: 10px;">
             <button id="reset-defaults" style="flex: 1; padding: 5px; background: #cc7777; border: none; border-radius: 4px; color: white; cursor: pointer;">Reset to Defaults</button>
             <button id="close-settings" style="flex: 1; padding: 5px; background: var(--accent-color); border: none; border-radius: 4px; color: white; cursor: pointer;">Close Settings</button>
@@ -606,6 +643,7 @@
         const closeSettingsBtn = document.getElementById('close-settings');
         const resetDefaultsBtn = document.getElementById('reset-defaults');
         const controlsToggle = document.querySelector('.controls-toggle');
+        const digitalControlsToggle = document.querySelector('.digital-controls-toggle');
         const controls = document.querySelector('.controls');
 
         // Initialize controls
@@ -616,16 +654,17 @@
         displayModeSelect.addEventListener('change', function() {
             const mode = this.value;
             const clockElement = document.querySelector('.clock');
+            const digitalContainer = document.querySelector('.digital-container');
             
             if (mode === 'both') {
                 clockElement.style.display = 'flex';
-                digitalTime.style.display = 'block';
+                digitalContainer.style.display = 'inline-block';
             } else if (mode === 'analog') {
                 clockElement.style.display = 'flex';
-                digitalTime.style.display = 'none';
+                digitalContainer.style.display = 'none';
             } else if (mode === 'digital') {
                 clockElement.style.display = 'none';
-                digitalTime.style.display = 'block';
+                digitalContainer.style.display = 'inline-block';
             }
         });
         
@@ -884,16 +923,17 @@
             if (preset.displayMode) {
                 displayModeSelect.value = preset.displayMode;
                 const clockElement = document.querySelector('.clock');
+                const digitalContainer = document.querySelector('.digital-container');
                 
                 if (preset.displayMode === 'both') {
                     clockElement.style.display = 'flex';
-                    digitalTime.style.display = 'block';
+                    digitalContainer.style.display = 'inline-block';
                 } else if (preset.displayMode === 'analog') {
                     clockElement.style.display = 'flex';
-                    digitalTime.style.display = 'none';
+                    digitalContainer.style.display = 'none';
                 } else if (preset.displayMode === 'digital') {
                     clockElement.style.display = 'none';
-                    digitalTime.style.display = 'block';
+                    digitalContainer.style.display = 'inline-block';
                 }
             }
             
@@ -975,10 +1015,12 @@
             controlsToggle.style.right = '-40px';
         }
 
-        // Handle settings toggle click
-        controlsToggle.addEventListener('click', function(e) {
-            e.stopPropagation(); // Prevent event from bubbling
-            e.preventDefault();
+        // Function to toggle settings panel
+        function toggleSettingsPanel(e) {
+            if (e) {
+                e.stopPropagation(); // Prevent event from bubbling
+                e.preventDefault();
+            }
             
             // Toggle settings panel visibility
             const isVisible = window.getComputedStyle(controls).display !== 'none';
@@ -996,7 +1038,11 @@
                     controls.style.opacity = '1';
                 });
             }
-        });
+        }
+        
+        // Handle settings toggle clicks
+        controlsToggle.addEventListener('click', toggleSettingsPanel);
+        digitalControlsToggle.addEventListener('click', toggleSettingsPanel);
 
         // Update the clock hands and digital time
         function updateClock() {
@@ -1155,16 +1201,17 @@
                 if (settings.displayMode) {
                     displayModeSelect.value = settings.displayMode;
                     const clockElement = document.querySelector('.clock');
+                    const digitalContainer = document.querySelector('.digital-container');
                     
                     if (settings.displayMode === 'both') {
                         clockElement.style.display = 'flex';
-                        digitalTime.style.display = 'block';
+                        digitalContainer.style.display = 'inline-block';
                     } else if (settings.displayMode === 'analog') {
                         clockElement.style.display = 'flex';
-                        digitalTime.style.display = 'none';
+                        digitalContainer.style.display = 'none';
                     } else if (settings.displayMode === 'digital') {
                         clockElement.style.display = 'none';
-                        digitalTime.style.display = 'block';
+                        digitalContainer.style.display = 'inline-block';
                     }
                 }
                 
