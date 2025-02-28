@@ -444,7 +444,10 @@
             <span>Second Hand Color</span>
             <input type="color" id="second-hand-color-picker" value="#787878">
         </div>
-        <button id="close-settings" style="margin-top: 10px; padding: 5px; background: var(--accent-color); border: none; border-radius: 4px; color: white; cursor: pointer;">Close Settings</button>
+        <div style="display: flex; gap: 10px; margin-top: 10px;">
+            <button id="reset-defaults" style="flex: 1; padding: 5px; background: #cc7777; border: none; border-radius: 4px; color: white; cursor: pointer;">Reset to Defaults</button>
+            <button id="close-settings" style="flex: 1; padding: 5px; background: var(--accent-color); border: none; border-radius: 4px; color: white; cursor: pointer;">Close Settings</button>
+        </div>
     </div>
 
     <script>
@@ -480,6 +483,7 @@
         const accentSizeSlider = document.getElementById('accent-size-slider');
         const secondHandColorPicker = document.getElementById('second-hand-color-picker');
         const closeSettingsBtn = document.getElementById('close-settings');
+        const resetDefaultsBtn = document.getElementById('reset-defaults');
         const controlsToggle = document.querySelector('.controls-toggle');
         const controls = document.querySelector('.controls');
 
@@ -725,10 +729,202 @@
             element.style.transform = `rotate(${rotation}deg)`;
         }
 
-        // Initialize options
-        digitalTime.className = 'digital-time rounded';
-        updateClockNumbers();
-        updateAccentSize();
+        // Save settings to localStorage
+        function saveSettings() {
+            const settings = {
+                secondHand: secondHandToggle.checked,
+                digitalClock: digitalClockToggle.checked,
+                ampm: ampmToggle.checked,
+                showSeconds: secondsToggle.checked,
+                numbers: numbersToggle.checked,
+                numberStyle: numberStyleSelect.value,
+                digitalStyle: digitalStyleSelect.value,
+                darkMode: darkModeToggle.checked,
+                transparent: transparentToggle.checked,
+                scale: scaleSlider.value,
+                handThickness: handThicknessSelect.value,
+                accentColor: accentColorPicker.value,
+                accentSize: accentSizeSlider.value,
+                secondHandColor: secondHandColorPicker.value
+            };
+            
+            localStorage.setItem('clockSettings', JSON.stringify(settings));
+        }
+        
+        // Load settings from localStorage
+        function loadSettings() {
+            const savedSettings = localStorage.getItem('clockSettings');
+            
+            if (savedSettings) {
+                const settings = JSON.parse(savedSettings);
+                
+                // Apply saved settings
+                secondHandToggle.checked = settings.secondHand;
+                secondHand.style.display = settings.secondHand ? 'block' : 'none';
+                
+                digitalClockToggle.checked = settings.digitalClock;
+                digitalTime.style.display = settings.digitalClock ? 'block' : 'none';
+                
+                ampmToggle.checked = settings.ampm || true; // Default to true if missing
+                
+                if (settings.showSeconds !== undefined) {
+                    secondsToggle.checked = settings.showSeconds;
+                }
+                
+                numbersToggle.checked = settings.numbers;
+                
+                if (settings.numberStyle) {
+                    numberStyleSelect.value = settings.numberStyle;
+                }
+                
+                if (settings.digitalStyle) {
+                    digitalStyleSelect.value = settings.digitalStyle;
+                    digitalTime.className = 'digital-time ' + settings.digitalStyle;
+                } else {
+                    digitalTime.className = 'digital-time rounded';
+                }
+                
+                darkModeToggle.checked = settings.darkMode;
+                document.body.classList.toggle('dark-mode', settings.darkMode);
+                
+                transparentToggle.checked = settings.transparent;
+                document.body.classList.toggle('transparent-mode', settings.transparent);
+                
+                // Apply disabled state for transparent mode
+                accentColorPicker.disabled = settings.transparent;
+                accentSizeSlider.disabled = settings.transparent;
+                secondHandColorPicker.disabled = settings.transparent;
+                
+                if (settings.scale) {
+                    scaleSlider.value = settings.scale;
+                    document.documentElement.style.setProperty('--scale', settings.scale / 100);
+                }
+                
+                if (settings.handThickness) {
+                    handThicknessSelect.value = settings.handThickness;
+                    // Trigger the change event to apply thickness
+                    const event = new Event('change');
+                    handThicknessSelect.dispatchEvent(event);
+                }
+                
+                if (settings.accentColor) {
+                    accentColorPicker.value = settings.accentColor;
+                    document.documentElement.style.setProperty('--accent-color', settings.accentColor + 'CC');
+                }
+                
+                if (settings.accentSize !== undefined) {
+                    accentSizeSlider.value = settings.accentSize;
+                }
+                
+                if (settings.secondHandColor) {
+                    secondHandColorPicker.value = settings.secondHandColor;
+                    document.documentElement.style.setProperty('--clock-hand-second', settings.secondHandColor + 'CC');
+                }
+                
+                // Update UI
+                updateClockNumbers();
+                updateAccentSize();
+            } else {
+                // Default settings if nothing is saved
+                digitalTime.className = 'digital-time rounded';
+                updateClockNumbers();
+                updateAccentSize();
+            }
+        }
+        
+        // Set up event listeners to save settings when changed
+        const settingsControls = [
+            secondHandToggle, digitalClockToggle, ampmToggle, secondsToggle,
+            numbersToggle, numberStyleSelect, digitalStyleSelect, darkModeToggle,
+            transparentToggle, scaleSlider, handThicknessSelect, accentColorPicker,
+            accentSizeSlider, secondHandColorPicker
+        ];
+        
+        settingsControls.forEach(control => {
+            const eventType = control.type === 'range' || control.type === 'color' ? 'input' : 'change';
+            control.addEventListener(eventType, saveSettings);
+        });
+        
+        // Set default values
+        const defaultSettings = {
+            secondHand: true,
+            digitalClock: true,
+            ampm: true,
+            showSeconds: false,
+            numbers: false,
+            numberStyle: 'simple',
+            digitalStyle: 'rounded',
+            darkMode: false,
+            transparent: false,
+            scale: 100,
+            handThickness: 'normal',
+            accentColor: '#85A67B',
+            accentSize: 10,
+            secondHandColor: '#787878'
+        };
+        
+        // Reset to default settings
+        resetDefaultsBtn.addEventListener('click', function() {
+            // Apply default settings to all controls
+            secondHandToggle.checked = defaultSettings.secondHand;
+            secondHand.style.display = defaultSettings.secondHand ? 'block' : 'none';
+            
+            digitalClockToggle.checked = defaultSettings.digitalClock;
+            digitalTime.style.display = defaultSettings.digitalClock ? 'block' : 'none';
+            
+            ampmToggle.checked = defaultSettings.ampm;
+            secondsToggle.checked = defaultSettings.showSeconds;
+            
+            numbersToggle.checked = defaultSettings.numbers;
+            numberStyleSelect.value = defaultSettings.numberStyle;
+            
+            digitalStyleSelect.value = defaultSettings.digitalStyle;
+            digitalTime.className = 'digital-time ' + defaultSettings.digitalStyle;
+            
+            darkModeToggle.checked = defaultSettings.darkMode;
+            document.body.classList.toggle('dark-mode', defaultSettings.darkMode);
+            
+            transparentToggle.checked = defaultSettings.transparent;
+            document.body.classList.toggle('transparent-mode', defaultSettings.transparent);
+            
+            // Reset disabled state
+            accentColorPicker.disabled = defaultSettings.transparent;
+            accentSizeSlider.disabled = defaultSettings.transparent;
+            secondHandColorPicker.disabled = defaultSettings.transparent;
+            
+            scaleSlider.value = defaultSettings.scale;
+            document.documentElement.style.setProperty('--scale', defaultSettings.scale / 100);
+            
+            handThicknessSelect.value = defaultSettings.handThickness;
+            // Apply default thickness
+            hourHand.style.width = '6px';
+            minuteHand.style.width = '4px';
+            secondHand.style.width = '2px';
+            hourHand.style.left = 'calc(50% - 3px)';
+            minuteHand.style.left = 'calc(50% - 2px)';
+            secondHand.style.left = 'calc(50% - 1px)';
+            
+            accentColorPicker.value = defaultSettings.accentColor;
+            document.documentElement.style.setProperty('--accent-color', defaultSettings.accentColor + 'CC');
+            
+            accentSizeSlider.value = defaultSettings.accentSize;
+            
+            secondHandColorPicker.value = defaultSettings.secondHandColor;
+            document.documentElement.style.setProperty('--clock-hand-second', defaultSettings.secondHandColor + 'CC');
+            
+            // Update UI
+            updateClockNumbers();
+            updateAccentSize();
+            
+            // Save default settings to localStorage
+            saveSettings();
+            
+            // Show confirmation
+            alert('Settings reset to defaults');
+        });
+        
+        // Load settings on initialization
+        loadSettings();
         
         // Update controls position
         updateControlsPosition();

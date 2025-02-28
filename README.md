@@ -45,6 +45,8 @@ A lightweight, customizable clock overlay for OBS inspired by the aesthetic of P
 - **Accent Color**: Customize the accent color used for highlights
 - **Accent Size**: Adjust the size of accent elements (center dot, second hand tip) or hide completely
 - **Second Hand Color**: Set a custom color for the second hand
+- **Reset to Defaults**: Restore all settings to their default values
+- **Persistent Settings**: All your customizations are automatically saved between sessions
 
 ## Tips for Streamers
 

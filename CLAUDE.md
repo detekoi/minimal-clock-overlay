@@ -23,6 +23,8 @@ This is a vanilla JavaScript browser source with a customizable analog and digit
 - Custom accent colors and sizes (can be reduced to invisible)
 - Clock hand thickness options (thin, normal, thick)
 - Display seconds in digital time option
+- Settings persistence across browser refreshes (uses localStorage)
+- Reset to defaults functionality
 
 ## Code Style Guidelines
 
