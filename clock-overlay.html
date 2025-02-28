@@ -187,6 +187,7 @@
             font-weight: normal;
         }
         
+        /* OBS-compatible selector styling */
         select {
             background-color: var(--clock-face-color);
             color: var(--text-color);
@@ -196,29 +197,41 @@
             font-size: 12px;
         }
         
-        /* Theme selector styling */
-        #theme-select option {
-            padding: 6px;
+        /* Direct select buttons for OBS compatibility */
+        .select-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 5px;
         }
         
-        #theme-select option[value="light"] {
-            background-color: rgba(252, 252, 250, 0.85);
-            color: rgba(80, 80, 80, 0.9);
+        .select-btn {
+            background-color: var(--clock-face-color);
+            color: var(--text-color);
+            border: 1px solid var(--marker-color);
+            border-radius: 4px;
+            padding: 3px 5px;
+            font-size: 10px;
+            cursor: pointer;
+            flex-grow: 1;
+            text-align: center;
+            min-width: 40px;
         }
         
-        #theme-select option[value="dark"] {
-            background-color: rgba(40, 40, 40, 0.85);
-            color: rgba(220, 220, 220, 0.9);
+        .select-btn:hover {
+            background-color: var(--accent-color);
+            color: white;
         }
         
-        #theme-select option[value="natural"] {
-            background-color: rgba(245, 240, 230, 0.85);
-            color: rgba(80, 60, 40, 0.9);
+        .select-btn.active {
+            background-color: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
         }
         
-        #theme-select option[value="transparent"] {
-            background-color: rgba(255, 255, 255, 0.2);
-            color: rgba(80, 80, 80, 0.9);
+        /* Use this class for OBS compatibility mode */
+        .obs-mode select {
+            display: none; /* Hide dropdowns in OBS mode */
         }
         
         input[type="color"] {
@@ -470,6 +483,19 @@
                 <option value="dark-tech">Dark Tech</option>
                 <option value="elegant">Elegant Serif</option>
             </select>
+            <!-- OBS-compatible alternative -->
+            <div class="select-buttons preset-buttons">
+                <button class="select-btn preset-btn" data-value="default">Default</button>
+                <button class="select-btn preset-btn" data-value="modern">Modern</button>
+                <button class="select-btn preset-btn" data-value="coastal">Coastal</button>
+                <button class="select-btn preset-btn" data-value="artdeco">Art Deco</button>
+                <button class="select-btn preset-btn" data-value="digital">Digital</button>
+                <button class="select-btn preset-btn" data-value="traditional">Classic</button>
+                <button class="select-btn preset-btn" data-value="gaming">Gaming</button>
+                <button class="select-btn preset-btn" data-value="retro">Retro</button>
+                <button class="select-btn preset-btn" data-value="dark-tech">Tech</button>
+                <button class="select-btn preset-btn" data-value="elegant">Elegant</button>
+            </div>
         </div>
         <div class="control-item">
             <span>Second Hand</span>
@@ -485,6 +511,12 @@
                 <option value="analog">Analog Only</option>
                 <option value="digital">Digital Only</option>
             </select>
+            <!-- OBS-compatible alternative -->
+            <div class="select-buttons display-mode-buttons">
+                <button class="select-btn display-mode-btn" data-value="both">Both</button>
+                <button class="select-btn display-mode-btn" data-value="analog">Analog</button>
+                <button class="select-btn display-mode-btn" data-value="digital">Digital</button>
+            </div>
         </div>
         <div class="control-item">
             <span>Show AM/PM</span>
@@ -529,6 +561,13 @@
                 <option value="dots">Dots</option>
                 <option value="serif">Serif</option>
             </select>
+            <!-- OBS-compatible alternative -->
+            <div class="select-buttons number-style-buttons">
+                <button class="select-btn number-style-btn" data-value="simple">Simple</button>
+                <button class="select-btn number-style-btn" data-value="roman">Roman</button>
+                <button class="select-btn number-style-btn" data-value="dots">Dots</button>
+                <button class="select-btn number-style-btn" data-value="serif">Serif</button>
+            </div>
         </div>
         <div class="control-item">
             <span>Digital Style</span>
@@ -539,6 +578,14 @@
                 <option value="serif">Serif</option>
                 <option value="vfd">VFD Nova</option>
             </select>
+            <!-- OBS-compatible alternative -->
+            <div class="select-buttons digital-style-buttons">
+                <button class="select-btn digital-style-btn" data-value="rounded">Rounded</button>
+                <button class="select-btn digital-style-btn" data-value="simple">Simple</button>
+                <button class="select-btn digital-style-btn" data-value="monospace">Mono</button>
+                <button class="select-btn digital-style-btn" data-value="serif">Serif</button>
+                <button class="select-btn digital-style-btn" data-value="vfd">VFD</button>
+            </div>
         </div>
         <div class="control-item">
             <span>Theme</span>
@@ -548,6 +595,13 @@
                 <option value="natural">Natural</option>
                 <option value="transparent">Transparent</option>
             </select>
+            <!-- OBS-compatible alternative -->
+            <div class="select-buttons theme-buttons">
+                <button class="select-btn theme-btn" data-value="light">Light</button>
+                <button class="select-btn theme-btn" data-value="dark">Dark</button>
+                <button class="select-btn theme-btn" data-value="natural">Natural</button>
+                <button class="select-btn theme-btn" data-value="transparent">Clear</button>
+            </div>
         </div>
         <div class="control-item">
             <span>Scale</span>
@@ -560,6 +614,12 @@
                 <option value="thin">Thin</option>
                 <option value="thick">Thick</option>
             </select>
+            <!-- OBS-compatible alternative -->
+            <div class="select-buttons hand-thickness-buttons">
+                <button class="select-btn hand-thickness-btn" data-value="thin">Thin</button>
+                <button class="select-btn hand-thickness-btn" data-value="normal">Normal</button>
+                <button class="select-btn hand-thickness-btn" data-value="thick">Thick</button>
+            </div>
         </div>
         <div class="control-item">
             <span>Accent Color</span>
@@ -573,6 +633,14 @@
             <span>Second Hand Color</span>
             <input type="color" id="second-hand-color-picker" value="#787878">
         </div>
+        <div class="control-item">
+            <span>OBS Compatibility Mode</span>
+            <label class="switch">
+                <input type="checkbox" id="obs-mode-toggle">
+                <span class="slider"></span>
+            </label>
+        </div>
+        
         <div style="display: flex; gap: 10px; margin-top: 10px;">
             <button id="close-settings" style="flex: 1; padding: 5px; background: var(--accent-color); border: none; border-radius: 4px; color: white; cursor: pointer;">Close Settings</button>
         </div>
@@ -1371,8 +1439,77 @@
         
         // Default settings are now handled by the preset "default"
         
+        // OBS-compatible select button handlers
+        function setupSelectButtons() {
+            // Function to initialize all button selects
+            const setupButtonGroup = (buttonClass, selectId) => {
+                const buttons = document.querySelectorAll(`.${buttonClass}`);
+                const select = document.getElementById(selectId);
+                
+                if (!buttons.length || !select) return;
+                
+                // Initial state - mark active button
+                const initialValue = select.value;
+                buttons.forEach(btn => {
+                    if (btn.dataset.value === initialValue) {
+                        btn.classList.add('active');
+                    }
+                });
+                
+                // Add click handler to all buttons
+                buttons.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        // Remove active class from all buttons
+                        buttons.forEach(b => b.classList.remove('active'));
+                        
+                        // Add active class to clicked button
+                        btn.classList.add('active');
+                        
+                        // Set select element value
+                        select.value = btn.dataset.value;
+                        
+                        // Trigger change event for the select
+                        const event = new Event('change');
+                        select.dispatchEvent(event);
+                    });
+                });
+            };
+            
+            // Setup all button groups
+            setupButtonGroup('theme-btn', 'theme-select');
+            setupButtonGroup('display-mode-btn', 'display-mode-select');
+            setupButtonGroup('number-style-btn', 'number-style-select');
+            setupButtonGroup('digital-style-btn', 'digital-style-select');
+            setupButtonGroup('hand-thickness-btn', 'hand-thickness-select');
+            setupButtonGroup('preset-btn', 'preset-select');
+        }
+        
         // Load settings on initialization
         loadSettings();
+        
+        // Setup OBS-compatible buttons
+        setupSelectButtons();
+        
+        // OBS Compatibility Mode toggle
+        const obsToggle = document.getElementById('obs-mode-toggle');
+        
+        obsToggle.addEventListener('change', function() {
+            if (this.checked) {
+                document.body.classList.add('obs-mode');
+            } else {
+                document.body.classList.remove('obs-mode');
+            }
+            
+            // Save OBS mode preference
+            localStorage.setItem('obsMode', this.checked);
+        });
+        
+        // Load OBS mode preference
+        const savedObsMode = localStorage.getItem('obsMode');
+        if (savedObsMode === 'true') {
+            obsToggle.checked = true;
+            document.body.classList.add('obs-mode');
+        }
         
         // Ensure theme is set correctly (if nothing was loaded from localStorage)
         if (!document.body.classList.contains('theme-light') && 
