@@ -16,6 +16,7 @@ A lightweight, customizable clock overlay for OBS. Perfect for streamers who wan
   - AM/PM or 24-hour time format
   - Digital clock font styles (including serif and VFD display)
   - Color and size customization
+- **OBS/Streamlabs Compatibility**: Built-in compatibility mode for browser sources with dropdown issues
 - **Draggable**: Position anywhere on your stream
 - **Low Resource Usage**: Optimized for minimal CPU usage
 - **OBS Integration**: Works perfectly as a Browser Source
@@ -53,6 +54,7 @@ A lightweight, customizable clock overlay for OBS. Perfect for streamers who wan
 - **Accent Color**: Customize the accent color used for highlights
 - **Accent Size**: Adjust the size of accent elements (center dot, second hand tip) or hide completely
 - **Second Hand Color**: Set a custom color for the second hand
+- **OBS/Streamlabs Mode**: Toggle compatibility mode for browser sources with dropdown issues
 - **Style Presets**: Choose from predefined style combinations:
   - Modern Minimal: Clean, minimalist design with blue accents
   - Coastal Calm: Soothing blue and teal color scheme
@@ -77,6 +79,7 @@ A lightweight, customizable clock overlay for OBS. Perfect for streamers who wan
 - **Clock Not Visible**: Make sure the browser source is properly sized and positioned
 - **Settings Not Appearing**: Click directly on the gear icon that appears when hovering over the clock
 - **Settings Panel Off Screen**: Try moving the clock away from the edge of your canvas
+- **Dropdown Menus Not Working**: OBS has known issues with dropdown menus in Browser Sources. The clock now has a built-in "OBS/Streamlabs Mode" (enabled by default) which replaces dropdowns with compatible button selectors. If you still have issues, check that this mode is enabled in the settings panel.
 
 
 ## Credits
