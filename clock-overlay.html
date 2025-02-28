@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minimal Clock Overlay - Polar Bear Cafe Inspired</title>
+    <title>Minimal Clock Overlay</title>
     <style>
         :root {
             --main-bg-color: rgba(255, 255, 255, 0);
@@ -154,6 +154,12 @@
             font-weight: 500;
             transform-origin: center;
             z-index: 5;
+        }
+        
+        .number-marker.roman {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            font-size: 14px;
+            font-weight: normal;
         }
         
         select {
@@ -365,11 +371,12 @@
             </label>
         </div>
         <div class="control-item">
-            <span>Digital Clock</span>
-            <label class="switch">
-                <input type="checkbox" id="digital-clock-toggle" checked>
-                <span class="slider"></span>
-            </label>
+            <span>Display Mode</span>
+            <select id="display-mode-select">
+                <option value="both">Both</option>
+                <option value="analog">Analog Only</option>
+                <option value="digital">Digital Only</option>
+            </select>
         </div>
         <div class="control-item">
             <span>Show AM/PM</span>
@@ -516,7 +523,7 @@
         
         // Control elements
         const secondHandToggle = document.getElementById('second-hand-toggle');
-        const digitalClockToggle = document.getElementById('digital-clock-toggle');
+        const displayModeSelect = document.getElementById('display-mode-select');
         const ampmToggle = document.getElementById('ampm-toggle');
         const secondsToggle = document.getElementById('seconds-toggle');
         const showTimezoneToggle = document.getElementById('show-timezone-toggle');
@@ -540,8 +547,20 @@
             secondHand.style.display = this.checked ? 'block' : 'none';
         });
 
-        digitalClockToggle.addEventListener('change', function() {
-            digitalTime.style.display = this.checked ? 'block' : 'none';
+        displayModeSelect.addEventListener('change', function() {
+            const mode = this.value;
+            const clockElement = document.querySelector('.clock');
+            
+            if (mode === 'both') {
+                clockElement.style.display = 'flex';
+                digitalTime.style.display = 'block';
+            } else if (mode === 'analog') {
+                clockElement.style.display = 'flex';
+                digitalTime.style.display = 'none';
+            } else if (mode === 'digital') {
+                clockElement.style.display = 'none';
+                digitalTime.style.display = 'block';
+            }
         });
         
         showTimezoneToggle.addEventListener('change', function() {
@@ -577,6 +596,7 @@
                 } else if (style === 'roman') {
                     const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
                     marker.textContent = romanNumerals[i - 1];
+                    marker.classList.add('roman');
                 } else if (style === 'dots') {
                     marker.textContent = '•';
                     marker.style.fontSize = '20px';
@@ -838,7 +858,7 @@
         function saveSettings() {
             const settings = {
                 secondHand: secondHandToggle.checked,
-                digitalClock: digitalClockToggle.checked,
+                displayMode: displayModeSelect.value,
                 ampm: ampmToggle.checked,
                 showSeconds: secondsToggle.checked,
                 showTimezone: showTimezoneToggle.checked,
@@ -869,8 +889,22 @@
                 secondHandToggle.checked = settings.secondHand;
                 secondHand.style.display = settings.secondHand ? 'block' : 'none';
                 
-                digitalClockToggle.checked = settings.digitalClock;
-                digitalTime.style.display = settings.digitalClock ? 'block' : 'none';
+                // Handle display mode
+                if (settings.displayMode) {
+                    displayModeSelect.value = settings.displayMode;
+                    const clockElement = document.querySelector('.clock');
+                    
+                    if (settings.displayMode === 'both') {
+                        clockElement.style.display = 'flex';
+                        digitalTime.style.display = 'block';
+                    } else if (settings.displayMode === 'analog') {
+                        clockElement.style.display = 'flex';
+                        digitalTime.style.display = 'none';
+                    } else if (settings.displayMode === 'digital') {
+                        clockElement.style.display = 'none';
+                        digitalTime.style.display = 'block';
+                    }
+                }
                 
                 ampmToggle.checked = settings.ampm || true; // Default to true if missing
                 
@@ -951,7 +985,7 @@
         
         // Set up event listeners to save settings when changed
         const settingsControls = [
-            secondHandToggle, digitalClockToggle, ampmToggle, secondsToggle, showTimezoneToggle,
+            secondHandToggle, displayModeSelect, ampmToggle, secondsToggle, showTimezoneToggle,
             numbersToggle, numberStyleSelect, digitalStyleSelect, darkModeToggle,
             transparentToggle, scaleSlider, handThicknessSelect, accentColorPicker,
             accentSizeSlider, secondHandColorPicker, timezoneSelect
@@ -965,7 +999,7 @@
         // Set default values
         const defaultSettings = {
             secondHand: true,
-            digitalClock: true,
+            displayMode: 'both',
             ampm: true,
             showSeconds: false,
             showTimezone: false,
@@ -988,8 +1022,20 @@
             secondHandToggle.checked = defaultSettings.secondHand;
             secondHand.style.display = defaultSettings.secondHand ? 'block' : 'none';
             
-            digitalClockToggle.checked = defaultSettings.digitalClock;
-            digitalTime.style.display = defaultSettings.digitalClock ? 'block' : 'none';
+            // Reset display mode
+            displayModeSelect.value = defaultSettings.displayMode;
+            const clockElement = document.querySelector('.clock');
+            
+            if (defaultSettings.displayMode === 'both') {
+                clockElement.style.display = 'flex';
+                digitalTime.style.display = 'block';
+            } else if (defaultSettings.displayMode === 'analog') {
+                clockElement.style.display = 'flex';
+                digitalTime.style.display = 'none';
+            } else if (defaultSettings.displayMode === 'digital') {
+                clockElement.style.display = 'none';
+                digitalTime.style.display = 'block';
+            }
             
             ampmToggle.checked = defaultSettings.ampm;
             secondsToggle.checked = defaultSettings.showSeconds;
