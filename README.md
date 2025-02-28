@@ -13,7 +13,7 @@ A lightweight, customizable clock overlay for OBS. Perfect for streamers who wan
   - Four beautiful themes: Light, Dark, Natural, and Transparent
   - Toggle for clock numbers (Arabic or Roman numerals)
   - AM/PM or 24-hour time format
-  - Digital clock font styles (including serif option)
+  - Digital clock font styles (including serif and VFD display)
   - Color and size customization
 - **Draggable**: Position anywhere on your stream
 - **Low Resource Usage**: Optimized for minimal CPU usage
@@ -45,7 +45,7 @@ A lightweight, customizable clock overlay for OBS. Perfect for streamers who wan
 - **Show Time Zone**: Display the name of the selected time zone below the clock
 - **Clock Numbers**: Show or hide hour numbers on the clock face
 - **Number Style**: Choose between simple numbers, Roman numerals, dots, or serif
-- **Digital Style**: Different font options including rounded, simple, monospace, and serif
+- **Digital Style**: Different font options including rounded, simple, monospace, serif, and VFD display
 - **Theme**: Choose from Light, Dark, Natural (warm beige), or Transparent modes
 - **Scale**: Adjust the overall size of the clock
 - **Hand Thickness**: Choose between thin, normal, or thick clock hands
@@ -67,6 +67,10 @@ A lightweight, customizable clock overlay for OBS. Perfect for streamers who wan
 - **Settings Not Appearing**: Click directly on the gear icon that appears when hovering over the clock
 - **Settings Panel Off Screen**: Try moving the clock away from the edge of your canvas
 
+
+## Credits
+
+- VFD Nova Font by [Nihar Mazumdar](https://www.fontspace.com/nihar-mazumdar), included for use with the digital time display
 
 ## License
 

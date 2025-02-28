@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minimal Clock Overlay</title>
     <style>
+        /* Custom Font Definitions */
+        @font-face {
+            font-family: 'VFD Nova';
+            src: url('fonts/VFD-Nova.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+        }
+    
         :root {
             --main-bg-color: rgba(255, 255, 255, 0);
             --scale: 1;
@@ -270,6 +278,11 @@
         .digital-time.serif {
             font-family: 'Georgia', 'Times New Roman', serif;
         }
+        
+        .digital-time.vfd {
+            font-family: 'VFD Nova', 'Courier New', monospace;
+            letter-spacing: 2px;
+        }
 
         .controls {
             position: fixed;
@@ -471,6 +484,7 @@
                 <option value="simple">Simple</option>
                 <option value="monospace">Monospace</option>
                 <option value="serif">Serif</option>
+                <option value="vfd">VFD Nova</option>
             </select>
         </div>
         <div class="control-item">
