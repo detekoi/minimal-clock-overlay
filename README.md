@@ -2,10 +2,13 @@
 
 A lightweight, customizable clock overlay for OBS inspired by the aesthetic of Polar Bear Cafe anime. Perfect for streamers who want to display the time without distracting from their content.
 
+![Default Clock](screenshots/default-clock.png)
+
 ## Features
 
 - **Minimal Design**: Clean, unobtrusive clock with subtle styling
 - **Dual Display**: Shows both analog and digital time
+- **Time Zone Support**: Display any time zone with optional time zone label
 - **Customizable**: Multiple appearance options including:
   - Light, dark, and transparent modes
   - Toggle for clock numbers (Arabic or Roman numerals)
@@ -15,6 +18,23 @@ A lightweight, customizable clock overlay for OBS inspired by the aesthetic of P
 - **Draggable**: Position anywhere on your stream
 - **Low Resource Usage**: Optimized for minimal CPU usage
 - **OBS Integration**: Works perfectly as a Browser Source
+
+## Screenshots
+
+### Light Mode
+![Light Mode](screenshots/light-mode.png)
+
+### Dark Mode
+![Dark Mode](screenshots/dark-mode.png)
+
+### Transparent Mode
+![Transparent Mode](screenshots/transparent-mode.png)
+
+### Roman Numerals with Serif Font
+![Roman Numerals](screenshots/roman-numerals.png)
+
+### Time Zone Display
+![Time Zone Display](screenshots/timezone-display.png)
 
 ## Installation
 
@@ -31,15 +51,19 @@ A lightweight, customizable clock overlay for OBS inspired by the aesthetic of P
 
 ## Customization Options
 
+![Settings Panel](screenshots/settings-panel.png)
+
 - **Second Hand**: Toggle visibility of the second hand
 - **Digital Clock**: Toggle visibility of the digital time display
 - **AM/PM Display**: Switch between 12-hour (with AM/PM) and 24-hour format
 - **Display Seconds**: Toggle seconds in the digital time display
+- **Time Zone**: Select from multiple time zones around the world
+- **Show Time Zone**: Display the name of the selected time zone below the clock
 - **Clock Numbers**: Show or hide hour numbers on the clock face
 - **Number Style**: Choose between simple numbers, Roman numerals, dots, or serif
 - **Digital Style**: Different font options including rounded, simple, monospace, and serif
 - **Dark Mode**: Switch between light and dark color schemes
-- **Transparent Mode**: Make the clock and ALL elements semi-transparent (great for overlaying on gameplay)
+- **Transparent Mode**: Make the clock face transparent while keeping hands and accents visible
 - **Scale**: Adjust the overall size of the clock
 - **Hand Thickness**: Choose between thin, normal, or thick clock hands
 - **Accent Color**: Customize the accent color used for highlights
