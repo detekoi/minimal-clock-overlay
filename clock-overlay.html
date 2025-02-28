@@ -7,21 +7,25 @@
     <style>
         :root {
             --main-bg-color: rgba(255, 255, 255, 0);
+            --scale: 1;
+            --digital-font: 'Arial Rounded MT Bold', 'Helvetica Rounded', Arial, sans-serif;
+        }
+        
+        /* Default light theme - these same variables are used by all themes */
+        .theme-light, body {
             --clock-face-color: rgba(252, 252, 250, 0.85);
             --clock-border-color: rgba(120, 120, 120, 0.6);
             --clock-hand-hour: rgba(80, 80, 80, 0.9);
             --clock-hand-minute: rgba(80, 80, 80, 0.8);
-            --clock-hand-second: rgba(120, 120, 120, 0.8); /* More neutral color */
+            --clock-hand-second: rgba(120, 120, 120, 0.8);
             --text-color: rgba(80, 80, 80, 0.9);
             --accent-color: rgba(133, 166, 123, 0.8);
             --marker-color: rgba(100, 100, 100, 0.7);
             --number-color: rgba(80, 80, 80, 0.8);
             --shadow-color: rgba(0, 0, 0, 0.05);
-            --scale: 1;
-            --digital-font: 'Arial Rounded MT Bold', 'Helvetica Rounded', Arial, sans-serif;
         }
 
-        .dark-mode {
+        .theme-dark {
             --clock-face-color: rgba(40, 40, 40, 0.85);
             --clock-border-color: rgba(180, 180, 180, 0.6);
             --clock-hand-hour: rgba(220, 220, 220, 0.9);
@@ -34,7 +38,20 @@
             --shadow-color: rgba(0, 0, 0, 0.3);
         }
         
-        .transparent-mode {
+        .theme-natural {
+            --clock-face-color: rgba(245, 240, 230, 0.85);
+            --clock-border-color: rgba(120, 100, 80, 0.6);
+            --clock-hand-hour: rgba(80, 60, 40, 0.9);
+            --clock-hand-minute: rgba(80, 60, 40, 0.8);
+            --clock-hand-second: rgba(120, 100, 80, 0.8);
+            --text-color: rgba(80, 60, 40, 0.9);
+            --accent-color: rgba(150, 120, 90, 0.8);
+            --marker-color: rgba(100, 80, 60, 0.7);
+            --number-color: rgba(80, 60, 40, 0.8);
+            --shadow-color: rgba(0, 0, 0, 0.05);
+        }
+        
+        .theme-transparent {
             --clock-face-color: rgba(255, 255, 255, 0);
             --clock-border-color: rgba(180, 180, 180, 0.4);
             --shadow-color: rgba(0, 0, 0, 0);
@@ -169,6 +186,31 @@
             border-radius: 4px;
             padding: 2px 4px;
             font-size: 12px;
+        }
+        
+        /* Theme selector styling */
+        #theme-select option {
+            padding: 6px;
+        }
+        
+        #theme-select option[value="light"] {
+            background-color: rgba(252, 252, 250, 0.85);
+            color: rgba(80, 80, 80, 0.9);
+        }
+        
+        #theme-select option[value="dark"] {
+            background-color: rgba(40, 40, 40, 0.85);
+            color: rgba(220, 220, 220, 0.9);
+        }
+        
+        #theme-select option[value="natural"] {
+            background-color: rgba(245, 240, 230, 0.85);
+            color: rgba(80, 60, 40, 0.9);
+        }
+        
+        #theme-select option[value="transparent"] {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: rgba(80, 80, 80, 0.9);
         }
         
         input[type="color"] {
@@ -432,18 +474,13 @@
             </select>
         </div>
         <div class="control-item">
-            <span>Dark Mode</span>
-            <label class="switch">
-                <input type="checkbox" id="dark-mode-toggle">
-                <span class="slider"></span>
-            </label>
-        </div>
-        <div class="control-item">
-            <span>Transparent</span>
-            <label class="switch">
-                <input type="checkbox" id="transparent-toggle">
-                <span class="slider"></span>
-            </label>
+            <span>Theme</span>
+            <select id="theme-select">
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+                <option value="natural">Natural</option>
+                <option value="transparent">Transparent</option>
+            </select>
         </div>
         <div class="control-item">
             <span>Scale</span>
@@ -530,8 +567,7 @@
         const numbersToggle = document.getElementById('numbers-toggle');
         const numberStyleSelect = document.getElementById('number-style-select');
         const digitalStyleSelect = document.getElementById('digital-style-select');
-        const darkModeToggle = document.getElementById('dark-mode-toggle');
-        const transparentToggle = document.getElementById('transparent-toggle');
+        const themeSelect = document.getElementById('theme-select');
         const scaleSlider = document.getElementById('scale-slider');
         const handThicknessSelect = document.getElementById('hand-thickness-select');
         const accentColorPicker = document.getElementById('accent-color-picker');
@@ -612,8 +648,12 @@
         numbersToggle.addEventListener('change', updateClockNumbers);
         numberStyleSelect.addEventListener('change', updateClockNumbers);
 
-        darkModeToggle.addEventListener('change', function() {
-            document.body.classList.toggle('dark-mode', this.checked);
+        themeSelect.addEventListener('change', function() {
+            // Remove all theme classes first
+            document.body.classList.remove('theme-light', 'theme-dark', 'theme-natural', 'theme-transparent');
+            
+            // Add the selected theme class
+            document.body.classList.add('theme-' + this.value);
         });
 
         scaleSlider.addEventListener('input', function() {
@@ -690,10 +730,7 @@
             document.documentElement.style.setProperty('--clock-hand-second', this.value + 'CC');
         });
         
-        transparentToggle.addEventListener('change', function() {
-            document.body.classList.toggle('transparent-mode', this.checked);
-            // No longer disabling accent colors in transparent mode
-        });
+        // Removed the transparent toggle handler since we now use the theme selector
         
         closeSettingsBtn.addEventListener('click', function(e) {
             e.stopPropagation();
@@ -865,8 +902,7 @@
                 numbers: numbersToggle.checked,
                 numberStyle: numberStyleSelect.value,
                 digitalStyle: digitalStyleSelect.value,
-                darkMode: darkModeToggle.checked,
-                transparent: transparentToggle.checked,
+                theme: themeSelect.value,
                 scale: scaleSlider.value,
                 handThickness: handThicknessSelect.value,
                 accentColor: accentColorPicker.value,
@@ -931,11 +967,29 @@
                     digitalTime.className = 'digital-time rounded';
                 }
                 
-                darkModeToggle.checked = settings.darkMode;
-                document.body.classList.toggle('dark-mode', settings.darkMode);
-                
-                transparentToggle.checked = settings.transparent;
-                document.body.classList.toggle('transparent-mode', settings.transparent);
+                // Apply theme setting
+                if (settings.theme) {
+                    themeSelect.value = settings.theme;
+                    
+                    // Remove all theme classes first
+                    document.body.classList.remove('theme-light', 'theme-dark', 'theme-natural', 'theme-transparent');
+                    
+                    // Add the selected theme class
+                    document.body.classList.add('theme-' + settings.theme);
+                } 
+                // Handle legacy settings for backward compatibility
+                else if (settings.darkMode !== undefined || settings.transparent !== undefined) {
+                    let themeValue = 'light'; // default
+                    
+                    if (settings.transparent) {
+                        themeValue = 'transparent';
+                    } else if (settings.darkMode) {
+                        themeValue = 'dark';
+                    }
+                    
+                    themeSelect.value = themeValue;
+                    document.body.classList.add('theme-' + themeValue);
+                }
                 
                 if (settings.scale) {
                     scaleSlider.value = settings.scale;
@@ -986,8 +1040,8 @@
         // Set up event listeners to save settings when changed
         const settingsControls = [
             secondHandToggle, displayModeSelect, ampmToggle, secondsToggle, showTimezoneToggle,
-            numbersToggle, numberStyleSelect, digitalStyleSelect, darkModeToggle,
-            transparentToggle, scaleSlider, handThicknessSelect, accentColorPicker,
+            numbersToggle, numberStyleSelect, digitalStyleSelect, themeSelect,
+            scaleSlider, handThicknessSelect, accentColorPicker,
             accentSizeSlider, secondHandColorPicker, timezoneSelect
         ];
         
@@ -1006,8 +1060,7 @@
             numbers: false,
             numberStyle: 'simple',
             digitalStyle: 'rounded',
-            darkMode: false,
-            transparent: false,
+            theme: 'light',
             scale: 100,
             handThickness: 'normal',
             accentColor: '#85A67B',
@@ -1049,16 +1102,14 @@
             digitalStyleSelect.value = defaultSettings.digitalStyle;
             digitalTime.className = 'digital-time ' + defaultSettings.digitalStyle;
             
-            darkModeToggle.checked = defaultSettings.darkMode;
-            document.body.classList.toggle('dark-mode', defaultSettings.darkMode);
+            // Reset theme
+            themeSelect.value = defaultSettings.theme;
             
-            transparentToggle.checked = defaultSettings.transparent;
-            document.body.classList.toggle('transparent-mode', defaultSettings.transparent);
+            // Remove all theme classes first
+            document.body.classList.remove('theme-light', 'theme-dark', 'theme-natural', 'theme-transparent');
             
-            // Reset disabled state
-            accentColorPicker.disabled = defaultSettings.transparent;
-            accentSizeSlider.disabled = defaultSettings.transparent;
-            secondHandColorPicker.disabled = defaultSettings.transparent;
+            // Add the default theme class
+            document.body.classList.add('theme-' + defaultSettings.theme);
             
             scaleSlider.value = defaultSettings.scale;
             document.documentElement.style.setProperty('--scale', defaultSettings.scale / 100);
@@ -1095,6 +1146,14 @@
         
         // Load settings on initialization
         loadSettings();
+        
+        // Ensure theme is set correctly (if nothing was loaded from localStorage)
+        if (!document.body.classList.contains('theme-light') && 
+            !document.body.classList.contains('theme-dark') && 
+            !document.body.classList.contains('theme-natural') && 
+            !document.body.classList.contains('theme-transparent')) {
+            document.body.classList.add('theme-light');
+        }
         
         // Update controls position
         updateControlsPosition();

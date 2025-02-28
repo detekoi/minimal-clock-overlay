@@ -7,10 +7,10 @@ A lightweight, customizable clock overlay for OBS. Perfect for streamers who wan
 ## Features
 
 - **Minimal Design**: Clean, unobtrusive clock with subtle styling
-- **Dual Display**: Shows both analog and digital time
+- **Flexible Display**: Choose to show analog clock, digital time, or both
 - **Time Zone Support**: Display any time zone with optional time zone label
 - **Customizable**: Multiple appearance options including:
-  - Light, dark, and transparent modes
+  - Four beautiful themes: Light, Dark, Natural, and Transparent
   - Toggle for clock numbers (Arabic or Roman numerals)
   - AM/PM or 24-hour time format
   - Digital clock font styles (including serif option)
@@ -38,7 +38,7 @@ A lightweight, customizable clock overlay for OBS. Perfect for streamers who wan
 ![Settings Panel](screenshots/settings-panel.png)
 
 - **Second Hand**: Toggle visibility of the second hand
-- **Digital Clock**: Toggle visibility of the digital time display
+- **Display Mode**: Choose between analog clock, digital time, or both
 - **AM/PM Display**: Switch between 12-hour (with AM/PM) and 24-hour format
 - **Display Seconds**: Toggle seconds in the digital time display
 - **Time Zone**: Select from multiple time zones around the world
@@ -46,8 +46,7 @@ A lightweight, customizable clock overlay for OBS. Perfect for streamers who wan
 - **Clock Numbers**: Show or hide hour numbers on the clock face
 - **Number Style**: Choose between simple numbers, Roman numerals, dots, or serif
 - **Digital Style**: Different font options including rounded, simple, monospace, and serif
-- **Dark Mode**: Switch between light and dark color schemes
-- **Transparent Mode**: Make the clock face transparent while keeping hands and accents visible
+- **Theme**: Choose from Light, Dark, Natural (warm beige), or Transparent modes
 - **Scale**: Adjust the overall size of the clock
 - **Hand Thickness**: Choose between thin, normal, or thick clock hands
 - **Accent Color**: Customize the accent color used for highlights
@@ -58,7 +57,7 @@ A lightweight, customizable clock overlay for OBS. Perfect for streamers who wan
 
 ## Tips for Streamers
 
-- **Use Transparent Mode**: For gameplay streams, the transparent mode provides time information without blocking gameplay
+- **Use Transparent Theme**: For gameplay streams, the transparent theme provides time information without blocking gameplay
 - **Match Your Brand**: Use the color pickers to match your stream's color scheme
 - **Position Strategically**: Place in a corner where it won't overlap important HUD elements in games
 
