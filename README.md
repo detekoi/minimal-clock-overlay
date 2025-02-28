@@ -4,6 +4,8 @@ A lightweight, customizable clock overlay for OBS. Perfect for streamers who wan
 
 ![Default Clock](screenshots/default-clock.png)
 
+[Click here](https://detekoi.github.io/minimal-clock-overlay/clock-overlay.html) for a live demo!
+
 ## Features
 
 - **Minimal Design**: Clean, unobtrusive clock with subtle styling
