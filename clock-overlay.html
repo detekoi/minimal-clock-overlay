@@ -520,6 +520,21 @@
             <span>Second Hand Color</span>
             <input type="color" id="second-hand-color-picker" value="#787878">
         </div>
+        <div class="control-item">
+            <span>Style Presets</span>
+            <select id="preset-select">
+                <option value="none">Choose a preset...</option>
+                <option value="modern">Modern Minimal</option>
+                <option value="coastal">Coastal Calm</option>
+                <option value="artdeco">Art Deco</option>
+                <option value="digital">Digital Display</option>
+                <option value="traditional">Traditional</option>
+                <option value="gaming">Gaming HUD</option>
+                <option value="retro">Retro Vibe</option>
+                <option value="dark-tech">Dark Tech</option>
+                <option value="elegant">Elegant Serif</option>
+            </select>
+        </div>
         <div style="display: flex; gap: 10px; margin-top: 10px;">
             <button id="reset-defaults" style="flex: 1; padding: 5px; background: #cc7777; border: none; border-radius: 4px; color: white; cursor: pointer;">Reset to Defaults</button>
             <button id="close-settings" style="flex: 1; padding: 5px; background: var(--accent-color); border: none; border-radius: 4px; color: white; cursor: pointer;">Close Settings</button>
@@ -587,6 +602,7 @@
         const accentColorPicker = document.getElementById('accent-color-picker');
         const accentSizeSlider = document.getElementById('accent-size-slider');
         const secondHandColorPicker = document.getElementById('second-hand-color-picker');
+        const presetSelect = document.getElementById('preset-select');
         const closeSettingsBtn = document.getElementById('close-settings');
         const resetDefaultsBtn = document.getElementById('reset-defaults');
         const controlsToggle = document.querySelector('.controls-toggle');
@@ -745,6 +761,202 @@
         });
         
         // Removed the transparent toggle handler since we now use the theme selector
+        
+        // Define style presets
+        const presets = {
+            modern: {
+                displayMode: 'both',
+                theme: 'light',
+                secondHand: true,
+                numbers: false,
+                handThickness: 'thin',
+                accentColor: '#3498db',
+                secondHandColor: '#e74c3c',
+                digitalStyle: 'simple',
+                showSeconds: false
+            },
+            coastal: {
+                displayMode: 'both',
+                theme: 'light',
+                secondHand: true,
+                numbers: true,
+                numberStyle: 'simple',
+                handThickness: 'normal',
+                accentColor: '#5cbbf6',
+                secondHandColor: '#4ca484',
+                digitalStyle: 'rounded',
+                showSeconds: false
+            },
+            artdeco: {
+                displayMode: 'both',
+                theme: 'dark',
+                secondHand: true,
+                numbers: true,
+                numberStyle: 'serif',
+                handThickness: 'thin',
+                accentColor: '#f1c40f',
+                secondHandColor: '#f39c12',
+                digitalStyle: 'serif',
+                showSeconds: false
+            },
+            digital: {
+                displayMode: 'digital',
+                theme: 'dark',
+                secondHand: false,
+                numbers: false,
+                digitalStyle: 'vfd',
+                handThickness: 'normal',
+                accentColor: '#2ecc71',
+                secondHandColor: '#27ae60',
+                showSeconds: true
+            },
+            traditional: {
+                displayMode: 'analog',
+                theme: 'natural',
+                secondHand: true,
+                numbers: true,
+                numberStyle: 'roman',
+                handThickness: 'normal',
+                accentColor: '#8b4513',
+                secondHandColor: '#a52a2a',
+                digitalStyle: 'serif',
+                showSeconds: false
+            },
+            gaming: {
+                displayMode: 'both',
+                theme: 'transparent',
+                secondHand: true,
+                numbers: false,
+                handThickness: 'thick',
+                accentColor: '#00ff00',
+                secondHandColor: '#ff0000',
+                digitalStyle: 'monospace',
+                showSeconds: true
+            },
+            retro: {
+                displayMode: 'both',
+                theme: 'natural',
+                secondHand: false,
+                numbers: true,
+                numberStyle: 'simple',
+                handThickness: 'thick',
+                accentColor: '#e67e22',
+                secondHandColor: '#d35400',
+                digitalStyle: 'monospace',
+                showSeconds: false,
+                ampm: true
+            },
+            'dark-tech': {
+                displayMode: 'both',
+                theme: 'dark',
+                secondHand: true,
+                numbers: true,
+                numberStyle: 'dots',
+                handThickness: 'thin',
+                accentColor: '#9b59b6',
+                secondHandColor: '#8e44ad',
+                digitalStyle: 'monospace',
+                showSeconds: true
+            },
+            elegant: {
+                displayMode: 'both',
+                theme: 'light',
+                secondHand: true,
+                numbers: true,
+                numberStyle: 'roman',
+                handThickness: 'thin',
+                accentColor: '#34495e',
+                secondHandColor: '#2c3e50',
+                digitalStyle: 'serif',
+                showSeconds: false
+            }
+        };
+        
+        // Handle preset selection
+        presetSelect.addEventListener('change', function() {
+            const selectedPreset = this.value;
+            
+            if (selectedPreset === 'none') return;
+            
+            const preset = presets[selectedPreset];
+            
+            // Apply preset settings
+            if (preset.displayMode) {
+                displayModeSelect.value = preset.displayMode;
+                const clockElement = document.querySelector('.clock');
+                
+                if (preset.displayMode === 'both') {
+                    clockElement.style.display = 'flex';
+                    digitalTime.style.display = 'block';
+                } else if (preset.displayMode === 'analog') {
+                    clockElement.style.display = 'flex';
+                    digitalTime.style.display = 'none';
+                } else if (preset.displayMode === 'digital') {
+                    clockElement.style.display = 'none';
+                    digitalTime.style.display = 'block';
+                }
+            }
+            
+            if (preset.theme) {
+                themeSelect.value = preset.theme;
+                document.body.classList.remove('theme-light', 'theme-dark', 'theme-natural', 'theme-transparent');
+                document.body.classList.add('theme-' + preset.theme);
+            }
+            
+            if (preset.secondHand !== undefined) {
+                secondHandToggle.checked = preset.secondHand;
+                secondHand.style.display = preset.secondHand ? 'block' : 'none';
+            }
+            
+            if (preset.numbers !== undefined) {
+                numbersToggle.checked = preset.numbers;
+            }
+            
+            if (preset.numberStyle) {
+                numberStyleSelect.value = preset.numberStyle;
+            }
+            
+            if (preset.digitalStyle) {
+                digitalStyleSelect.value = preset.digitalStyle;
+                digitalTime.className = 'digital-time ' + preset.digitalStyle;
+            }
+            
+            if (preset.handThickness) {
+                handThicknessSelect.value = preset.handThickness;
+                // Trigger thickness change
+                const event = new Event('change');
+                handThicknessSelect.dispatchEvent(event);
+            }
+            
+            if (preset.accentColor) {
+                accentColorPicker.value = preset.accentColor;
+                document.documentElement.style.setProperty('--accent-color', preset.accentColor + 'CC');
+            }
+            
+            if (preset.secondHandColor) {
+                secondHandColorPicker.value = preset.secondHandColor;
+                document.documentElement.style.setProperty('--clock-hand-second', preset.secondHandColor + 'CC');
+            }
+            
+            if (preset.showSeconds !== undefined) {
+                secondsToggle.checked = preset.showSeconds;
+            }
+            
+            if (preset.ampm !== undefined) {
+                ampmToggle.checked = preset.ampm;
+            }
+            
+            // Update UI
+            updateClockNumbers();
+            
+            // Save settings
+            saveSettings();
+            
+            // Reset dropdown to "Choose a preset..." after applying
+            setTimeout(() => {
+                this.value = 'none';
+            }, 500);
+        });
         
         closeSettingsBtn.addEventListener('click', function(e) {
             e.stopPropagation();

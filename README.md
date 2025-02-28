@@ -11,6 +11,7 @@ A lightweight, customizable clock overlay for OBS. Perfect for streamers who wan
 - **Time Zone Support**: Display any time zone with optional time zone label
 - **Customizable**: Multiple appearance options including:
   - Four beautiful themes: Light, Dark, Natural, and Transparent
+  - Pre-defined style presets (Modern, Art Deco, Gaming, and more)
   - Toggle for clock numbers (Arabic or Roman numerals)
   - AM/PM or 24-hour time format
   - Digital clock font styles (including serif and VFD display)
@@ -52,6 +53,16 @@ A lightweight, customizable clock overlay for OBS. Perfect for streamers who wan
 - **Accent Color**: Customize the accent color used for highlights
 - **Accent Size**: Adjust the size of accent elements (center dot, second hand tip) or hide completely
 - **Second Hand Color**: Set a custom color for the second hand
+- **Style Presets**: Choose from predefined style combinations:
+  - Modern Minimal: Clean, minimalist design with blue accents
+  - Coastal Calm: Soothing blue and teal color scheme
+  - Art Deco: Elegant gold and black design
+  - Digital Display: VFD digital-only display with a tech feel
+  - Traditional: Classic Roman numeral clock with natural wood tones
+  - Gaming HUD: Transparent clock with gaming-inspired neon colors
+  - Retro Vibe: Warm oranges with thicker hands for a vintage feel
+  - Dark Tech: Modern dark theme with dot markers and purple accents
+  - Elegant Serif: Roman numerals with thin hands for a sophisticated look
 - **Reset to Defaults**: Restore all settings to their default values
 - **Persistent Settings**: All your customizations are automatically saved between sessions
 
