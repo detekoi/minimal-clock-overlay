@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimal Clock Overlay - Polar Bear Cafe Inspired</title>
+    <style>
+        :root {
+            --main-bg-color: rgba(255, 255, 255, 0);
+            --clock-face-color: rgba(252, 252, 250, 0.85);
+            --clock-border-color: rgba(120, 120, 120, 0.6);
+            --clock-hand-hour: rgba(80, 80, 80, 0.9);
+            --clock-hand-minute: rgba(80, 80, 80, 0.8);
+            --clock-hand-second: rgba(120, 120, 120, 0.8); /* More neutral color */
+            --text-color: rgba(80, 80, 80, 0.9);
+            --accent-color: rgba(133, 166, 123, 0.8);
+            --marker-color: rgba(100, 100, 100, 0.7);
+            --number-color: rgba(80, 80, 80, 0.8);
+            --shadow-color: rgba(0, 0, 0, 0.05);
+            --scale: 1;
+            --digital-font: 'Arial Rounded MT Bold', 'Helvetica Rounded', Arial, sans-serif;
+        }
+
+        .dark-mode {
+            --clock-face-color: rgba(40, 40, 40, 0.85);
+            --clock-border-color: rgba(180, 180, 180, 0.6);
+            --clock-hand-hour: rgba(220, 220, 220, 0.9);
+            --clock-hand-minute: rgba(220, 220, 220, 0.8);
+            --clock-hand-second: rgba(220, 220, 220, 0.9);
+            --text-color: rgba(220, 220, 220, 0.9);
+            --accent-color: rgba(169, 203, 159, 0.8);
+            --marker-color: rgba(200, 200, 200, 0.7);
+            --number-color: rgba(220, 220, 220, 0.85);
+            --shadow-color: rgba(0, 0, 0, 0.3);
+        }
+        
+        .transparent-mode {
+            --clock-face-color: rgba(255, 255, 255, 0);
+            --clock-border-color: rgba(180, 180, 180, 0.4);
+            --shadow-color: rgba(0, 0, 0, 0);
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            background-color: var(--main-bg-color);
+            font-family: 'Arial Rounded MT Bold', 'Helvetica Rounded', Arial, sans-serif;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            transform: scale(var(--scale));
+            transition: transform 0.3s ease;
+        }
+
+        .clock {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background-color: var(--clock-face-color);
+            border: 2px solid var(--clock-border-color);
+            box-shadow: 0 4px 8px var(--shadow-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hand {
+            position: absolute;
+            transform-origin: bottom center;
+            border-radius: 10px;
+            z-index: 10;
+        }
+
+        .hour-hand {
+            width: 6px;
+            height: 60px;
+            background-color: var(--clock-hand-hour);
+            bottom: 50%;
+            left: calc(50% - 3px);
+        }
+
+        .minute-hand {
+            width: 4px;
+            height: 80px;
+            background-color: var(--clock-hand-minute);
+            bottom: 50%;
+            left: calc(50% - 2px);
+        }
+
+        .second-hand {
+            width: 2px;
+            height: 90px;
+            background-color: var(--clock-hand-second);
+            bottom: 50%;
+            left: calc(50% - 1px);
+        }
+
+        .second-hand::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -2px;
+            width: 6px;
+            height: 6px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            transform: translateY(-3px);
+        }
+
+        .center-dot {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            z-index: 15;
+        }
+
+        .marker {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform: rotate(var(--rotation));
+        }
+
+        .marker::before {
+            content: '';
+            position: absolute;
+            width: 2px;
+            height: 8px;
+            background-color: var(--marker-color);
+            top: 5px;
+            left: calc(50% - 1px);
+        }
+
+        .hour-marker::before {
+            height: 12px;
+            width: 3px;
+        }
+        
+        .number-marker {
+            position: absolute;
+            font-size: 16px;
+            color: var(--number-color);
+            font-weight: 500;
+            transform-origin: center;
+            z-index: 5;
+        }
+        
+        select {
+            background-color: var(--clock-face-color);
+            color: var(--text-color);
+            border: 1px solid var(--marker-color);
+            border-radius: 4px;
+            padding: 2px 4px;
+            font-size: 12px;
+        }
+        
+        input[type="color"] {
+            width: 30px;
+            height: 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .digital-time {
+            margin-top: 20px;
+            font-size: 24px;
+            color: var(--text-color);
+            letter-spacing: 1px;
+            position: relative;
+            font-family: var(--digital-font);
+        }
+
+        .digital-time::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background-color: var(--accent-color);
+            opacity: 0.5;
+        }
+        
+        .digital-time.simple {
+            font-family: 'Arial', sans-serif;
+        }
+        
+        .digital-time.rounded {
+            font-family: 'Arial Rounded MT Bold', 'Helvetica Rounded', Arial, sans-serif;
+        }
+        
+        .digital-time.monospace {
+            font-family: 'Courier New', monospace;
+        }
+
+        .controls {
+            position: fixed;
+            width: 250px;
+            background-color: var(--clock-face-color);
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 2px 6px var(--shadow-color);
+            display: none;
+            flex-direction: column;
+            gap: 8px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+            max-height: 80vh;
+            overflow-y: auto;
+            right: 20px;
+            top: 20px;
+        }
+
+        .controls-toggle {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            bottom: 10px;
+            right: 10px;
+            background-color: var(--clock-face-color);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 2px 6px var(--shadow-color);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 99;
+        }
+        
+        .clock:hover .controls-toggle,
+        .controls-toggle:hover {
+            opacity: 0.8;
+        }
+
+        .controls-toggle::after {
+            content: '⚙';
+            color: var(--text-color);
+            font-size: 18px;
+        }
+
+        .control-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: var(--text-color);
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 20px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--accent-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        input[type="range"] {
+            width: 80px;
+            height: 4px;
+            -webkit-appearance: none;
+            background: var(--marker-color);
+            border-radius: 2px;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 12px;
+            height: 12px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="clock">
+            <div class="hour-hand hand"></div>
+            <div class="minute-hand hand"></div>
+            <div class="second-hand hand"></div>
+            <div class="center-dot"></div>
+            <!-- Hour markers will be added by JavaScript -->
+            <div class="controls-toggle"></div>
+        </div>
+        <div class="digital-time">00:00</div>
+    </div>
+    <div class="controls">
+        <h3 style="margin-top: 0; margin-bottom: 10px; color: var(--text-color); font-size: 14px; text-align: center;">Clock Settings</h3>
+        <div class="control-item">
+            <span>Second Hand</span>
+            <label class="switch">
+                <input type="checkbox" id="second-hand-toggle" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="control-item">
+            <span>Digital Clock</span>
+            <label class="switch">
+                <input type="checkbox" id="digital-clock-toggle" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="control-item">
+            <span>Show AM/PM</span>
+            <label class="switch">
+                <input type="checkbox" id="ampm-toggle" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="control-item">
+            <span>Clock Numbers</span>
+            <label class="switch">
+                <input type="checkbox" id="numbers-toggle">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="control-item">
+            <span>Number Style</span>
+            <select id="number-style-select">
+                <option value="simple">Simple</option>
+                <option value="roman">Roman</option>
+                <option value="dots">Dots</option>
+            </select>
+        </div>
+        <div class="control-item">
+            <span>Digital Style</span>
+            <select id="digital-style-select">
+                <option value="rounded">Rounded</option>
+                <option value="simple">Simple</option>
+                <option value="monospace">Monospace</option>
+            </select>
+        </div>
+        <div class="control-item">
+            <span>Dark Mode</span>
+            <label class="switch">
+                <input type="checkbox" id="dark-mode-toggle">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="control-item">
+            <span>Transparent</span>
+            <label class="switch">
+                <input type="checkbox" id="transparent-toggle">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="control-item">
+            <span>Scale</span>
+            <input type="range" id="scale-slider" min="50" max="150" value="100">
+        </div>
+        <div class="control-item">
+            <span>Accent Color</span>
+            <input type="color" id="accent-color-picker" value="#85A67B">
+        </div>
+        <div class="control-item">
+            <span>Second Hand Color</span>
+            <input type="color" id="second-hand-color-picker" value="#787878">
+        </div>
+        <button id="close-settings" style="margin-top: 10px; padding: 5px; background: var(--accent-color); border: none; border-radius: 4px; color: white; cursor: pointer;">Close Settings</button>
+    </div>
+
+    <script>
+        // Create clock markers
+        const clock = document.querySelector('.clock');
+        for (let i = 0; i < 12; i++) {
+            const marker = document.createElement('div');
+            marker.classList.add('marker');
+            if (i % 3 === 0) marker.classList.add('hour-marker');
+            marker.style.setProperty('--rotation', `${i * 30}deg`);
+            clock.appendChild(marker);
+        }
+
+        // Clock hands elements
+        const hourHand = document.querySelector('.hour-hand');
+        const minuteHand = document.querySelector('.minute-hand');
+        const secondHand = document.querySelector('.second-hand');
+        const digitalTime = document.querySelector('.digital-time');
+
+        // Control elements
+        const secondHandToggle = document.getElementById('second-hand-toggle');
+        const digitalClockToggle = document.getElementById('digital-clock-toggle');
+        const ampmToggle = document.getElementById('ampm-toggle');
+        const numbersToggle = document.getElementById('numbers-toggle');
+        const numberStyleSelect = document.getElementById('number-style-select');
+        const digitalStyleSelect = document.getElementById('digital-style-select');
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const transparentToggle = document.getElementById('transparent-toggle');
+        const scaleSlider = document.getElementById('scale-slider');
+        const accentColorPicker = document.getElementById('accent-color-picker');
+        const secondHandColorPicker = document.getElementById('second-hand-color-picker');
+        const closeSettingsBtn = document.getElementById('close-settings');
+        const controlsToggle = document.querySelector('.controls-toggle');
+        const controls = document.querySelector('.controls');
+
+        // Initialize controls
+        secondHandToggle.addEventListener('change', function() {
+            secondHand.style.display = this.checked ? 'block' : 'none';
+        });
+
+        digitalClockToggle.addEventListener('change', function() {
+            digitalTime.style.display = this.checked ? 'block' : 'none';
+        });
+        
+        digitalStyleSelect.addEventListener('change', function() {
+            digitalTime.className = 'digital-time ' + this.value;
+        });
+        
+        function updateClockNumbers() {
+            // Clear existing number markers
+            document.querySelectorAll('.number-marker').forEach(el => el.remove());
+            
+            if (!numbersToggle.checked) return;
+            
+            const clockRadius = clock.offsetWidth / 2;
+            const style = numberStyleSelect.value;
+            
+            for (let i = 1; i <= 12; i++) {
+                const angle = (i * 30 - 90) * (Math.PI / 180);
+                const x = clockRadius + (clockRadius - 30) * Math.cos(angle);
+                const y = clockRadius + (clockRadius - 30) * Math.sin(angle);
+                
+                const marker = document.createElement('div');
+                marker.className = 'number-marker';
+                marker.style.left = `${x}px`;
+                marker.style.top = `${y}px`;
+                marker.style.transform = 'translate(-50%, -50%)';
+                
+                if (style === 'simple') {
+                    marker.textContent = i;
+                } else if (style === 'roman') {
+                    const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+                    marker.textContent = romanNumerals[i - 1];
+                } else if (style === 'dots') {
+                    marker.textContent = '•';
+                    marker.style.fontSize = '20px';
+                }
+                
+                clock.appendChild(marker);
+            }
+        }
+        
+        numbersToggle.addEventListener('change', updateClockNumbers);
+        numberStyleSelect.addEventListener('change', updateClockNumbers);
+
+        darkModeToggle.addEventListener('change', function() {
+            document.body.classList.toggle('dark-mode', this.checked);
+        });
+
+        scaleSlider.addEventListener('input', function() {
+            document.documentElement.style.setProperty('--scale', this.value / 100);
+        });
+        
+        accentColorPicker.addEventListener('input', function() {
+            document.documentElement.style.setProperty('--accent-color', this.value + 'CC');
+        });
+        
+        secondHandColorPicker.addEventListener('input', function() {
+            document.documentElement.style.setProperty('--clock-hand-second', this.value + 'CC');
+        });
+        
+        transparentToggle.addEventListener('change', function() {
+            document.body.classList.toggle('transparent-mode', this.checked);
+        });
+        
+        closeSettingsBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            
+            // Hide settings
+            controls.style.opacity = '0';
+            setTimeout(() => {
+                controls.style.display = 'none';
+            }, 300);
+        });
+        
+        // Position controls better
+        function updateControlsPosition() {
+            controlsToggle.style.top = '50%';
+            controlsToggle.style.right = '-40px';
+        }
+
+        // Handle settings toggle click
+        controlsToggle.addEventListener('click', function(e) {
+            e.stopPropagation(); // Prevent event from bubbling
+            e.preventDefault();
+            
+            // Toggle settings panel visibility
+            const isVisible = window.getComputedStyle(controls).display !== 'none';
+            
+            if (isVisible) {
+                // Hide settings
+                controls.style.opacity = '0';
+                setTimeout(() => {
+                    controls.style.display = 'none';
+                }, 300);
+            } else {
+                // Show settings
+                controls.style.display = 'flex';
+                requestAnimationFrame(() => {
+                    controls.style.opacity = '1';
+                });
+            }
+        });
+
+        // Update the clock hands and digital time
+        function updateClock() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+            const milliseconds = now.getMilliseconds();
+            
+            // Calculate angles for hands
+            // Include milliseconds for smooth movement
+            const secondRatio = (seconds + milliseconds / 1000) / 60;
+            const minuteRatio = (minutes + secondRatio) / 60;
+            const hourRatio = ((hours % 12) + minuteRatio) / 12;
+            
+            // Set rotation for hands
+            setRotation(hourHand, hourRatio * 360);
+            setRotation(minuteHand, minuteRatio * 360);
+            setRotation(secondHand, secondRatio * 360);
+            
+            // Update digital time
+            const formattedHours = hours.toString().padStart(2, '0');
+            const formattedMinutes = minutes.toString().padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            const displayHours = ampmToggle.checked ? (hours % 12 || 12) : hours;
+            const displayHoursFormatted = displayHours.toString().padStart(2, '0');
+            
+            digitalTime.textContent = ampmToggle.checked 
+                ? `${displayHoursFormatted}:${formattedMinutes} ${ampm}`
+                : `${formattedHours}:${formattedMinutes}`;
+            
+            // Call requestAnimationFrame for smooth animation
+            requestAnimationFrame(updateClock);
+        }
+
+        function setRotation(element, rotation) {
+            element.style.transform = `rotate(${rotation}deg)`;
+        }
+
+        // Initialize options
+        digitalTime.className = 'digital-time rounded';
+        updateClockNumbers();
+        
+        // Update controls position
+        updateControlsPosition();
+        
+        // Handle window resize
+        window.addEventListener('resize', updateControlsPosition);
+        
+        // Start the clock
+        updateClock();
+
+        // Make the clock and controls draggable
+        let isDragging = false;
+        let dragTarget = null;
+        let offsetX, offsetY;
+
+        // Make the clock draggable
+        clock.addEventListener('mousedown', startDrag);
+        
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('mouseup', endDrag);
+
+        function startDrag(e) {
+            // Don't start drag if clicking on controls or controls toggle
+            if (e.target.closest('.controls') || e.target.closest('.controls-toggle')) {
+                return;
+            }
+            
+            isDragging = true;
+            dragTarget = e.target.closest('.container');
+            
+            const rect = dragTarget.getBoundingClientRect();
+            offsetX = e.clientX - rect.left;
+            offsetY = e.clientY - rect.top;
+            
+            dragTarget.style.cursor = 'grabbing';
+            e.preventDefault();
+        }
+
+        function drag(e) {
+            if (!isDragging) return;
+            
+            const x = e.clientX - offsetX;
+            const y = e.clientY - offsetY;
+            
+            dragTarget.style.position = 'absolute';
+            dragTarget.style.left = `${x}px`;
+            dragTarget.style.top = `${y}px`;
+            
+            // Update the controls position after dragging
+            updateControlsPosition();
+        }
+
+        function endDrag() {
+            if (isDragging && dragTarget) {
+                dragTarget.style.cursor = '';
+                isDragging = false;
+                
+                // Ensure the controls are positioned correctly
+                updateControlsPosition();
+            }
+        }
+    </script>
+</body>
+</html>
