@@ -37,13 +37,6 @@
         .transparent-mode {
             --clock-face-color: rgba(255, 255, 255, 0);
             --clock-border-color: rgba(180, 180, 180, 0.4);
-            --clock-hand-hour: rgba(80, 80, 80, 0.4);
-            --clock-hand-minute: rgba(80, 80, 80, 0.4);
-            --clock-hand-second: rgba(80, 80, 80, 0.4);
-            --text-color: rgba(80, 80, 80, 0.6);
-            --accent-color: rgba(80, 80, 80, 0.4);
-            --marker-color: rgba(100, 100, 100, 0.4);
-            --number-color: rgba(80, 80, 80, 0.5);
             --shadow-color: rgba(0, 0, 0, 0);
         }
 
@@ -187,10 +180,20 @@
             letter-spacing: 1px;
             position: relative;
             font-family: var(--digital-font);
+            text-align: center;
         }
 
         .digital-time {
             --accent-line-height: 1px;
+        }
+        
+        .timezone-display {
+            font-size: 14px;
+            color: var(--text-color);
+            opacity: 0.8;
+            text-align: center;
+            margin-top: 5px;
+            font-family: var(--digital-font);
         }
         
         .digital-time::after {
@@ -350,6 +353,7 @@
             <div class="controls-toggle"></div>
         </div>
         <div class="digital-time">00:00</div>
+        <div class="timezone-display" style="display: none;"></div>
     </div>
     <div class="controls">
         <h3 style="margin-top: 0; margin-bottom: 10px; color: var(--text-color); font-size: 14px; text-align: center;">Clock Settings</h3>
@@ -378,6 +382,20 @@
             <span>Show Seconds</span>
             <label class="switch">
                 <input type="checkbox" id="seconds-toggle">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="control-item">
+            <span>Time Zone</span>
+            <select id="timezone-select">
+                <option value="local">Local Time</option>
+                <!-- Added timezones will be populated by JavaScript -->
+            </select>
+        </div>
+        <div class="control-item">
+            <span>Show Time Zone</span>
+            <label class="switch">
+                <input type="checkbox" id="show-timezone-toggle">
                 <span class="slider"></span>
             </label>
         </div>
@@ -467,11 +485,41 @@
         const secondHand = document.querySelector('.second-hand');
         const digitalTime = document.querySelector('.digital-time');
 
+        // Populate timezones dropdown
+        const timezoneSelect = document.getElementById('timezone-select');
+        const timezones = [
+            { value: 'UTC', label: 'UTC' },
+            { value: 'America/New_York', label: 'Eastern Time (ET)' },
+            { value: 'America/Chicago', label: 'Central Time (CT)' },
+            { value: 'America/Denver', label: 'Mountain Time (MT)' },
+            { value: 'America/Los_Angeles', label: 'Pacific Time (PT)' },
+            { value: 'America/Anchorage', label: 'Alaska Time' },
+            { value: 'Pacific/Honolulu', label: 'Hawaii Time' },
+            { value: 'Europe/London', label: 'London (GMT)' },
+            { value: 'Europe/Paris', label: 'Paris (CET)' },
+            { value: 'Europe/Berlin', label: 'Berlin (CET)' },
+            { value: 'Europe/Moscow', label: 'Moscow (MSK)' },
+            { value: 'Asia/Tokyo', label: 'Tokyo (JST)' },
+            { value: 'Asia/Shanghai', label: 'China (CST)' },
+            { value: 'Asia/Seoul', label: 'Seoul (KST)' },
+            { value: 'Australia/Sydney', label: 'Sydney (AEST)' },
+            { value: 'Pacific/Auckland', label: 'Auckland (NZST)' }
+        ];
+        
+        // Add timezone options to select dropdown
+        timezones.forEach(tz => {
+            const option = document.createElement('option');
+            option.value = tz.value;
+            option.textContent = tz.label;
+            timezoneSelect.appendChild(option);
+        });
+        
         // Control elements
         const secondHandToggle = document.getElementById('second-hand-toggle');
         const digitalClockToggle = document.getElementById('digital-clock-toggle');
         const ampmToggle = document.getElementById('ampm-toggle');
         const secondsToggle = document.getElementById('seconds-toggle');
+        const showTimezoneToggle = document.getElementById('show-timezone-toggle');
         const numbersToggle = document.getElementById('numbers-toggle');
         const numberStyleSelect = document.getElementById('number-style-select');
         const digitalStyleSelect = document.getElementById('digital-style-select');
@@ -494,6 +542,10 @@
 
         digitalClockToggle.addEventListener('change', function() {
             digitalTime.style.display = this.checked ? 'block' : 'none';
+        });
+        
+        showTimezoneToggle.addEventListener('change', function() {
+            document.querySelector('.timezone-display').style.display = this.checked ? 'block' : 'none';
         });
         
         digitalStyleSelect.addEventListener('change', function() {
@@ -620,23 +672,7 @@
         
         transparentToggle.addEventListener('change', function() {
             document.body.classList.toggle('transparent-mode', this.checked);
-            
-            // Disable accent color picker when in transparent mode
-            accentColorPicker.disabled = this.checked;
-            accentSizeSlider.disabled = this.checked;
-            secondHandColorPicker.disabled = this.checked;
-            
-            if (this.checked) {
-                // Store original values to restore later
-                accentColorPicker.dataset.originalValue = accentColorPicker.value;
-                secondHandColorPicker.dataset.originalValue = secondHandColorPicker.value;
-            } else if (accentColorPicker.dataset.originalValue) {
-                // Restore original values
-                document.documentElement.style.setProperty('--accent-color', accentColorPicker.dataset.originalValue + 'CC');
-                document.documentElement.style.setProperty('--clock-hand-second', secondHandColorPicker.dataset.originalValue + 'CC');
-                accentColorPicker.value = accentColorPicker.dataset.originalValue;
-                secondHandColorPicker.value = secondHandColorPicker.dataset.originalValue;
-            }
+            // No longer disabling accent colors in transparent mode
         });
         
         closeSettingsBtn.addEventListener('click', function(e) {
@@ -681,7 +717,60 @@
 
         // Update the clock hands and digital time
         function updateClock() {
-            const now = new Date();
+            // Get time based on selected timezone
+            let now;
+            const selectedTimezone = timezoneSelect.value;
+            
+            if (selectedTimezone === 'local') {
+                now = new Date();
+            } else {
+                // Get time in the specified timezone
+                try {
+                    // Create date in local time
+                    const localDate = new Date();
+                    
+                    // Format using the specified timezone
+                    const options = { timeZone: selectedTimezone };
+                    const formatter = new Intl.DateTimeFormat('en-US', {
+                        timeZone: selectedTimezone,
+                        year: 'numeric',
+                        month: 'numeric',
+                        day: 'numeric',
+                        hour: 'numeric',
+                        minute: 'numeric',
+                        second: 'numeric',
+                        hour12: false
+                    });
+                    
+                    // Get parts
+                    const parts = formatter.formatToParts(localDate);
+                    const dateParts = {};
+                    
+                    parts.forEach(part => {
+                        if (part.type !== 'literal') {
+                            dateParts[part.type] = parseInt(part.value);
+                        }
+                    });
+                    
+                    // Create new date object
+                    now = new Date(
+                        dateParts.year,
+                        dateParts.month - 1, // months are 0-indexed
+                        dateParts.day,
+                        dateParts.hour,
+                        dateParts.minute,
+                        dateParts.second
+                    );
+                    
+                    // Add milliseconds from the local date for smoother animation
+                    // (since formatToParts doesn't give milliseconds)
+                    now.setMilliseconds(localDate.getMilliseconds());
+                } catch (e) {
+                    console.error('Error formatting time for timezone', selectedTimezone, e);
+                    now = new Date(); // Fall back to local time
+                }
+            }
+            
             const hours = now.getHours();
             const minutes = now.getMinutes();
             const seconds = now.getSeconds();
@@ -721,6 +810,22 @@
             
             digitalTime.textContent = timeString;
             
+            // Update timezone display
+            const timezoneDisplay = document.querySelector('.timezone-display');
+            if (selectedTimezone === 'local') {
+                // Try to get user's timezone name
+                try {
+                    const tzName = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                    timezoneDisplay.textContent = tzName.replace(/_/g, ' ').replace(/\//g, ' / ');
+                } catch (e) {
+                    timezoneDisplay.textContent = 'Local Time';
+                }
+            } else {
+                // Find the timezone label from the options
+                const tzOption = timezones.find(tz => tz.value === selectedTimezone);
+                timezoneDisplay.textContent = tzOption ? tzOption.label : selectedTimezone;
+            }
+            
             // Call requestAnimationFrame for smooth animation
             requestAnimationFrame(updateClock);
         }
@@ -736,6 +841,7 @@
                 digitalClock: digitalClockToggle.checked,
                 ampm: ampmToggle.checked,
                 showSeconds: secondsToggle.checked,
+                showTimezone: showTimezoneToggle.checked,
                 numbers: numbersToggle.checked,
                 numberStyle: numberStyleSelect.value,
                 digitalStyle: digitalStyleSelect.value,
@@ -745,7 +851,8 @@
                 handThickness: handThicknessSelect.value,
                 accentColor: accentColorPicker.value,
                 accentSize: accentSizeSlider.value,
-                secondHandColor: secondHandColorPicker.value
+                secondHandColor: secondHandColorPicker.value,
+                timezone: timezoneSelect.value
             };
             
             localStorage.setItem('clockSettings', JSON.stringify(settings));
@@ -771,6 +878,12 @@
                     secondsToggle.checked = settings.showSeconds;
                 }
                 
+                if (settings.showTimezone !== undefined) {
+                    showTimezoneToggle.checked = settings.showTimezone;
+                    document.querySelector('.timezone-display').style.display = 
+                        settings.showTimezone ? 'block' : 'none';
+                }
+                
                 numbersToggle.checked = settings.numbers;
                 
                 if (settings.numberStyle) {
@@ -789,11 +902,6 @@
                 
                 transparentToggle.checked = settings.transparent;
                 document.body.classList.toggle('transparent-mode', settings.transparent);
-                
-                // Apply disabled state for transparent mode
-                accentColorPicker.disabled = settings.transparent;
-                accentSizeSlider.disabled = settings.transparent;
-                secondHandColorPicker.disabled = settings.transparent;
                 
                 if (settings.scale) {
                     scaleSlider.value = settings.scale;
@@ -821,6 +929,15 @@
                     document.documentElement.style.setProperty('--clock-hand-second', settings.secondHandColor + 'CC');
                 }
                 
+                // Set timezone if saved
+                if (settings.timezone) {
+                    // Check if the saved timezone is valid
+                    const allTimezones = ['local', ...timezones.map(tz => tz.value)];
+                    if (allTimezones.includes(settings.timezone)) {
+                        timezoneSelect.value = settings.timezone;
+                    }
+                }
+                
                 // Update UI
                 updateClockNumbers();
                 updateAccentSize();
@@ -834,10 +951,10 @@
         
         // Set up event listeners to save settings when changed
         const settingsControls = [
-            secondHandToggle, digitalClockToggle, ampmToggle, secondsToggle,
+            secondHandToggle, digitalClockToggle, ampmToggle, secondsToggle, showTimezoneToggle,
             numbersToggle, numberStyleSelect, digitalStyleSelect, darkModeToggle,
             transparentToggle, scaleSlider, handThicknessSelect, accentColorPicker,
-            accentSizeSlider, secondHandColorPicker
+            accentSizeSlider, secondHandColorPicker, timezoneSelect
         ];
         
         settingsControls.forEach(control => {
@@ -851,6 +968,7 @@
             digitalClock: true,
             ampm: true,
             showSeconds: false,
+            showTimezone: false,
             numbers: false,
             numberStyle: 'simple',
             digitalStyle: 'rounded',
@@ -860,7 +978,8 @@
             handThickness: 'normal',
             accentColor: '#85A67B',
             accentSize: 10,
-            secondHandColor: '#787878'
+            secondHandColor: '#787878',
+            timezone: 'local'
         };
         
         // Reset to default settings
@@ -874,6 +993,9 @@
             
             ampmToggle.checked = defaultSettings.ampm;
             secondsToggle.checked = defaultSettings.showSeconds;
+            showTimezoneToggle.checked = defaultSettings.showTimezone;
+            document.querySelector('.timezone-display').style.display = 
+                defaultSettings.showTimezone ? 'block' : 'none';
             
             numbersToggle.checked = defaultSettings.numbers;
             numberStyleSelect.value = defaultSettings.numberStyle;
@@ -911,6 +1033,8 @@
             
             secondHandColorPicker.value = defaultSettings.secondHandColor;
             document.documentElement.style.setProperty('--clock-hand-second', defaultSettings.secondHandColor + 'CC');
+            
+            timezoneSelect.value = defaultSettings.timezone;
             
             // Update UI
             updateClockNumbers();
