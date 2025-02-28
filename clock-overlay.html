@@ -64,6 +64,72 @@
             --clock-border-color: rgba(180, 180, 180, 0.4);
             --shadow-color: rgba(0, 0, 0, 0);
         }
+        
+        /* New theme styles */
+        .theme-neon {
+            --clock-face-color: rgba(20, 20, 30, 0.85);
+            --clock-border-color: rgba(0, 255, 255, 0.6);
+            --clock-hand-hour: rgba(255, 0, 255, 0.9);
+            --clock-hand-minute: rgba(0, 255, 255, 0.8);
+            --clock-hand-second: rgba(0, 255, 0, 0.9);
+            --text-color: rgba(0, 255, 255, 0.9);
+            --accent-color: rgba(255, 0, 255, 0.8);
+            --marker-color: rgba(0, 255, 255, 0.7);
+            --number-color: rgba(255, 255, 255, 0.85);
+            --shadow-color: rgba(0, 255, 255, 0.3);
+        }
+        
+        .theme-pastel {
+            --clock-face-color: rgba(250, 240, 245, 0.85);
+            --clock-border-color: rgba(200, 180, 210, 0.6);
+            --clock-hand-hour: rgba(170, 130, 180, 0.9);
+            --clock-hand-minute: rgba(220, 170, 200, 0.8);
+            --clock-hand-second: rgba(240, 150, 170, 0.9);
+            --text-color: rgba(170, 130, 180, 0.9);
+            --accent-color: rgba(180, 220, 240, 0.8);
+            --marker-color: rgba(220, 170, 200, 0.7);
+            --number-color: rgba(170, 130, 180, 0.85);
+            --shadow-color: rgba(0, 0, 0, 0.05);
+        }
+        
+        .theme-forest {
+            --clock-face-color: rgba(235, 240, 230, 0.85);
+            --clock-border-color: rgba(90, 130, 100, 0.6);
+            --clock-hand-hour: rgba(60, 90, 70, 0.9);
+            --clock-hand-minute: rgba(70, 110, 80, 0.8);
+            --clock-hand-second: rgba(150, 170, 90, 0.8);
+            --text-color: rgba(60, 90, 70, 0.9);
+            --accent-color: rgba(200, 130, 50, 0.8);
+            --marker-color: rgba(90, 130, 100, 0.7);
+            --number-color: rgba(60, 90, 70, 0.8);
+            --shadow-color: rgba(0, 0, 0, 0.05);
+        }
+        
+        .theme-sunset {
+            --clock-face-color: rgba(40, 40, 60, 0.85);
+            --clock-border-color: rgba(240, 140, 70, 0.6);
+            --clock-hand-hour: rgba(240, 140, 70, 0.9);
+            --clock-hand-minute: rgba(240, 90, 90, 0.8);
+            --clock-hand-second: rgba(240, 90, 150, 0.9);
+            --text-color: rgba(240, 200, 130, 0.9);
+            --accent-color: rgba(240, 90, 90, 0.8);
+            --marker-color: rgba(240, 140, 70, 0.7);
+            --number-color: rgba(240, 200, 130, 0.85);
+            --shadow-color: rgba(0, 0, 0, 0.3);
+        }
+        
+        .theme-ocean {
+            --clock-face-color: rgba(230, 240, 250, 0.85);
+            --clock-border-color: rgba(70, 140, 190, 0.6);
+            --clock-hand-hour: rgba(50, 90, 130, 0.9);
+            --clock-hand-minute: rgba(70, 140, 190, 0.8);
+            --clock-hand-second: rgba(40, 180, 200, 0.8);
+            --text-color: rgba(50, 90, 130, 0.9);
+            --accent-color: rgba(80, 190, 220, 0.8);
+            --marker-color: rgba(70, 140, 190, 0.7);
+            --number-color: rgba(50, 90, 130, 0.8);
+            --shadow-color: rgba(0, 0, 0, 0.05);
+        }
 
         body, html {
             margin: 0;
@@ -490,6 +556,11 @@
                 <option value="retro">Retro Vibe</option>
                 <option value="dark-tech">Dark Tech</option>
                 <option value="elegant">Elegant Serif</option>
+                <option value="cyberpunk">Cyberpunk</option>
+                <option value="lofi">Lo-Fi Beats</option>
+                <option value="nature">Nature Watch</option>
+                <option value="twilight">Twilight Hour</option>
+                <option value="candy">Candy Pop</option>
             </select>
             <!-- OBS-compatible alternative -->
             <div class="select-buttons preset-buttons">
@@ -503,6 +574,11 @@
                 <button class="select-btn preset-btn" data-value="retro">Retro</button>
                 <button class="select-btn preset-btn" data-value="dark-tech">Tech</button>
                 <button class="select-btn preset-btn" data-value="elegant">Elegant</button>
+                <button class="select-btn preset-btn" data-value="cyberpunk">Cyber</button>
+                <button class="select-btn preset-btn" data-value="lofi">Lo-Fi</button>
+                <button class="select-btn preset-btn" data-value="nature">Nature</button>
+                <button class="select-btn preset-btn" data-value="twilight">Twilight</button>
+                <button class="select-btn preset-btn" data-value="candy">Candy</button>
             </div>
         </div>
         <div class="control-item">
@@ -602,6 +678,11 @@
                 <option value="dark">Dark</option>
                 <option value="natural">Natural</option>
                 <option value="transparent">Transparent</option>
+                <option value="neon">Neon</option>
+                <option value="pastel">Pastel</option>
+                <option value="forest">Forest</option>
+                <option value="sunset">Sunset</option>
+                <option value="ocean">Ocean</option>
             </select>
             <!-- OBS-compatible alternative -->
             <div class="select-buttons theme-buttons">
@@ -609,6 +690,11 @@
                 <button class="select-btn theme-btn" data-value="dark">Dark</button>
                 <button class="select-btn theme-btn" data-value="natural">Natural</button>
                 <button class="select-btn theme-btn" data-value="transparent">Clear</button>
+                <button class="select-btn theme-btn" data-value="neon">Neon</button>
+                <button class="select-btn theme-btn" data-value="pastel">Pastel</button>
+                <button class="select-btn theme-btn" data-value="forest">Forest</button>
+                <button class="select-btn theme-btn" data-value="sunset">Sunset</button>
+                <button class="select-btn theme-btn" data-value="ocean">Ocean</button>
             </div>
         </div>
         <div class="control-item">
@@ -798,7 +884,17 @@
 
         themeSelect.addEventListener('change', function() {
             // Remove all theme classes first
-            document.body.classList.remove('theme-light', 'theme-dark', 'theme-natural', 'theme-transparent');
+            document.body.classList.remove(
+                'theme-light', 
+                'theme-dark', 
+                'theme-natural', 
+                'theme-transparent',
+                'theme-neon',
+                'theme-pastel',
+                'theme-forest',
+                'theme-sunset',
+                'theme-ocean'
+            );
             
             // Add the selected theme class
             document.body.classList.add('theme-' + this.value);
@@ -1004,6 +1100,68 @@
                 secondHandColor: '#2c3e50',
                 digitalStyle: 'serif',
                 showSeconds: false
+            },
+            cyberpunk: {
+                displayMode: 'both',
+                theme: 'neon',
+                secondHand: true,
+                numbers: true,
+                numberStyle: 'dots',
+                handThickness: 'thin',
+                accentColor: '#ff00ff',
+                secondHandColor: '#00ff00',
+                digitalStyle: 'vfd',
+                showSeconds: true,
+                ampm: false
+            },
+            lofi: {
+                displayMode: 'both',
+                theme: 'pastel',
+                secondHand: true,
+                numbers: false,
+                handThickness: 'normal',
+                accentColor: '#aa82b4',
+                secondHandColor: '#f096aa',
+                digitalStyle: 'rounded',
+                showSeconds: false,
+                ampm: true
+            },
+            nature: {
+                displayMode: 'both',
+                theme: 'forest',
+                secondHand: true,
+                numbers: true,
+                numberStyle: 'serif',
+                handThickness: 'normal',
+                accentColor: '#c88232',
+                secondHandColor: '#96aa5a',
+                digitalStyle: 'serif',
+                showSeconds: false
+            },
+            twilight: {
+                displayMode: 'both',
+                theme: 'sunset',
+                secondHand: true,
+                numbers: true,
+                numberStyle: 'simple',
+                handThickness: 'normal',
+                accentColor: '#f05a5a',
+                secondHandColor: '#f08c46',
+                digitalStyle: 'simple',
+                showSeconds: true
+            },
+            candy: {
+                displayMode: 'both',
+                theme: 'pastel',
+                secondHand: true,
+                numbers: true,
+                numberStyle: 'simple',
+                handThickness: 'thick',
+                accentColor: '#ff6bd5',
+                secondHandColor: '#6b9dff',
+                digitalStyle: 'rounded',
+                showSeconds: false,
+                accentSize: 12
             }
         };
         
@@ -1039,7 +1197,17 @@
             
             if (preset.theme) {
                 themeSelect.value = preset.theme;
-                document.body.classList.remove('theme-light', 'theme-dark', 'theme-natural', 'theme-transparent');
+                document.body.classList.remove(
+                    'theme-light', 
+                    'theme-dark', 
+                    'theme-natural', 
+                    'theme-transparent',
+                    'theme-neon',
+                    'theme-pastel',
+                    'theme-forest',
+                    'theme-sunset',
+                    'theme-ocean'
+                );
                 document.body.classList.add('theme-' + preset.theme);
             }
             
@@ -1365,7 +1533,17 @@
                     themeSelect.value = settings.theme;
                     
                     // Remove all theme classes first
-                    document.body.classList.remove('theme-light', 'theme-dark', 'theme-natural', 'theme-transparent');
+                    document.body.classList.remove(
+                        'theme-light', 
+                        'theme-dark', 
+                        'theme-natural', 
+                        'theme-transparent',
+                        'theme-neon',
+                        'theme-pastel',
+                        'theme-forest',
+                        'theme-sunset',
+                        'theme-ocean'
+                    );
                     
                     // Add the selected theme class
                     document.body.classList.add('theme-' + settings.theme);
@@ -1523,7 +1701,12 @@
         if (!document.body.classList.contains('theme-light') && 
             !document.body.classList.contains('theme-dark') && 
             !document.body.classList.contains('theme-natural') && 
-            !document.body.classList.contains('theme-transparent')) {
+            !document.body.classList.contains('theme-transparent') &&
+            !document.body.classList.contains('theme-neon') &&
+            !document.body.classList.contains('theme-pastel') &&
+            !document.body.classList.contains('theme-forest') &&
+            !document.body.classList.contains('theme-sunset') &&
+            !document.body.classList.contains('theme-ocean')) {
             document.body.classList.add('theme-light');
         }
         

@@ -10,8 +10,8 @@ A lightweight, customizable clock overlay for OBS. Perfect for streamers who wan
 - **Flexible Display**: Choose to show analog clock, digital time, or both
 - **Time Zone Support**: Display any time zone with optional time zone label
 - **Customizable**: Multiple appearance options including:
-  - Four beautiful themes: Light, Dark, Natural, and Transparent
-  - Pre-defined style presets (Modern, Art Deco, Gaming, and more)
+  - Nine beautiful themes: Light, Dark, Natural, Transparent, Neon, Pastel, Forest, Sunset, and Ocean
+  - Fifteen pre-defined style presets (Modern, Cyberpunk, Lo-Fi, Nature, and more)
   - Toggle for clock numbers (Arabic or Roman numerals)
   - AM/PM or 24-hour time format
   - Digital clock font styles (including serif and VFD display)
@@ -48,7 +48,16 @@ A lightweight, customizable clock overlay for OBS. Perfect for streamers who wan
 - **Clock Numbers**: Show or hide hour numbers on the clock face
 - **Number Style**: Choose between simple numbers, Roman numerals, dots, or serif
 - **Digital Style**: Different font options including rounded, simple, monospace, serif, and VFD display
-- **Theme**: Choose from Light, Dark, Natural (warm beige), or Transparent modes
+- **Theme**: Choose from nine themes:
+  - Light: Clean white background with dark elements
+  - Dark: Dark background with light elements
+  - Natural: Warm beige tones with brown accents
+  - Transparent: No background, perfect for overlaying on stream content
+  - Neon: Cyberpunk-inspired with bright cyan and magenta
+  - Pastel: Soft lavender and pink hues
+  - Forest: Natural greens with earthy orange accents
+  - Sunset: Dark night sky with sunset orange and pink accents
+  - Ocean: Calming blue tones with aqua accents
 - **Scale**: Adjust the overall size of the clock
 - **Hand Thickness**: Choose between thin, normal, or thick clock hands
 - **Accent Color**: Customize the accent color used for highlights
@@ -65,6 +74,11 @@ A lightweight, customizable clock overlay for OBS. Perfect for streamers who wan
   - Retro Vibe: Warm oranges with thicker hands for a vintage feel
   - Dark Tech: Modern dark theme with dot markers and purple accents
   - Elegant Serif: Roman numerals with thin hands for a sophisticated look
+  - Cyberpunk: Futuristic neon design with bright magenta and green
+  - Lo-Fi: Soft pastel colors for a relaxed, lofi aesthetic
+  - Nature: Forest-inspired with earthy greens and wood tones
+  - Twilight: Dark sunset theme with orange and red accents
+  - Candy Pop: Playful pink and blue with thicker elements
 - **Reset to Defaults**: Restore all settings to their default values
 - **Persistent Settings**: All your customizations are automatically saved between sessions
 
