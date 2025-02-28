@@ -229,9 +229,17 @@
             border-color: var(--accent-color);
         }
         
-        /* Use this class for OBS compatibility mode */
+        /* OBS compatibility mode styles */
+        .select-buttons {
+            display: none; /* Hide selector buttons by default */
+        }
+        
         .obs-mode select {
             display: none; /* Hide dropdowns in OBS mode */
+        }
+        
+        .obs-mode .select-buttons {
+            display: flex; /* Show selector buttons in OBS mode */
         }
         
         input[type="color"] {
@@ -634,7 +642,7 @@
             <input type="color" id="second-hand-color-picker" value="#787878">
         </div>
         <div class="control-item">
-            <span>OBS Compatibility Mode</span>
+            <span>OBS/Streamlabs Mode</span>
             <label class="switch">
                 <input type="checkbox" id="obs-mode-toggle">
                 <span class="slider"></span>
@@ -1504,9 +1512,9 @@
             localStorage.setItem('obsMode', this.checked);
         });
         
-        // Load OBS mode preference
+        // Load OBS mode preference (enabled by default)
         const savedObsMode = localStorage.getItem('obsMode');
-        if (savedObsMode === 'true') {
+        if (savedObsMode === null || savedObsMode === 'true') {
             obsToggle.checked = true;
             document.body.classList.add('obs-mode');
         }
