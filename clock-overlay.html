@@ -1218,6 +1218,8 @@
                 digitalStyle: 'rounded',
                 showSeconds: false,
                 showTimezone: false,
+                showDate: false,
+                dateStyle: 'rounded',
                 ampm: true,
                 scale: 100
             },
@@ -1231,6 +1233,8 @@
                 secondHandColor: '#999999',
                 digitalStyle: 'simple',
                 showSeconds: false,
+                showDate: false,
+                dateStyle: 'simple',
                 accentSize: 0 // No accent elements for true minimalism
             },
             coastal: {
@@ -1243,6 +1247,8 @@
                 accentColor: '#5cbbf6',
                 secondHandColor: '#4ca484',
                 digitalStyle: 'rounded',
+                showDate: true,
+                dateStyle: 'rounded',
                 showSeconds: false
             },
             artdeco: {
@@ -1255,6 +1261,8 @@
                 accentColor: '#f1c40f',
                 secondHandColor: '#f39c12',
                 digitalStyle: 'serif',
+                showDate: true,
+                dateStyle: 'serif',
                 showSeconds: false
             },
             digital: {
@@ -1266,6 +1274,8 @@
                 handThickness: 'normal',
                 accentColor: '#2ecc71',
                 secondHandColor: '#27ae60',
+                showDate: true,
+                dateStyle: 'vfd',
                 showSeconds: true
             },
             traditional: {
@@ -1278,6 +1288,8 @@
                 accentColor: '#8b4513',
                 secondHandColor: '#a52a2a',
                 digitalStyle: 'serif',
+                showDate: false,
+                dateStyle: 'serif',
                 showSeconds: false
             },
             gaming: {
@@ -1289,6 +1301,8 @@
                 accentColor: '#00ff00',
                 secondHandColor: '#ff0000',
                 digitalStyle: 'monospace',
+                showDate: true,
+                dateStyle: 'monospace',
                 showSeconds: true
             },
             retro: {
@@ -1301,6 +1315,8 @@
                 accentColor: '#e67e22',
                 secondHandColor: '#d35400',
                 digitalStyle: 'monospace',
+                showDate: true,
+                dateStyle: 'monospace',
                 showSeconds: false,
                 ampm: true
             },
@@ -1314,6 +1330,8 @@
                 accentColor: '#9b59b6',
                 secondHandColor: '#8e44ad',
                 digitalStyle: 'monospace',
+                showDate: true,
+                dateStyle: 'monospace',
                 showSeconds: true
             },
             elegant: {
@@ -1326,6 +1344,8 @@
                 accentColor: '#34495e',
                 secondHandColor: '#2c3e50',
                 digitalStyle: 'serif',
+                showDate: true,
+                dateStyle: 'serif',
                 showSeconds: false
             },
             cyberpunk: {
@@ -1338,6 +1358,8 @@
                 accentColor: '#ff00ff',
                 secondHandColor: '#00ff00',
                 digitalStyle: 'vfd',
+                showDate: true,
+                dateStyle: 'vfd',
                 showSeconds: true,
                 ampm: false
             },
@@ -1350,6 +1372,8 @@
                 accentColor: '#aa82b4',
                 secondHandColor: '#f096aa',
                 digitalStyle: 'rounded',
+                showDate: true,
+                dateStyle: 'rounded',
                 showSeconds: false,
                 ampm: true
             },
@@ -1363,6 +1387,8 @@
                 accentColor: '#c88232',
                 secondHandColor: '#96aa5a',
                 digitalStyle: 'serif',
+                showDate: true,
+                dateStyle: 'serif',
                 showSeconds: false
             },
             twilight: {
@@ -1375,6 +1401,8 @@
                 accentColor: '#f05a5a',
                 secondHandColor: '#f08c46',
                 digitalStyle: 'simple',
+                showDate: true,
+                dateStyle: 'simple',
                 showSeconds: true
             },
             candy: {
@@ -1387,6 +1415,8 @@
                 accentColor: '#ff6bd5',
                 secondHandColor: '#6b9dff',
                 digitalStyle: 'rounded',
+                showDate: true,
+                dateStyle: 'rounded',
                 showSeconds: false,
                 accentSize: 12
             }
@@ -1495,6 +1525,18 @@
                 showTimezoneToggle.checked = preset.showTimezone;
                 document.querySelector('.timezone-display').style.display = 
                     preset.showTimezone ? 'block' : 'none';
+            }
+            
+            if (preset.showDate !== undefined) {
+                showDateToggle.checked = preset.showDate;
+                document.querySelector('.date-display').style.display = 
+                    preset.showDate ? 'block' : 'none';
+            }
+            
+            if (preset.dateStyle) {
+                dateStyleSelect.value = preset.dateStyle;
+                document.querySelector('.date-display').className = 
+                    'date-display ' + preset.dateStyle;
             }
             
             // Update UI
