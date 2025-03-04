@@ -7,8 +7,9 @@
     <style>
         /* Custom Font Definitions */
         @font-face {
-            font-family: 'VFD Nova';
-            src: url('fonts/VFD-Nova.otf') format('opentype');
+            font-family: 'LCD';
+            src: url('fonts/Alarm-Clock.ttf') format('truetype'),
+                 url('fonts/VFD-Nova.otf') format('opentype');
             font-weight: normal;
             font-style: normal;
         }
@@ -561,10 +562,10 @@
             font-family: 'Georgia', 'Times New Roman', serif;
         }
         
-        .digital-time.vfd,
-        .timezone-display.vfd,
-        .date-display.vfd {
-            font-family: 'VFD Nova', 'Courier New', monospace;
+        .digital-time.lcd,
+        .timezone-display.lcd,
+        .date-display.lcd {
+            font-family: 'LCD', 'Courier New', monospace;
             letter-spacing: 2px;
             text-transform: uppercase;
         }
@@ -873,7 +874,7 @@
                 <option value="simple">Simple</option>
                 <option value="monospace">Monospace</option>
                 <option value="serif">Serif</option>
-                <option value="vfd">VFD Nova</option>
+                <option value="lcd">LCD</option>
             </select>
             <!-- OBS-compatible alternative -->
             <div class="select-buttons timezone-style-buttons" style="--buttons-per-row: 3">
@@ -881,7 +882,7 @@
                 <button class="select-btn timezone-style-btn" data-value="simple">Simple</button>
                 <button class="select-btn timezone-style-btn" data-value="monospace">Mono</button>
                 <button class="select-btn timezone-style-btn" data-value="serif">Serif</button>
-                <button class="select-btn timezone-style-btn" data-value="vfd">VFD</button>
+                <button class="select-btn timezone-style-btn" data-value="lcd">LCD</button>
             </div>
         </div>
         <div class="control-item">
@@ -898,7 +899,7 @@
                 <option value="simple">Simple</option>
                 <option value="monospace">Monospace</option>
                 <option value="serif">Serif</option>
-                <option value="vfd">VFD Nova</option>
+                <option value="lcd">LCD</option>
             </select>
             <!-- OBS-compatible alternative -->
             <div class="select-buttons date-style-buttons" style="--buttons-per-row: 3">
@@ -906,7 +907,7 @@
                 <button class="select-btn date-style-btn" data-value="simple">Simple</button>
                 <button class="select-btn date-style-btn" data-value="monospace">Mono</button>
                 <button class="select-btn date-style-btn" data-value="serif">Serif</button>
-                <button class="select-btn date-style-btn" data-value="vfd">VFD</button>
+                <button class="select-btn date-style-btn" data-value="lcd">LCD</button>
             </div>
         </div>
         <div class="control-item">
@@ -939,7 +940,7 @@
                 <option value="simple">Simple</option>
                 <option value="monospace">Monospace</option>
                 <option value="serif">Serif</option>
-                <option value="vfd">VFD Nova</option>
+                <option value="lcd">LCD</option>
             </select>
             <!-- OBS-compatible alternative -->
             <div class="select-buttons digital-style-buttons" style="--buttons-per-row: 3">
@@ -947,7 +948,7 @@
                 <button class="select-btn digital-style-btn" data-value="simple">Simple</button>
                 <button class="select-btn digital-style-btn" data-value="monospace">Mono</button>
                 <button class="select-btn digital-style-btn" data-value="serif">Serif</button>
-                <button class="select-btn digital-style-btn" data-value="vfd">VFD</button>
+                <button class="select-btn digital-style-btn" data-value="lcd">LCD</button>
             </div>
         </div>
         <div class="control-item">
@@ -1428,12 +1429,12 @@
                 theme: 'dark',
                 secondHand: false,
                 numbers: false,
-                digitalStyle: 'vfd',
+                digitalStyle: 'lcd',
                 handThickness: 'normal',
                 accentColor: '#2ecc71',
                 secondHandColor: '#27ae60',
                 showDate: true,
-                dateStyle: 'vfd',
+                dateStyle: 'lcd',
                 showSeconds: true
             },
             traditional: {
@@ -1515,9 +1516,9 @@
                 handThickness: 'thin',
                 accentColor: '#ff00ff',
                 secondHandColor: '#00ff00',
-                digitalStyle: 'vfd',
+                digitalStyle: 'lcd',
                 showDate: true,
-                dateStyle: 'vfd',
+                dateStyle: 'lcd',
                 showSeconds: true,
                 ampm: false
             },

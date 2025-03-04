@@ -16,7 +16,7 @@ A lightweight, customizable clock overlay for OBS. Perfect for streamers who wan
   - Fifteen pre-defined style presets (Modern, Cyberpunk, Lo-Fi, Nature, and more)
   - Toggle for clock numbers (Arabic or Roman numerals)
   - AM/PM or 24-hour time format
-  - Customizable font styles for digital clock, date, and time zone (including serif and VFD display)
+  - Customizable font styles for digital clock, date, and time zone (including serif and LCD display)
   - Color and size customization
 - **OBS/Streamlabs Compatibility**: Built-in compatibility mode for browser sources with dropdown issues
 - **Draggable**: Position anywhere on your stream
@@ -47,12 +47,12 @@ A lightweight, customizable clock overlay for OBS. Perfect for streamers who wan
 - **Display Seconds**: Toggle seconds in the digital time display
 - **Time Zone**: Select from multiple time zones around the world
 - **Show Time Zone**: Display the name of the selected time zone below the clock
-- **Time Zone Style**: Choose from different font styles (rounded, simple, monospace, serif, VFD)
+- **Time Zone Style**: Choose from different font styles (rounded, simple, monospace, serif, LCD)
 - **Show Date**: Toggle the display of the current date
-- **Date Style**: Choose from different font styles (rounded, simple, monospace, serif, VFD)
+- **Date Style**: Choose from different font styles (rounded, simple, monospace, serif, LCD)
 - **Clock Numbers**: Show or hide hour numbers on the clock face
 - **Number Style**: Choose between simple numbers, Roman numerals, dots, or serif
-- **Digital Style**: Different font options including rounded, simple, monospace, serif, and VFD display
+- **Digital Style**: Different font options including rounded, simple, monospace, serif, and LCD display
 - **Theme**: Choose from nine themes:
   - Light: Clean white background with dark elements
   - Dark: Dark background with light elements
@@ -73,7 +73,7 @@ A lightweight, customizable clock overlay for OBS. Perfect for streamers who wan
   - Modern Minimal: Clean, minimalist design with blue accents
   - Coastal Calm: Soothing blue and teal color scheme
   - Art Deco: Elegant gold and black design
-  - Digital Display: VFD digital-only display with a tech feel
+  - Digital Display: LCD digital-only display with a tech feel
   - Traditional: Classic Roman numeral clock with natural wood tones
   - Gaming HUD: Transparent clock with gaming-inspired neon colors
   - Retro Vibe: Warm oranges with thicker hands for a vintage feel
@@ -103,7 +103,8 @@ A lightweight, customizable clock overlay for OBS. Perfect for streamers who wan
 
 ## Credits
 
-- VFD Nova Font by [Nihar Mazumdar](https://www.fontspace.com/nihar-mazumdar), included for use with the digital time display
+- Alarm Clock Font by [David J Patterson](https://www.dafont.com/david-j-patterson.d5686), included for use with the digital time display
+- VFD Nova Font by [Nihar Mazumdar](https://www.fontspace.com/nihar-mazumdar), included as a fallback font
 
 ## License
 
