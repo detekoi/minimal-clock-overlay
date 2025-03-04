@@ -337,6 +337,52 @@
             display: grid; /* Show selector buttons in OBS mode */
         }
         
+        /* Timezone navigation for OBS mode */
+        .timezone-navigation {
+            display: none;
+            width: 100%;
+            align-items: center;
+            justify-content: space-between;
+            background-color: rgba(var(--control-bg-r, 240), var(--control-bg-g, 240), var(--control-bg-b, 240), 0.7);
+            border-radius: 4px;
+            border: 1px solid var(--marker-color);
+            padding: 2px 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+            height: 22px;
+        }
+        
+        .obs-mode .timezone-navigation {
+            display: flex;
+        }
+        
+        .tz-nav-btn {
+            background-color: transparent;
+            border: none;
+            color: var(--text-color);
+            font-size: 14px;
+            cursor: pointer;
+            padding: 0 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        
+        .tz-nav-btn:hover {
+            color: var(--accent-color);
+        }
+        
+        .tz-display {
+            flex: 1;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-color);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 0 5px;
+        }
+        
         input[type="color"] {
             width: 30px;
             height: 20px;
@@ -733,6 +779,12 @@
                 <option value="local">Local Time</option>
                 <!-- Added timezones will be populated by JavaScript -->
             </select>
+            <!-- OBS-compatible alternative -->
+            <div class="timezone-navigation">
+                <button class="tz-nav-btn prev-tz">&lt;</button>
+                <div class="tz-display">Local Time</div>
+                <button class="tz-nav-btn next-tz">&gt;</button>
+            </div>
         </div>
         <div class="control-item">
             <span>Show Time Zone</span>
@@ -1824,13 +1876,72 @@
                 // Update UI
                 updateClockNumbers();
                 updateAccentSize();
+                updateTimezoneDisplay(); // Update timezone navigation display
             } else {
                 // Default settings if nothing is saved
                 digitalTime.className = 'digital-time rounded';
                 updateClockNumbers();
                 updateAccentSize();
+                updateTimezoneDisplay(); // Update timezone navigation display
             }
         }
+        
+        // Timezone navigation for OBS mode
+        const prevTzBtn = document.querySelector('.prev-tz');
+        const nextTzBtn = document.querySelector('.next-tz');
+        const tzDisplay = document.querySelector('.tz-display');
+        
+        // Function to update timezone display in the navigation component
+        function updateTimezoneDisplay() {
+            const selectedValue = timezoneSelect.value;
+            let displayText = 'Local Time';
+            
+            if (selectedValue !== 'local') {
+                const selectedOption = timezones.find(tz => tz.value === selectedValue);
+                if (selectedOption) {
+                    displayText = selectedOption.label;
+                }
+            }
+            
+            tzDisplay.textContent = displayText;
+        }
+        
+        // Navigate through timezones
+        function navigateTimezones(direction) {
+            // Create a list of all timezone values
+            const tzValues = ['local', ...timezones.map(tz => tz.value)];
+            
+            // Find current index
+            const currentIndex = tzValues.indexOf(timezoneSelect.value);
+            
+            // Calculate next index with wraparound
+            let nextIndex;
+            if (direction === 'prev') {
+                nextIndex = (currentIndex - 1 + tzValues.length) % tzValues.length;
+            } else { // next
+                nextIndex = (currentIndex + 1) % tzValues.length;
+            }
+            
+            // Set the new timezone
+            timezoneSelect.value = tzValues[nextIndex];
+            
+            // Update the display
+            updateTimezoneDisplay();
+            
+            // Trigger change event to update the clock
+            const event = new Event('change');
+            timezoneSelect.dispatchEvent(event);
+        }
+        
+        // Set up event listeners for timezone navigation
+        prevTzBtn.addEventListener('click', () => navigateTimezones('prev'));
+        nextTzBtn.addEventListener('click', () => navigateTimezones('next'));
+        
+        // Initialize timezone display
+        updateTimezoneDisplay();
+        
+        // Update timezone display when select changes
+        timezoneSelect.addEventListener('change', updateTimezoneDisplay);
         
         // Set up event listeners to save settings when changed
         const settingsControls = [
