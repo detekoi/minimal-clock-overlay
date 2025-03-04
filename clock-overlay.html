@@ -1161,7 +1161,39 @@
         });
         
         accentColorPicker.addEventListener('input', function() {
-            document.documentElement.style.setProperty('--accent-color', this.value + 'CC');
+            // Set the accent color with alpha channel
+            const accentColor = this.value + 'CC'; // Add 80% opacity
+            document.documentElement.style.setProperty('--accent-color', accentColor);
+            
+            // Apply to center dot
+            document.querySelector('.center-dot').style.backgroundColor = accentColor;
+            
+            // Apply to second hand dot
+            const secondHandDotStyle = document.createElement('style');
+            secondHandDotStyle.innerHTML = `.second-hand::after { background-color: ${accentColor}; }`;
+            
+            // Replace existing style or add new one
+            const existingDotStyle = document.getElementById('second-hand-dot-accent-style');
+            if (existingDotStyle) {
+                existingDotStyle.innerHTML = secondHandDotStyle.innerHTML;
+            } else {
+                secondHandDotStyle.id = 'second-hand-dot-accent-style';
+                document.head.appendChild(secondHandDotStyle);
+            }
+            
+            // Apply to digital time underline
+            document.querySelector('.digital-time').style.setProperty('--accent-color', accentColor);
+            
+            // Also update slider styles to match accent color
+            document.querySelectorAll('input[type="range"]::-webkit-slider-thumb').forEach(thumb => {
+                thumb.style.backgroundColor = accentColor;
+            });
+            
+            // Apply to selected buttons
+            document.querySelectorAll('.select-btn.active').forEach(btn => {
+                btn.style.backgroundColor = accentColor;
+            });
+            
             updateAccentSize();
         });
         
@@ -1199,7 +1231,12 @@
         }
         
         secondHandColorPicker.addEventListener('input', function() {
-            document.documentElement.style.setProperty('--clock-hand-second', this.value + 'CC');
+            // Set the second hand color variable with alpha channel
+            const secondHandColor = this.value + 'CC'; // Add 80% opacity
+            document.documentElement.style.setProperty('--clock-hand-second', secondHandColor);
+            
+            // Directly apply color to the second hand element
+            document.querySelector('.second-hand').style.backgroundColor = secondHandColor;
         });
         
         // Removed the transparent toggle handler since we now use the theme selector
@@ -1496,12 +1533,16 @@
             
             if (preset.accentColor) {
                 accentColorPicker.value = preset.accentColor;
-                document.documentElement.style.setProperty('--accent-color', preset.accentColor + 'CC');
+                // Trigger the input event to apply all color settings
+                const accentEvent = new Event('input');
+                accentColorPicker.dispatchEvent(accentEvent);
             }
             
             if (preset.secondHandColor) {
                 secondHandColorPicker.value = preset.secondHandColor;
-                document.documentElement.style.setProperty('--clock-hand-second', preset.secondHandColor + 'CC');
+                // Trigger the input event to apply all color settings
+                const secondHandEvent = new Event('input');
+                secondHandColorPicker.dispatchEvent(secondHandEvent);
             }
             
             if (preset.showSeconds !== undefined) {
@@ -1898,7 +1939,9 @@
                 
                 if (settings.accentColor) {
                     accentColorPicker.value = settings.accentColor;
-                    document.documentElement.style.setProperty('--accent-color', settings.accentColor + 'CC');
+                    // Trigger the input event to apply all color settings
+                    const accentEvent = new Event('input');
+                    accentColorPicker.dispatchEvent(accentEvent);
                 }
                 
                 if (settings.accentSize !== undefined) {
@@ -1907,7 +1950,9 @@
                 
                 if (settings.secondHandColor) {
                     secondHandColorPicker.value = settings.secondHandColor;
-                    document.documentElement.style.setProperty('--clock-hand-second', settings.secondHandColor + 'CC');
+                    // Trigger the input event to apply all color settings
+                    const secondHandEvent = new Event('input');
+                    secondHandColorPicker.dispatchEvent(secondHandEvent);
                 }
                 
                 // Set timezone if saved
