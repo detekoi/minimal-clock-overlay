@@ -2260,8 +2260,13 @@
                 // Add click handler to all buttons
                 buttons.forEach(btn => {
                     btn.addEventListener('click', () => {
-                        // Remove active class from all buttons
-                        buttons.forEach(b => b.classList.remove('active'));
+                        // Remove active class from all buttons and reset their styles
+                        buttons.forEach(b => {
+                            b.classList.remove('active');
+                            b.style.removeProperty('background-color');
+                            b.style.removeProperty('color');
+                            b.style.removeProperty('border-color');
+                        });
                         
                         // Add active class to clicked button
                         btn.classList.add('active');
