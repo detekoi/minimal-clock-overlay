@@ -394,13 +394,18 @@
             font-size: 14px;
         }
         
-        .timezone-display {
+        .timezone-display,
+        .date-display {
             font-size: 14px;
             color: var(--text-color);
             opacity: 0.8;
             text-align: center;
             margin-top: 5px;
             font-family: var(--digital-font);
+        }
+        
+        .date-display {
+            margin-top: 10px;
         }
         
         .digital-time::after {
@@ -414,23 +419,33 @@
             opacity: 0.5;
         }
         
-        .digital-time.simple {
+        .digital-time.simple,
+        .timezone-display.simple,
+        .date-display.simple {
             font-family: 'Arial', sans-serif;
         }
         
-        .digital-time.rounded {
+        .digital-time.rounded,
+        .timezone-display.rounded,
+        .date-display.rounded {
             font-family: 'Arial Rounded MT Bold', 'Helvetica Rounded', Arial, sans-serif;
         }
         
-        .digital-time.monospace {
+        .digital-time.monospace,
+        .timezone-display.monospace,
+        .date-display.monospace {
             font-family: 'Courier New', monospace;
         }
         
-        .digital-time.serif {
+        .digital-time.serif,
+        .timezone-display.serif,
+        .date-display.serif {
             font-family: 'Georgia', 'Times New Roman', serif;
         }
         
-        .digital-time.vfd {
+        .digital-time.vfd,
+        .timezone-display.vfd,
+        .date-display.vfd {
             font-family: 'VFD Nova', 'Courier New', monospace;
             letter-spacing: 2px;
         }
@@ -633,6 +648,7 @@
             <div class="digital-time">00:00</div>
             <div class="digital-controls-toggle"></div>
         </div>
+        <div class="date-display" style="display: none;"></div>
         <div class="timezone-display" style="display: none;"></div>
     </div>
     <div class="controls">
@@ -724,6 +740,49 @@
                 <input type="checkbox" id="show-timezone-toggle">
                 <span class="slider"></span>
             </label>
+        </div>
+        <div class="control-item">
+            <span>Time Zone Style</span>
+            <select id="timezone-style-select">
+                <option value="rounded">Rounded</option>
+                <option value="simple">Simple</option>
+                <option value="monospace">Monospace</option>
+                <option value="serif">Serif</option>
+                <option value="vfd">VFD Nova</option>
+            </select>
+            <!-- OBS-compatible alternative -->
+            <div class="select-buttons timezone-style-buttons" style="--buttons-per-row: 3">
+                <button class="select-btn timezone-style-btn" data-value="rounded">Rounded</button>
+                <button class="select-btn timezone-style-btn" data-value="simple">Simple</button>
+                <button class="select-btn timezone-style-btn" data-value="monospace">Mono</button>
+                <button class="select-btn timezone-style-btn" data-value="serif">Serif</button>
+                <button class="select-btn timezone-style-btn" data-value="vfd">VFD</button>
+            </div>
+        </div>
+        <div class="control-item">
+            <span>Show Date</span>
+            <label class="switch">
+                <input type="checkbox" id="show-date-toggle">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="control-item">
+            <span>Date Style</span>
+            <select id="date-style-select">
+                <option value="rounded">Rounded</option>
+                <option value="simple">Simple</option>
+                <option value="monospace">Monospace</option>
+                <option value="serif">Serif</option>
+                <option value="vfd">VFD Nova</option>
+            </select>
+            <!-- OBS-compatible alternative -->
+            <div class="select-buttons date-style-buttons" style="--buttons-per-row: 3">
+                <button class="select-btn date-style-btn" data-value="rounded">Rounded</button>
+                <button class="select-btn date-style-btn" data-value="simple">Simple</button>
+                <button class="select-btn date-style-btn" data-value="monospace">Mono</button>
+                <button class="select-btn date-style-btn" data-value="serif">Serif</button>
+                <button class="select-btn date-style-btn" data-value="vfd">VFD</button>
+            </div>
         </div>
         <div class="control-item">
             <span>Clock Numbers</span>
@@ -891,6 +950,9 @@
         const ampmToggle = document.getElementById('ampm-toggle');
         const secondsToggle = document.getElementById('seconds-toggle');
         const showTimezoneToggle = document.getElementById('show-timezone-toggle');
+        const timezoneStyleSelect = document.getElementById('timezone-style-select');
+        const showDateToggle = document.getElementById('show-date-toggle');
+        const dateStyleSelect = document.getElementById('date-style-select');
         const numbersToggle = document.getElementById('numbers-toggle');
         const numberStyleSelect = document.getElementById('number-style-select');
         const digitalStyleSelect = document.getElementById('digital-style-select');
@@ -934,6 +996,20 @@
         
         showTimezoneToggle.addEventListener('change', function() {
             document.querySelector('.timezone-display').style.display = this.checked ? 'block' : 'none';
+        });
+        
+        timezoneStyleSelect.addEventListener('change', function() {
+            const timezoneDisplay = document.querySelector('.timezone-display');
+            timezoneDisplay.className = 'timezone-display ' + this.value;
+        });
+        
+        showDateToggle.addEventListener('change', function() {
+            document.querySelector('.date-display').style.display = this.checked ? 'block' : 'none';
+        });
+        
+        dateStyleSelect.addEventListener('change', function() {
+            const dateDisplay = document.querySelector('.date-display');
+            dateDisplay.className = 'date-display ' + this.value;
         });
         
         digitalStyleSelect.addEventListener('change', function() {
@@ -1538,6 +1614,28 @@
                 timezoneDisplay.textContent = tzOption ? tzOption.label : selectedTimezone;
             }
             
+            // Update date display
+            const dateDisplay = document.querySelector('.date-display');
+            const dateOptions = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric'
+            };
+            try {
+                if (selectedTimezone === 'local') {
+                    dateDisplay.textContent = now.toLocaleDateString(undefined, dateOptions);
+                } else {
+                    dateDisplay.textContent = now.toLocaleDateString(undefined, {
+                        ...dateOptions,
+                        timeZone: selectedTimezone
+                    });
+                }
+            } catch (e) {
+                // Fallback if timezone formatting fails
+                dateDisplay.textContent = now.toLocaleDateString(undefined, dateOptions);
+            }
+            
             // Call requestAnimationFrame for smooth animation
             requestAnimationFrame(updateClock);
         }
@@ -1554,6 +1652,9 @@
                 ampm: ampmToggle.checked,
                 showSeconds: secondsToggle.checked,
                 showTimezone: showTimezoneToggle.checked,
+                timezoneStyle: timezoneStyleSelect.value,
+                showDate: showDateToggle.checked,
+                dateStyle: dateStyleSelect.value,
                 numbers: numbersToggle.checked,
                 numberStyle: numberStyleSelect.value,
                 digitalStyle: digitalStyleSelect.value,
@@ -1612,6 +1713,30 @@
                     showTimezoneToggle.checked = settings.showTimezone;
                     document.querySelector('.timezone-display').style.display = 
                         settings.showTimezone ? 'block' : 'none';
+                }
+                
+                if (settings.timezoneStyle) {
+                    timezoneStyleSelect.value = settings.timezoneStyle;
+                    document.querySelector('.timezone-display').className = 
+                        'timezone-display ' + settings.timezoneStyle;
+                } else {
+                    document.querySelector('.timezone-display').className = 
+                        'timezone-display rounded'; // Default
+                }
+                
+                if (settings.showDate !== undefined) {
+                    showDateToggle.checked = settings.showDate;
+                    document.querySelector('.date-display').style.display = 
+                        settings.showDate ? 'block' : 'none';
+                }
+                
+                if (settings.dateStyle) {
+                    dateStyleSelect.value = settings.dateStyle;
+                    document.querySelector('.date-display').className = 
+                        'date-display ' + settings.dateStyle;
+                } else {
+                    document.querySelector('.date-display').className = 
+                        'date-display rounded'; // Default
                 }
                 
                 numbersToggle.checked = settings.numbers;
@@ -1709,7 +1834,9 @@
         
         // Set up event listeners to save settings when changed
         const settingsControls = [
-            secondHandToggle, displayModeSelect, ampmToggle, secondsToggle, showTimezoneToggle,
+            secondHandToggle, displayModeSelect, ampmToggle, secondsToggle, 
+            showTimezoneToggle, timezoneStyleSelect,
+            showDateToggle, dateStyleSelect,
             numbersToggle, numberStyleSelect, digitalStyleSelect, themeSelect,
             scaleSlider, handThicknessSelect, accentColorPicker,
             accentSizeSlider, secondHandColorPicker, timezoneSelect
@@ -1765,6 +1892,8 @@
             setupButtonGroup('display-mode-btn', 'display-mode-select');
             setupButtonGroup('number-style-btn', 'number-style-select');
             setupButtonGroup('digital-style-btn', 'digital-style-select');
+            setupButtonGroup('timezone-style-btn', 'timezone-style-select');
+            setupButtonGroup('date-style-btn', 'date-style-select');
             setupButtonGroup('hand-thickness-btn', 'hand-thickness-select');
             setupButtonGroup('preset-btn', 'preset-select');
         }
