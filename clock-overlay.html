@@ -1542,6 +1542,9 @@
             // Update UI
             updateClockNumbers();
             
+            // Update control visibility based on new settings
+            updateControlVisibility();
+            
             // Save settings
             saveSettings();
             
@@ -1985,6 +1988,68 @@
         // Update timezone display when select changes
         timezoneSelect.addEventListener('change', updateTimezoneDisplay);
         
+        // Function to update control visibility based on settings
+        function updateControlVisibility() {
+            // Get all control items
+            const controlItems = document.querySelectorAll('.control-item');
+            
+            // Hide Time Zone Style if Show Time Zone is disabled
+            const timeZoneStyleControl = Array.from(controlItems).find(
+                item => item.querySelector('span')?.textContent === 'Time Zone Style'
+            );
+            if (timeZoneStyleControl) {
+                timeZoneStyleControl.style.display = showTimezoneToggle.checked ? 'flex' : 'none';
+            }
+            
+            // Hide Date Style if Show Date is disabled
+            const dateStyleControl = Array.from(controlItems).find(
+                item => item.querySelector('span')?.textContent === 'Date Style'
+            );
+            if (dateStyleControl) {
+                dateStyleControl.style.display = showDateToggle.checked ? 'flex' : 'none';
+            }
+            
+            // Hide Number Style if Clock Numbers is disabled
+            const numberStyleControl = Array.from(controlItems).find(
+                item => item.querySelector('span')?.textContent === 'Number Style'
+            );
+            if (numberStyleControl) {
+                numberStyleControl.style.display = numbersToggle.checked ? 'flex' : 'none';
+            }
+            
+            // If Display Mode is set to Digital only
+            const isDigitalOnly = displayModeSelect.value === 'digital';
+            
+            // Hide analog-specific controls if in Digital only mode
+            const secondHandControl = Array.from(controlItems).find(
+                item => item.querySelector('span')?.textContent === 'Second Hand'
+            );
+            const clockNumbersControl = Array.from(controlItems).find(
+                item => item.querySelector('span')?.textContent === 'Clock Numbers'
+            );
+            const handThicknessControl = Array.from(controlItems).find(
+                item => item.querySelector('span')?.textContent === 'Hand Thickness'
+            );
+            const secondHandColorControl = Array.from(controlItems).find(
+                item => item.querySelector('span')?.textContent === 'Second Hand Color'
+            );
+            
+            if (secondHandControl) secondHandControl.style.display = isDigitalOnly ? 'none' : 'flex';
+            if (clockNumbersControl) clockNumbersControl.style.display = isDigitalOnly ? 'none' : 'flex';
+            if (numberStyleControl && isDigitalOnly) numberStyleControl.style.display = 'none';
+            if (handThicknessControl) handThicknessControl.style.display = isDigitalOnly ? 'none' : 'flex';
+            if (secondHandColorControl) secondHandColorControl.style.display = isDigitalOnly ? 'none' : 'flex';
+            
+            // Hide Digital Style if in Analog only mode
+            const isAnalogOnly = displayModeSelect.value === 'analog';
+            const digitalStyleControl = Array.from(controlItems).find(
+                item => item.querySelector('span')?.textContent === 'Digital Style'
+            );
+            if (digitalStyleControl) {
+                digitalStyleControl.style.display = isAnalogOnly ? 'none' : 'flex';
+            }
+        }
+
         // Set up event listeners to save settings when changed
         const settingsControls = [
             secondHandToggle, displayModeSelect, ampmToggle, secondsToggle, 
@@ -1998,6 +2063,11 @@
         settingsControls.forEach(control => {
             const eventType = control.type === 'range' || control.type === 'color' ? 'input' : 'change';
             control.addEventListener(eventType, saveSettings);
+            
+            // Additionally, update control visibility when these specific controls change
+            if ([displayModeSelect, showTimezoneToggle, showDateToggle, numbersToggle].includes(control)) {
+                control.addEventListener(eventType, updateControlVisibility);
+            }
         });
         
         // Default values are now defined in the presets
@@ -2056,6 +2126,9 @@
         
         // Setup OBS-compatible buttons
         setupSelectButtons();
+        
+        // Initialize control visibility based on current settings
+        updateControlVisibility();
         
         // OBS Compatibility Mode toggle
         const obsToggle = document.getElementById('obs-mode-toggle');
