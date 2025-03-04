@@ -1218,6 +1218,34 @@
             
             // Add the selected theme class
             document.body.classList.add('theme-' + this.value);
+            
+            // Update accent and second hand colors based on theme
+            const theme = this.value;
+            
+            // Define theme accent colors and second hand colors
+            const themeColors = {
+                light: { accent: '#85A67B', secondHand: '#787878' },
+                dark: { accent: '#A9CB9F', secondHand: '#DCDCDC' },
+                natural: { accent: '#96785A', secondHand: '#786458' },
+                transparent: { accent: '#85A67B', secondHand: '#B4B4B4' },
+                neon: { accent: '#FF00FF', secondHand: '#00FF00' },
+                pastel: { accent: '#B4DCF0', secondHand: '#F096AA' },
+                forest: { accent: '#C88232', secondHand: '#96AA5A' },
+                sunset: { accent: '#F05A5A', secondHand: '#F08C46' },
+                ocean: { accent: '#50BEDC', secondHand: '#28B4C8' }
+            };
+            
+            if (themeColors[theme]) {
+                // Set accent color
+                accentColorPicker.value = themeColors[theme].accent;
+                const accentEvent = new Event('input');
+                accentColorPicker.dispatchEvent(accentEvent);
+                
+                // Set second hand color
+                secondHandColorPicker.value = themeColors[theme].secondHand;
+                const secondHandEvent = new Event('input');
+                secondHandColorPicker.dispatchEvent(secondHandEvent);
+            }
         });
 
         scaleSlider.addEventListener('input', function() {
