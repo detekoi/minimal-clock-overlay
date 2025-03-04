@@ -390,6 +390,78 @@
             border-radius: 4px;
             cursor: pointer;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.1);
+            display: none; /* Hide for OBS compatibility */
+        }
+        
+        /* Color swatch carousel */
+        .color-swatches {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 3px;
+            width: 100%;
+            margin-top: 3px;
+        }
+        
+        .color-swatch {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 3px;
+            cursor: pointer;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            transition: transform 0.1s ease;
+            position: relative;
+        }
+        
+        .color-swatch:hover {
+            transform: scale(1.1);
+            z-index: 1;
+        }
+        
+        .color-swatch.active {
+            box-shadow: 0 0 0 2px white, 0 0 0 3px var(--accent-color);
+        }
+        
+        .color-nav {
+            display: flex;
+            justify-content: center;
+            margin-top: 3px;
+            gap: 3px;
+        }
+        
+        .color-nav-btn {
+            background-color: rgba(var(--control-bg-r, 240), var(--control-bg-g, 240), var(--control-bg-b, 240), 0.7);
+            color: var(--text-color);
+            border: 1px solid var(--marker-color);
+            border-radius: 3px;
+            padding: 1px 8px;
+            font-size: 10px;
+            cursor: pointer;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .color-nav-btn:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+        
+        .color-nav-btn.active {
+            background-color: var(--accent-color);
+            color: white;
+        }
+        
+        .obs-mode input[type="color"] {
+            display: none !important;
+        }
+        
+        .obs-mode .color-picker-container {
+            display: block;
+        }
+        
+        .color-picker-container {
+            display: none;
         }
 
         .digital-time {
@@ -925,6 +997,16 @@
         <div class="control-item">
             <span>Accent Color</span>
             <input type="color" id="accent-color-picker" value="#85A67B">
+            <div class="color-picker-container" id="accent-color-container">
+                <div class="color-swatches" id="accent-color-swatches">
+                    <!-- Color swatches will be added by JavaScript -->
+                </div>
+                <div class="color-nav">
+                    <button class="color-nav-btn accent-palette-btn active" data-palette="main">Main</button>
+                    <button class="color-nav-btn accent-palette-btn" data-palette="pastel">Pastel</button>
+                    <button class="color-nav-btn accent-palette-btn" data-palette="neon">Neon</button>
+                </div>
+            </div>
         </div>
         <div class="control-item">
             <span>Accent Size</span>
@@ -933,6 +1015,16 @@
         <div class="control-item">
             <span>Second Hand Color</span>
             <input type="color" id="second-hand-color-picker" value="#787878">
+            <div class="color-picker-container" id="second-hand-color-container">
+                <div class="color-swatches" id="second-hand-color-swatches">
+                    <!-- Color swatches will be added by JavaScript -->
+                </div>
+                <div class="color-nav">
+                    <button class="color-nav-btn second-hand-palette-btn active" data-palette="main">Main</button>
+                    <button class="color-nav-btn second-hand-palette-btn" data-palette="pastel">Pastel</button>
+                    <button class="color-nav-btn second-hand-palette-btn" data-palette="neon">Neon</button>
+                </div>
+            </div>
         </div>
         <div class="control-item">
             <span>OBS/Streamlabs Mode</span>
@@ -2179,12 +2271,34 @@
         // OBS Compatibility Mode toggle
         const obsToggle = document.getElementById('obs-mode-toggle');
         
-        obsToggle.addEventListener('change', function() {
-            if (this.checked) {
+        function updateObsMode() {
+            const isObsMode = obsToggle.checked;
+            
+            if (isObsMode) {
                 document.body.classList.add('obs-mode');
+                // Show swatch containers
+                document.querySelectorAll('.color-picker-container').forEach(container => {
+                    container.style.display = 'block';
+                });
+                // Hide actual color inputs
+                document.querySelectorAll('input[type="color"]').forEach(input => {
+                    input.style.display = 'none';
+                });
             } else {
                 document.body.classList.remove('obs-mode');
+                // Hide swatch containers
+                document.querySelectorAll('.color-picker-container').forEach(container => {
+                    container.style.display = 'none';
+                });
+                // Show actual color inputs
+                document.querySelectorAll('input[type="color"]').forEach(input => {
+                    input.style.display = 'block';
+                });
             }
+        }
+        
+        obsToggle.addEventListener('change', function() {
+            updateObsMode();
             
             // Save OBS mode preference
             localStorage.setItem('obsMode', this.checked);
@@ -2194,8 +2308,9 @@
         const savedObsMode = localStorage.getItem('obsMode');
         if (savedObsMode === null || savedObsMode === 'true') {
             obsToggle.checked = true;
-            document.body.classList.add('obs-mode');
             document.querySelector('.obs-preview-window').style.display = 'block';
+            // Apply OBS mode changes
+            updateObsMode();
         }
         
         // Update OBS preview window when toggle changes
@@ -2226,6 +2341,9 @@
         
         // Handle window resize
         window.addEventListener('resize', updateControlsPosition);
+        
+        // Initialize color swatches
+        setupColorSwatches();
         
         // Start the clock
         updateClock();
@@ -2280,6 +2398,157 @@
                 // Ensure the controls are positioned correctly
                 updateControlsPosition();
             }
+        }
+        
+        // Setup color swatch pickers
+        function setupColorSwatches() {
+            // Color palettes for swatches
+            const colorPalettes = {
+                main: [
+                    '#FF5252', '#FF4081', '#E040FB', '#7C4DFF', '#536DFE', '#448AFF',
+                    '#40C4FF', '#18FFFF', '#64FFDA', '#69F0AE', '#B2FF59', '#EEFF41',
+                    '#FFFF00', '#FFD740', '#FFAB40', '#FF6E40', '#78909C', '#FFFFFF',
+                    '#BDBDBD', '#757575', '#424242', '#212121', '#000000', '#85A67B'
+                ],
+                pastel: [
+                    '#FFCDD2', '#F8BBD0', '#E1BEE7', '#D1C4E9', '#C5CAE9', '#BBDEFB',
+                    '#B3E5FC', '#B2EBF2', '#B2DFDB', '#C8E6C9', '#DCEDC8', '#F0F4C3',
+                    '#FFF9C4', '#FFECB3', '#FFE0B2', '#FFCCBC', '#D7CCC8', '#F5F5F5',
+                    '#CFD8DC', '#FBEFEB', '#ECEBF3', '#E8F8F5', '#FAEEEE', '#F0F5E8'
+                ],
+                neon: [
+                    '#FF0000', '#FF00FF', '#AA00FF', '#0000FF', '#00FFFF', '#00FF00',
+                    '#FFFF00', '#FF6600', '#FF3399', '#33FF99', '#33FFFF', '#33CCFF',
+                    '#3366FF', '#CC33FF', '#FF33CC', '#FF7F00', '#F0FF00', '#00FF7F',
+                    '#FF33F5', '#FF66CC', '#33FFC4', '#FDFF00', '#808080', '#FFFFFF'
+                ]
+            };
+            
+            // Setup accent color swatches
+            setupColorPickerSwatches(
+                'accent-color-swatches',
+                'accent-color-picker',
+                colorPalettes,
+                '.accent-palette-btn'
+            );
+            
+            // Setup second hand color swatches
+            setupColorPickerSwatches(
+                'second-hand-color-swatches',
+                'second-hand-color-picker',
+                colorPalettes,
+                '.second-hand-palette-btn'
+            );
+        }
+        
+        function setupColorPickerSwatches(swatchesContainerId, colorPickerId, palettes, paletteButtonSelector) {
+            const container = document.getElementById(swatchesContainerId);
+            const colorPicker = document.getElementById(colorPickerId);
+            const paletteButtons = document.querySelectorAll(paletteButtonSelector);
+            
+            // Initial palette is 'main'
+            let currentPalette = 'main';
+            
+            // Function to render swatches for current palette
+            function renderSwatches() {
+                // Clear existing swatches
+                container.innerHTML = '';
+                
+                // Create swatches for current palette
+                palettes[currentPalette].forEach(color => {
+                    const swatch = document.createElement('button');
+                    swatch.className = 'color-swatch';
+                    swatch.style.backgroundColor = color;
+                    
+                    // Mark active if matches current color picker value
+                    if (color.toLowerCase() === colorPicker.value.toLowerCase()) {
+                        swatch.classList.add('active');
+                    }
+                    
+                    // Add click handler
+                    swatch.addEventListener('click', () => {
+                        // Update color picker value
+                        colorPicker.value = color;
+                        
+                        // Remove active class from all swatches
+                        container.querySelectorAll('.color-swatch').forEach(s => {
+                            s.classList.remove('active');
+                        });
+                        
+                        // Add active class to clicked swatch
+                        swatch.classList.add('active');
+                        
+                        // Trigger input event on color picker to apply changes
+                        const event = new Event('input');
+                        colorPicker.dispatchEvent(event);
+                    });
+                    
+                    container.appendChild(swatch);
+                });
+            }
+            
+            // Handle palette button clicks
+            paletteButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Update current palette
+                    currentPalette = button.dataset.palette;
+                    
+                    // Remove active class from all palette buttons
+                    paletteButtons.forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    
+                    // Add active class to clicked button
+                    button.classList.add('active');
+                    
+                    // Render swatches for new palette
+                    renderSwatches();
+                });
+            });
+            
+            // Initialize with first palette
+            renderSwatches();
+            
+            // Handle color picker changes (to sync selected swatch)
+            colorPicker.addEventListener('input', () => {
+                // Update swatches to reflect selected color
+                const swatches = container.querySelectorAll('.color-swatch');
+                let found = false;
+                
+                swatches.forEach(swatch => {
+                    // Check if swatch color matches picker
+                    if (rgbToHex(swatch.style.backgroundColor).toLowerCase() === colorPicker.value.toLowerCase()) {
+                        swatch.classList.add('active');
+                        found = true;
+                    } else {
+                        swatch.classList.remove('active');
+                    }
+                });
+                
+                // If we can't find an exact match, don't highlight any swatch
+                if (!found) {
+                    swatches.forEach(swatch => {
+                        swatch.classList.remove('active');
+                    });
+                }
+            });
+        }
+        
+        // Helper function to convert RGB to Hex
+        function rgbToHex(rgb) {
+            // If already hex or named color
+            if (!rgb || rgb.charAt(0) === '#') return rgb;
+            
+            // RGB or RGBA format parsing
+            const rgbMatch = rgb.match(/rgba?\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i);
+            if (rgbMatch) {
+                return '#' + 
+                    Number(rgbMatch[1]).toString(16).padStart(2, '0') +
+                    Number(rgbMatch[2]).toString(16).padStart(2, '0') +
+                    Number(rgbMatch[3]).toString(16).padStart(2, '0');
+            }
+            
+            return rgb; // Return original if can't parse
         }
     </script>
 </body>
