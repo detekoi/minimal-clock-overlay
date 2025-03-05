@@ -27,7 +27,7 @@ A lightweight, customizable clock overlay for OBS. Perfect for streamers who wan
 
 ## Installation
 
-### Using GitHub Pages (Recommended Online Method)
+### Using GitHub Pages (Easy Online Method)
 The easiest way to use this clock overlay is with the online version:
 1. Visit [https://detekoi.github.io/minimal-clock-overlay/scene-manager.html](https://detekoi.github.io/minimal-clock-overlay/scene-manager.html)
 2. Create a new clock scene with a meaningful name (e.g., "Gaming Scene Clock")
