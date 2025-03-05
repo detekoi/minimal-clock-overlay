@@ -27,8 +27,14 @@ A lightweight, customizable clock overlay for OBS. Perfect for streamers who wan
 
 ## Installation
 
+### Downloading from GitHub
+1. Click the green "Code" button near the top of the page
+2. Select "Download ZIP" from the dropdown menu
+3. Extract the ZIP file to a location on your computer
+4. You'll now have all the necessary files to use the clock overlay
+
 ### Using Scene Manager (Recommended)
-1. Open `index.html` in your browser to access the Clock Scene Manager
+1. After downloading the files, open `scene-manager.html` in your browser to access the Clock Scene Manager
 2. Create a new clock scene with a meaningful name (e.g., "Gaming Scene Clock")
 3. Copy the generated URL
 4. In OBS Studio, add a new "Browser Source"
@@ -37,10 +43,17 @@ A lightweight, customizable clock overlay for OBS. Perfect for streamers who wan
 7. Check "Refresh browser when scene becomes active" (optional)
 
 ### Direct Installation (Legacy Method)
-1. In OBS Studio, add a new "Browser Source"
-2. Set the width and height to appropriate values (recommended: 300x300)
-3. Check "Local file" and browse to select the `clock-overlay.html` file
-4. Check "Refresh browser when scene becomes active" (optional)
+1. After downloading the files, open OBS Studio
+2. Add a new "Browser Source"
+3. Set the width and height to appropriate values (recommended: 300x300)
+4. Check "Local file" and browse to select the `clock-overlay.html` file
+5. Check "Refresh browser when scene becomes active" (optional)
+
+### Using GitHub Pages (Online Method)
+If you prefer not to download any files, you can use the online version:
+1. Visit [https://detekoi.github.io/minimal-clock-overlay/scene-manager.html](https://detekoi.github.io/minimal-clock-overlay/scene-manager.html)
+2. Create a new clock scene
+3. Copy the generated URL to use in your OBS Browser Source
 
 ## Usage
 
@@ -113,7 +126,7 @@ The Clock Scene Manager allows you to create and manage multiple clock configura
 
 ### How to Use
 
-1. Open `index.html` in your web browser to access the Scene Manager
+1. Open `scene-manager.html` in your web browser to access the Scene Manager
 2. Create a new clock scene with a descriptive name
 3. Copy the browser source URL
 4. Add to OBS as a browser source
