@@ -271,6 +271,17 @@
         .alert-icon {
             margin-right: 0.5rem;
         }
+        
+        /* Modal alert styles */
+        .modal .alert {
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .modal .alert ol {
+            margin: 0;
+            padding-left: 1.25rem;
+        }
 
         /* ID badge */
         .badge {
@@ -295,6 +306,7 @@
             border-radius: var(--radius);
             cursor: pointer;
             transition: all 0.2s;
+            width: 150px;
         }
 
         .copy-btn:hover {
@@ -335,6 +347,28 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+        }
+        
+        /* URL display in table */
+        .table-url-display {
+            margin-top: 0;
+            padding: 0.25rem 0.5rem;
+            max-width: 300px;
+            min-width: 200px;
+        }
+        
+        /* Highlighted URL display for modal */
+        .url-display-highlight {
+            font-size: 1.1em;
+            background-color: rgba(133, 166, 123, 0.1);
+            border: 2px solid var(--accent-color);
+            padding: 0.75rem;
+        }
+        
+        .highlighted-url label {
+            font-weight: 600;
+            color: var(--accent-dark);
+            font-size: 1.1em;
         }
 
         /* Sort and filter controls */
@@ -533,17 +567,17 @@
                 <div class="form-group">
                     <label for="instance-name">Name</label>
                     <input type="text" id="instance-name" class="form-control" placeholder="e.g., Gaming Scene Clock" required>
-                    <span class="form-hint">Give your clock instance a descriptive name</span>
+                    <span class="form-hint">Give your clock scene a descriptive name</span>
                 </div>
                 <div class="form-group">
-                    <label for="instance-id">Instance ID</label>
+                    <label for="instance-id">Scene ID</label>
                     <input type="text" id="instance-id" class="form-control" placeholder="e.g., gaming-scene-clock" required>
                     <span class="form-hint">A unique identifier with no spaces (auto-generated from name)</span>
                 </div>
                 <div class="form-group">
                     <label for="instance-description">Description (optional)</label>
                     <input type="text" id="instance-description" class="form-control" placeholder="e.g., Transparent clock for gameplay">
-                    <span class="form-hint">Add details to help remember this instance's purpose</span>
+                    <span class="form-hint">Add details to help remember this scene's purpose</span>
                 </div>
                 <button type="submit" class="btn btn-primary btn-full">Create Scene</button>
             </form>
@@ -570,7 +604,6 @@
                     <select id="sort-by" class="form-control">
                         <option value="name">Name</option>
                         <option value="createdAt">Date Created</option>
-                        <option value="lastUsed">Last Used</option>
                     </select>
                 </div>
                 <div class="control-group">
@@ -584,7 +617,7 @@
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th>Last Used</th>
+                            <th>URL</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -606,22 +639,22 @@
     <div id="instance-details-modal" class="modal-backdrop">
         <div class="modal">
             <div class="modal-header">
-                <h3 class="modal-title">Instance Details</h3>
+                <h3 class="modal-title">Scene Details</h3>
                 <button class="modal-close" id="close-modal">&times;</button>
             </div>
             <div class="modal-body">
-                <div id="instance-details-content">
-                    <!-- Details will be filled dynamically -->
-                </div>
-                <div class="form-group mt-3">
-                    <label>Browser Source URL</label>
-                    <div class="url-display">
+                <div class="form-group highlighted-url">
+                    <label>Browser Source URL <span class="text-muted text-sm">(Copy this URL to OBS)</span></label>
+                    <div class="url-display url-display-highlight">
                         <span id="instance-url" class="truncate"></span>
                         <button id="copy-url-btn" class="copy-btn">
                             Copy
                             <span class="tooltip">Copied!</span>
                         </button>
                     </div>
+                </div>
+                <div id="instance-details-content" class="mt-4">
+                    <!-- Details will be filled dynamically -->
                 </div>
             </div>
             <div class="modal-footer">
@@ -635,23 +668,6 @@
     </div>
 
     <script>
-        // Handle migration from old storage key to new one
-        (function migrateLegacyData() {
-            const OLD_STORAGE_KEY = 'minimal-clock-instances';
-            const oldData = localStorage.getItem(OLD_STORAGE_KEY);
-            
-            if (oldData) {
-                // Check if new storage key already exists
-                const newDataExists = localStorage.getItem('minimal-clock-scenes');
-                
-                if (!newDataExists) {
-                    // Copy data from old key to new key
-                    localStorage.setItem('minimal-clock-scenes', oldData);
-                    console.log('Successfully migrated clock settings from old storage key');
-                }
-            }
-        })();
-        
         // Data storage structure
         const STORAGE_KEY = 'minimal-clock-scenes';
         const DEFAULT_DATA = {
@@ -726,7 +742,7 @@
             renderInstances();
             
             // Show success message
-            showAlert(`Clock instance "${name}" created successfully`, 'success');
+            showAlert(`Clock scene "${name}" created successfully`, 'success');
             
             // Show details modal with URL
             showInstanceDetails(newInstance);
@@ -763,8 +779,6 @@
                     return a.name.localeCompare(b.name);
                 } else if (sortBy === 'createdAt') {
                     return new Date(b.createdAt) - new Date(a.createdAt);
-                } else if (sortBy === 'lastUsed') {
-                    return new Date(b.lastUsed) - new Date(a.lastUsed);
                 }
                 return 0;
             });
@@ -789,6 +803,10 @@
                     const formattedDate = lastUsedDate.toLocaleDateString() + ' ' + 
                                           lastUsedDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                     
+                    // Generate the URL
+                    const baseUrl = window.location.href.replace(/\/[^\/]*$/, '/clock-overlay.html');
+                    const url = `${baseUrl}?scene=${instance.instanceId}`;
+                    
                     row.innerHTML = `
                         <td>
                             <div>${instance.name}</div>
@@ -797,7 +815,15 @@
                                 <span class="badge">${instance.instanceId}</span>
                             </div>
                         </td>
-                        <td>${formattedDate}</td>
+                        <td>
+                            <div class="url-display table-url-display">
+                                <span class="truncate">${url}</span>
+                                <button class="copy-btn row-copy-btn" data-url="${url}">
+                                    Copy
+                                    <span class="tooltip">Copied!</span>
+                                </button>
+                            </div>
+                        </td>
                         <td>
                             <div class="actions">
                                 <button class="btn btn-sm view-btn" data-id="${instance.instanceId}">Details</button>
@@ -829,6 +855,42 @@
                     });
                 });
                 
+                // Add event listeners to row copy buttons
+                document.querySelectorAll('.row-copy-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const url = this.getAttribute('data-url');
+                        const tooltip = this.querySelector('.tooltip');
+                        
+                        // Copy to clipboard
+                        if (navigator.clipboard) {
+                            navigator.clipboard.writeText(url)
+                                .then(() => {
+                                    tooltip.classList.add('show');
+                                    setTimeout(() => tooltip.classList.remove('show'), 2000);
+                                })
+                                .catch(err => console.error('Could not copy text: ', err));
+                        } else {
+                            // Fallback for older browsers
+                            const textArea = document.createElement('textarea');
+                            textArea.value = url;
+                            textArea.style.position = 'fixed';
+                            document.body.appendChild(textArea);
+                            textArea.focus();
+                            textArea.select();
+                            
+                            try {
+                                document.execCommand('copy');
+                                tooltip.classList.add('show');
+                                setTimeout(() => tooltip.classList.remove('show'), 2000);
+                            } catch (err) {
+                                console.error('Could not copy text: ', err);
+                            }
+                            
+                            document.body.removeChild(textArea);
+                        }
+                    });
+                });
+                
                 document.querySelectorAll('.delete-btn').forEach(btn => {
                     btn.addEventListener('click', function() {
                         const instanceId = this.getAttribute('data-id');
@@ -856,13 +918,22 @@
         
         // Show instance details modal
         function showInstanceDetails(instance) {
+            // Generate the URL
+            const baseUrl = window.location.href.replace(/\/[^\/]*$/, '/clock-overlay.html');
+            const url = `${baseUrl}?scene=${instance.instanceId}`;
+            instanceUrlEl.textContent = url;
+            
+            // Set modal title to reflect whether this is a new instance
+            const isNewInstance = new Date().getTime() - new Date(instance.createdAt).getTime() < 5000;
+            document.querySelector('.modal-title').textContent = isNewInstance ? "Scene Created Successfully!" : "Scene Details";
+            
             detailsContent.innerHTML = `
                 <div class="form-group">
                     <label>Name</label>
                     <div class="form-control">${instance.name}</div>
                 </div>
                 <div class="form-group">
-                    <label>Instance ID</label>
+                    <label>Scene ID</label>
                     <div class="form-control">${instance.instanceId}</div>
                 </div>
                 ${instance.description ? `
@@ -875,16 +946,25 @@
                     <label>Created</label>
                     <div class="form-control">${formatDateTime(instance.createdAt)}</div>
                 </div>
-                <div class="form-group">
-                    <label>Last Used</label>
-                    <div class="form-control">${formatDateTime(instance.lastUsed)}</div>
-                </div>
             `;
             
-            // Generate the URL
-            const baseUrl = window.location.href.replace(/\/[^\/]*$/, '/clock-overlay.html');
-            const url = `${baseUrl}?instance=${instance.instanceId}`;
-            instanceUrlEl.textContent = url;
+            // For new instances, add instruction text
+            if (isNewInstance) {
+                const instructionEl = document.createElement('div');
+                instructionEl.className = 'alert alert-success mt-3';
+                instructionEl.innerHTML = `
+                    <span class="alert-icon">✓</span>
+                    <div>
+                        <strong>Next steps:</strong>
+                        <ol class="mt-2">
+                            <li>Copy the URL above</li>
+                            <li>In OBS, add a Browser Source (size: 300x300)</li>
+                            <li>Paste this URL in the Browser Source URL field</li>
+                        </ol>
+                    </div>
+                `;
+                detailsContent.appendChild(instructionEl);
+            }
             
             // Show modal
             detailsModal.classList.add('show');
@@ -942,7 +1022,7 @@
                 data.instances.splice(index, 1);
                 saveData(data);
                 renderInstances();
-                showAlert(`Clock instance "${instanceName}" deleted`, 'success');
+                showAlert(`Clock scene "${instanceName}" deleted`, 'success');
             }
         }
         

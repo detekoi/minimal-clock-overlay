@@ -5,23 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minimal Clock Overlay</title>
     <script>
-        // Update title if instance is specified
+        // Update title if scene is specified
         (function() {
             const urlParams = new URLSearchParams(window.location.search);
-            const instanceId = urlParams.get('instance');
-            if (instanceId) {
-                // Try to find instance name in localStorage
+            const sceneId = urlParams.get('scene');
+            if (sceneId) {
+                // Try to find scene name in localStorage
                 try {
                     const data = localStorage.getItem('minimal-clock-scenes');
                     if (data) {
                         const parsed = JSON.parse(data);
-                        const instance = parsed.instances.find(inst => inst.instanceId === instanceId);
-                        if (instance) {
-                            document.title = `Clock: ${instance.name}`;
+                        const scene = parsed.instances.find(inst => inst.instanceId === sceneId);
+                        if (scene) {
+                            document.title = `Clock: ${scene.name}`;
                         }
                     }
                 } catch (e) {
-                    console.error('Error setting instance title:', e);
+                    console.error('Error setting scene title:', e);
                 }
             }
         })();
@@ -1926,29 +1926,15 @@
             element.style.transform = `rotate(${rotation}deg)`;
         }
 
-        // Get instance ID from URL parameters (if any)
-        function getInstanceId() {
+        // Get scene ID from URL parameters (if any)
+        function getSceneId() {
             const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('instance') || 'default';
+            return urlParams.get('scene') || 'default';
         }
         
-        // Migrate settings from old storage keys if needed
-        (function migrateSettings() {
-            const instanceId = getInstanceId();
-            const oldKey = `clockSettings-${instanceId}`;
-            
-            // Check if we need to migrate this specific instance's settings
-            const oldSettings = localStorage.getItem(oldKey);
-            if (oldSettings) {
-                // We'll continue using the same keys, so no migration needed
-                // This function is a placeholder for future migrations if needed
-                console.log('Instance settings found for:', instanceId);
-            }
-        })();
-        
-        // Save settings to localStorage with instance support
+        // Save settings to localStorage with scene support
         function saveSettings() {
-            const instanceId = getInstanceId();
+            const sceneId = getSceneId();
             const settings = {
                 secondHand: secondHandToggle.checked,
                 displayMode: displayModeSelect.value,
@@ -1970,14 +1956,14 @@
                 timezone: timezoneSelect.value
             };
             
-            // Use instance-specific storage key
-            localStorage.setItem(`clockSettings-${instanceId}`, JSON.stringify(settings));
+            // Use scene-specific storage key
+            localStorage.setItem(`clockSettings-${sceneId}`, JSON.stringify(settings));
         }
         
-        // Load settings from localStorage with instance support
+        // Load settings from localStorage with scene support
         function loadSettings() {
-            const instanceId = getInstanceId();
-            const savedSettings = localStorage.getItem(`clockSettings-${instanceId}`);
+            const sceneId = getSceneId();
+            const savedSettings = localStorage.getItem(`clockSettings-${sceneId}`);
             
             if (savedSettings) {
                 const settings = JSON.parse(savedSettings);
