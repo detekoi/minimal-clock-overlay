@@ -27,20 +27,23 @@ A lightweight, customizable clock overlay for OBS. Perfect for streamers who wan
 
 ## Installation
 
-### Downloading from GitHub
-1. Click the green "Code" button near the top of the page
-2. Select "Download ZIP" from the dropdown menu
-3. Extract the ZIP file to a location on your computer
-4. You'll now have all the necessary files to use the clock overlay
-
-### Using Scene Manager (Recommended)
-1. After downloading the files, open `scene-manager.html` in your browser to access the Clock Scene Manager
+### Using GitHub Pages (Recommended Online Method)
+The easiest way to use this clock overlay is with the online version:
+1. Visit [https://detekoi.github.io/minimal-clock-overlay/scene-manager.html](https://detekoi.github.io/minimal-clock-overlay/scene-manager.html)
 2. Create a new clock scene with a meaningful name (e.g., "Gaming Scene Clock")
 3. Copy the generated URL
 4. In OBS Studio, add a new "Browser Source"
 5. Set the width and height to appropriate values (recommended: 300x300)
 6. Paste the URL in the URL field
 7. Check "Refresh browser when scene becomes active" (optional)
+
+### Downloading from GitHub (Offline Method)
+If you prefer to host the files locally:
+1. Click the green "Code" button near the top of the page
+2. Select "Download ZIP" from the dropdown menu
+3. Extract the ZIP file to a location on your computer
+4. Open `scene-manager.html` in your browser to access the Clock Scene Manager
+5. Follow the steps to create and use clock scenes as described above
 
 ### Direct Installation (Legacy Method)
 1. After downloading the files, open OBS Studio
@@ -49,11 +52,20 @@ A lightweight, customizable clock overlay for OBS. Perfect for streamers who wan
 4. Check "Local file" and browse to select the `clock-overlay.html` file
 5. Check "Refresh browser when scene becomes active" (optional)
 
-### Using GitHub Pages (Online Method)
-If you prefer not to download any files, you can use the online version:
-1. Visit [https://detekoi.github.io/minimal-clock-overlay/scene-manager.html](https://detekoi.github.io/minimal-clock-overlay/scene-manager.html)
-2. Create a new clock scene
-3. Copy the generated URL to use in your OBS Browser Source
+### Advanced: Manual URL Parameters
+If you prefer to manage your clock scenes manually, you can use URL parameters:
+
+Add the `?scene=NAME` parameter to the URL:
+- Online example: `https://detekoi.github.io/minimal-clock-overlay/clock-overlay.html?scene=gaming`
+- Windows example: `file:///C:/path/to/clock-overlay.html?scene=gaming`
+- macOS example: `file:///Users/username/path/to/clock-overlay.html?scene=chatting`
+
+Each scene maintains its own separate settings with unique styling.
+
+Use descriptive scene names like:
+- `?scene=gaming` for your gaming scene
+- `?scene=talking` for your talking/webcam scene
+- `?scene=intro` for your stream intro scene
 
 ## Usage
 
