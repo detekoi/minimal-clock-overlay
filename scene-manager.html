@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clock Instance Manager</title>
+    <title>Clock Scene Manager</title>
     <style>
         :root {
             --primary-color: #4a5568;
@@ -520,14 +520,14 @@
 </head>
 <body>
     <div class="header">
-        <h1>Clock Instance Manager</h1>
-        <p>Create and manage multiple clock instances for your OBS scenes</p>
+        <h1>Clock Scene Manager</h1>
+        <p>Create and manage multiple clock configurations for your OBS scenes</p>
     </div>
 
     <div class="container">
         <div class="card">
             <div class="card-header">
-                <h2>Create New Clock Instance</h2>
+                <h2>Create New Clock Scene</h2>
             </div>
             <form id="create-instance-form">
                 <div class="form-group">
@@ -545,13 +545,13 @@
                     <input type="text" id="instance-description" class="form-control" placeholder="e.g., Transparent clock for gameplay">
                     <span class="form-hint">Add details to help remember this instance's purpose</span>
                 </div>
-                <button type="submit" class="btn btn-primary btn-full">Create Instance</button>
+                <button type="submit" class="btn btn-primary btn-full">Create Scene</button>
             </form>
 
             <div class="instructions mt-4">
-                <h3>How to Use Clock Instances</h3>
+                <h3>How to Use Clock Scenes</h3>
                 <ol>
-                    <li>Create a clock instance with a meaningful name</li>
+                    <li>Create a clock scene with a meaningful name</li>
                     <li>Copy the generated URL</li>
                     <li>In OBS, add a Browser Source (recommended size: 300x300)</li>
                     <li>Paste the URL and click OK</li>
@@ -562,7 +562,7 @@
 
         <div class="card">
             <div class="card-header">
-                <h2>Your Clock Instances</h2>
+                <h2>Your Clock Scenes</h2>
             </div>
             <div class="controls">
                 <div class="control-group">
@@ -596,8 +596,8 @@
 
             <div id="empty-state" class="empty-state">
                 <div class="empty-state-icon">⏰</div>
-                <p>You haven't created any clock instances yet</p>
-                <p class="text-sm mt-2">Create your first instance using the form on the left</p>
+                <p>You haven't created any clock scenes yet</p>
+                <p class="text-sm mt-2">Create your first scene using the form on the left</p>
             </div>
         </div>
     </div>
@@ -631,12 +631,29 @@
     </div>
 
     <div class="footer">
-        <p>Minimal Clock Overlay Instance Manager | <a href="https://github.com/your-username/your-repo">Documentation</a></p>
+        <p>Minimal Clock Overlay Scene Manager | <a href="https://github.com/detekoi/minimal-clock-overlay">Documentation</a></p>
     </div>
 
     <script>
+        // Handle migration from old storage key to new one
+        (function migrateLegacyData() {
+            const OLD_STORAGE_KEY = 'minimal-clock-instances';
+            const oldData = localStorage.getItem(OLD_STORAGE_KEY);
+            
+            if (oldData) {
+                // Check if new storage key already exists
+                const newDataExists = localStorage.getItem('minimal-clock-scenes');
+                
+                if (!newDataExists) {
+                    // Copy data from old key to new key
+                    localStorage.setItem('minimal-clock-scenes', oldData);
+                    console.log('Successfully migrated clock settings from old storage key');
+                }
+            }
+        })();
+        
         // Data storage structure
-        const STORAGE_KEY = 'minimal-clock-instances';
+        const STORAGE_KEY = 'minimal-clock-scenes';
         const DEFAULT_DATA = {
             version: '1.0',
             instances: []

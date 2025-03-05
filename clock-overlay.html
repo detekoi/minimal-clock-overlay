@@ -12,7 +12,7 @@
             if (instanceId) {
                 // Try to find instance name in localStorage
                 try {
-                    const data = localStorage.getItem('minimal-clock-instances');
+                    const data = localStorage.getItem('minimal-clock-scenes');
                     if (data) {
                         const parsed = JSON.parse(data);
                         const instance = parsed.instances.find(inst => inst.instanceId === instanceId);
@@ -1931,6 +1931,20 @@
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get('instance') || 'default';
         }
+        
+        // Migrate settings from old storage keys if needed
+        (function migrateSettings() {
+            const instanceId = getInstanceId();
+            const oldKey = `clockSettings-${instanceId}`;
+            
+            // Check if we need to migrate this specific instance's settings
+            const oldSettings = localStorage.getItem(oldKey);
+            if (oldSettings) {
+                // We'll continue using the same keys, so no migration needed
+                // This function is a placeholder for future migrations if needed
+                console.log('Instance settings found for:', instanceId);
+            }
+        })();
         
         // Save settings to localStorage with instance support
         function saveSettings() {
