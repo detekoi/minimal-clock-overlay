@@ -4,6 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minimal Clock Overlay</title>
+    <script>
+        // Update title if instance is specified
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const instanceId = urlParams.get('instance');
+            if (instanceId) {
+                // Try to find instance name in localStorage
+                try {
+                    const data = localStorage.getItem('minimal-clock-instances');
+                    if (data) {
+                        const parsed = JSON.parse(data);
+                        const instance = parsed.instances.find(inst => inst.instanceId === instanceId);
+                        if (instance) {
+                            document.title = `Clock: ${instance.name}`;
+                        }
+                    }
+                } catch (e) {
+                    console.error('Error setting instance title:', e);
+                }
+            }
+        })();
+    </script>
     <style>
         /* Custom Font Definitions */
         @font-face {
@@ -1904,8 +1926,15 @@
             element.style.transform = `rotate(${rotation}deg)`;
         }
 
-        // Save settings to localStorage
+        // Get instance ID from URL parameters (if any)
+        function getInstanceId() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('instance') || 'default';
+        }
+        
+        // Save settings to localStorage with instance support
         function saveSettings() {
+            const instanceId = getInstanceId();
             const settings = {
                 secondHand: secondHandToggle.checked,
                 displayMode: displayModeSelect.value,
@@ -1927,12 +1956,14 @@
                 timezone: timezoneSelect.value
             };
             
-            localStorage.setItem('clockSettings', JSON.stringify(settings));
+            // Use instance-specific storage key
+            localStorage.setItem(`clockSettings-${instanceId}`, JSON.stringify(settings));
         }
         
-        // Load settings from localStorage
+        // Load settings from localStorage with instance support
         function loadSettings() {
-            const savedSettings = localStorage.getItem('clockSettings');
+            const instanceId = getInstanceId();
+            const savedSettings = localStorage.getItem(`clockSettings-${instanceId}`);
             
             if (savedSettings) {
                 const settings = JSON.parse(savedSettings);

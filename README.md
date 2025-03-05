@@ -11,6 +11,7 @@ A lightweight, customizable clock overlay for OBS. Perfect for streamers who wan
 - **Minimal Design**: Clean, unobtrusive clock with subtle styling
 - **Flexible Display**: Choose to show analog clock, digital time, or both
 - **Date & Time Zone Support**: Display date and time zone with customizable styles
+- **Instance Manager**: Create and manage multiple clock instances for different scenes
 - **Customizable**: Multiple appearance options including:
   - Nine beautiful themes: Light, Dark, Natural, Transparent, Neon, Pastel, Forest, Sunset, and Ocean
   - Fifteen pre-defined style presets (Modern, Cyberpunk, Lo-Fi, Nature, and more)
@@ -26,9 +27,19 @@ A lightweight, customizable clock overlay for OBS. Perfect for streamers who wan
 
 ## Installation
 
+### Using Instance Manager (Recommended)
+1. Open `index.html` in your browser to access the Clock Instance Manager
+2. Create a new clock instance with a meaningful name (e.g., "Gaming Scene Clock")
+3. Copy the generated URL
+4. In OBS Studio, add a new "Browser Source"
+5. Set the width and height to appropriate values (recommended: 300x300)
+6. Paste the URL in the URL field
+7. Check "Refresh browser when scene becomes active" (optional)
+
+### Direct Installation (Legacy Method)
 1. In OBS Studio, add a new "Browser Source"
 2. Set the width and height to appropriate values (recommended: 300x300)
-3. Check "Local file" and browse to select the HTML file
+3. Check "Local file" and browse to select the `clock-overlay.html` file
 4. Check "Refresh browser when scene becomes active" (optional)
 
 ## Usage
@@ -87,8 +98,31 @@ A lightweight, customizable clock overlay for OBS. Perfect for streamers who wan
 - **Reset to Defaults**: Restore all settings to their default values
 - **Persistent Settings**: All your customizations are automatically saved between sessions
 
+## Clock Instance Manager
+
+The Clock Instance Manager allows you to create and manage multiple clock configurations for different scenes in your stream.
+
+### Features
+
+- Create named clock instances with unique configurations
+- Generate direct URLs for OBS browser sources
+- Manage all your clock instances in one place
+- Each instance maintains its own settings
+- Sort and search through your instances
+- Delete instances you no longer need
+
+### How to Use
+
+1. Open `index.html` in your web browser to access the Instance Manager
+2. Create a new clock instance with a descriptive name
+3. Copy the browser source URL
+4. Add to OBS as a browser source
+5. Configure the clock's appearance in OBS
+6. All settings will be saved for that specific instance
+
 ## Tips for Streamers
 
+- **Use Multiple Instances**: Create different clock styles for different scenes (e.g., a vibrant clock for your starting scene, a transparent one for gameplay)
 - **Use Transparent Theme**: For gameplay streams, the transparent theme provides time information without blocking gameplay
 - **Match Your Brand**: Use the color pickers to match your stream's color scheme
 - **Position Strategically**: Place in a corner where it won't overlap important HUD elements in games
@@ -99,12 +133,6 @@ A lightweight, customizable clock overlay for OBS. Perfect for streamers who wan
 - **Settings Not Appearing**: Click directly on the gear icon that appears when hovering over the clock
 - **Settings Panel Off Screen**: Try moving the clock away from the edge of your canvas
 - **Dropdown Menus Not Working**: OBS has known issues with dropdown menus in Browser Sources. The clock now has a built-in "OBS/Streamlabs Mode" (enabled by default) which replaces dropdowns with compatible button selectors. If you still have issues, check that this mode is enabled in the settings panel.
-
-
-## Credits
-
-- Alarm Clock Font by [David J Patterson](https://www.dafont.com/david-j-patterson.d5686), included for use with the digital time display
-- VFD Nova Font by [Nihar Mazumdar](https://www.fontspace.com/nihar-mazumdar), included as a fallback font
 
 ## License
 
