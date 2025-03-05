@@ -537,13 +537,35 @@
             display: flex;
             gap: 0.5rem;
             justify-content: flex-end;
+            align-items: center;
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.3s, visibility 0.3s;
-            background-color: var(--card-color);
-            border-radius: var(--radius);
             padding: 0.5rem;
             box-shadow: var(--shadow);
+        }
+        
+        .confirm-text {
+            background-color: #ffebeb;
+            color: var(--danger-color);
+            font-weight: bold;
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--danger-color);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+        
+        .confirm-yes, .confirm-no {
+            border: 1px solid;
+        }
+        
+        .confirm-yes {
+            border-color: var(--danger-color);
+            background-color: var(--danger-color);
+        }
+        
+        .confirm-no {
+            border-color: var(--border-color);
         }
         
         .confirm-message.show {
@@ -830,7 +852,7 @@
                                 <div class="confirm-wrapper">
                                     <button class="btn btn-sm btn-danger delete-btn" data-id="${instance.instanceId}">Delete</button>
                                     <div class="confirm-message" id="confirm-${instance.instanceId}">
-                                        <span>Are you sure?</span>
+                                        <span class="confirm-text">Are you sure?</span>
                                         <button class="btn btn-sm confirm-yes" data-id="${instance.instanceId}">Yes</button>
                                         <button class="btn btn-sm confirm-no" data-id="${instance.instanceId}">No</button>
                                     </div>
