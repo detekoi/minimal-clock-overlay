@@ -8,10 +8,7 @@ A lightweight, customizable clock overlay for OBS. Perfect for streamers who wan
 
 ## Features
 
-- **Minimal Design**: Clean, unobtrusive clock with subtle styling
 - **Flexible Display**: Choose to show analog clock, digital time, or both
-- **Date & Time Zone Support**: Display date and time zone with customizable styles
-- **Scene Manager**: Create and manage multiple clock configurations for different scenes
 - **Customizable**: Multiple appearance options including:
   - Nine beautiful themes: Light, Dark, Natural, Transparent, Neon, Pastel, Forest, Sunset, and Ocean
   - Fifteen pre-defined style presets (Modern, Cyberpunk, Lo-Fi, Nature, and more)
@@ -19,6 +16,8 @@ A lightweight, customizable clock overlay for OBS. Perfect for streamers who wan
   - AM/PM or 24-hour time format
   - Customizable font styles for digital clock, date, and time zone (including serif and LCD display)
   - Color and size customization
+- **Date & Time Zone Support**: Display date and time zone with customizable styles
+- **Scene Manager**: Create and manage multiple clock configurations for different scenes
 - **OBS/Streamlabs Compatibility**: Built-in compatibility mode for browser sources with dropdown issues
 - **Draggable**: Position anywhere on your stream
 - **Low Resource Usage**: Optimized for minimal CPU usage
@@ -129,34 +128,34 @@ The Clock Scene Manager allows you to create and manage multiple clock configura
 
 ### Features
 
-- Create named clock scenes with unique configurations
-- Generate direct URLs for OBS browser sources
-- Manage all your clock scenes in one place
-- Each scene maintains its own settings
-- Sort and search through your scenes
-- Delete scenes you no longer need
+- Create named clock scenes with unique configurations.
+- Generate direct URLs for OBS browser sources.
+- Manage all your clock scenes in one place.
+- Each scene maintains its own settings.
+- Sort and search through your scenes.
+- Delete scenes you no longer need.
 
 ### How to Use
 
-1. Open `scene-manager.html` in your web browser to access the Scene Manager
-2. Create a new clock scene with a descriptive name
-3. Copy the browser source URL
-4. Add to OBS as a browser source
-5. Configure the clock's appearance in OBS
-6. All settings will be saved for that specific scene
+1. Open `scene-manager.html` in your web browser to access the Scene Manager.
+2. Create a new clock scene with a descriptive name.
+3. Copy the browser source URL.
+4. Add to OBS as a browser source.
+5. Configure the clock's appearance in OBS.
+6. All settings will be saved for that specific scene.
 
 ## Tips for Streamers
 
-- **Use Multiple Scenes**: Create different clock styles for different scenes (e.g., a vibrant clock for your starting scene, a transparent one for gameplay)
-- **Use Transparent Theme**: For gameplay streams, the transparent theme provides time information without blocking gameplay
-- **Match Your Brand**: Use the color pickers to match your stream's color scheme
-- **Position Strategically**: Place in a corner where it won't overlap important HUD elements in games
+- **Use Multiple Scenes**: Create different clock styles for different scenes (e.g., a vibrant clock for your starting scene, a transparent one for gameplay).
+- **Use Transparent Theme**: For gameplay streams, the transparent theme provides time information without blocking gameplay.
+- **Match Your Brand**: Use the color pickers to match your stream's color scheme.
+- **Position Strategically**: Place in a corner where it won't overlap important HUD elements in games.
 
 ## Troubleshooting
 
-- **Clock Not Visible**: Make sure the browser source is properly sized and positioned
-- **Settings Not Appearing**: Click directly on the gear icon that appears when hovering over the clock
-- **Settings Panel Off Screen**: Try moving the clock away from the edge of your canvas
+- **Clock Not Visible**: Make sure the browser source is properly sized and positioned.
+- **Settings Not Appearing**: Click directly on the gear icon that appears when hovering over the clock.
+- **Settings Panel Off Screen**: Try moving the clock away from the edge of your canvas.
 - **Dropdown Menus Not Working**: OBS has known issues with dropdown menus in Browser Sources. The clock now has a built-in "OBS/Streamlabs Mode" (enabled by default) which replaces dropdowns with compatible button selectors. If you still have issues, check that this mode is enabled in the settings panel.
 
 ## License
