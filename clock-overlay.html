@@ -1656,6 +1656,7 @@
                 }
             }
             
+            // Apply theme first
             if (preset.theme) {
                 themeSelect.value = preset.theme;
                 document.body.classList.remove(
@@ -1670,6 +1671,20 @@
                     'theme-ocean'
                 );
                 document.body.classList.add('theme-' + preset.theme);
+                
+                // If theme colors are defined for this theme, apply them
+                const theme = preset.theme;
+                const themeColors = {
+                    light: { accent: '#85A67B', secondHand: '#787878' },
+                    dark: { accent: '#A9CB9F', secondHand: '#DCDCDC' },
+                    natural: { accent: '#96785A', secondHand: '#786458' },
+                    transparent: { accent: '#85A67B', secondHand: '#B4B4B4' },
+                    neon: { accent: '#FF00FF', secondHand: '#00FF00' },
+                    pastel: { accent: '#B4DCF0', secondHand: '#F096AA' },
+                    forest: { accent: '#C88232', secondHand: '#96AA5A' },
+                    sunset: { accent: '#F05A5A', secondHand: '#F08C46' },
+                    ocean: { accent: '#50BEDC', secondHand: '#28B4C8' }
+                };
             }
             
             if (preset.secondHand !== undefined) {
@@ -1729,11 +1744,9 @@
                 document.documentElement.style.setProperty('--scale', preset.scale / 100);
             }
             
+            // Set background opacity immediately if specified
             if (preset.backgroundOpacity !== undefined) {
                 opacitySlider.value = preset.backgroundOpacity;
-                // Trigger the input event to apply opacity
-                const opacityEvent = new Event('input');
-                opacitySlider.dispatchEvent(opacityEvent);
             }
             
             if (preset.showTimezone !== undefined) {
@@ -1759,6 +1772,55 @@
             
             // Update control visibility based on new settings
             updateControlVisibility();
+            
+            // Apply theme and background color at the end
+            // Directly set the background color based on theme and opacity
+            const theme = preset.theme || themeSelect.value;
+            const opacity = opacitySlider.value / 100;
+            
+            // Get the base color from the current theme
+            let baseColorR, baseColorG, baseColorB;
+            
+            switch(theme) {
+                case 'light':
+                    baseColorR = 252; baseColorG = 252; baseColorB = 250;
+                    break;
+                case 'dark':
+                    baseColorR = 40; baseColorG = 40; baseColorB = 40;
+                    break;
+                case 'natural':
+                    baseColorR = 245; baseColorG = 240; baseColorB = 230;
+                    break;
+                case 'transparent':
+                    baseColorR = 255; baseColorG = 255; baseColorB = 255;
+                    break;
+                case 'neon':
+                    baseColorR = 20; baseColorG = 20; baseColorB = 30;
+                    break;
+                case 'pastel':
+                    baseColorR = 250; baseColorG = 240; baseColorB = 245;
+                    break;
+                case 'forest':
+                    baseColorR = 235; baseColorG = 240; baseColorB = 230;
+                    break;
+                case 'sunset':
+                    baseColorR = 40; baseColorG = 40; baseColorB = 60;
+                    break;
+                case 'ocean':
+                    baseColorR = 230; baseColorG = 240; baseColorB = 250;
+                    break;
+                default:
+                    baseColorR = 252; baseColorG = 252; baseColorB = 250;
+            }
+            
+            // Update the opacity value in the CSS variable
+            document.documentElement.style.setProperty('--clock-face-opacity', opacity);
+            
+            // Update the clock face color with the new opacity
+            const newColor = `rgba(${baseColorR}, ${baseColorG}, ${baseColorB}, ${opacity})`;
+            
+            // Apply directly to the clock element to ensure it overrides theme styles
+            document.querySelector('.clock').style.backgroundColor = newColor;
             
             // Save settings
             saveSettings();
