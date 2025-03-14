@@ -31,7 +31,7 @@ The easiest way to use this clock overlay is with the online version.
 1. Visit the [Clock Scene Manager](https://detekoi.github.io/minimal-clock-overlay/scene-manager.html).
 2. Create a new clock scene with a meaningful name (e.g., "Gaming Scene Clock").
 3. Copy the generated URL.
-4. In OBS Studio, add a new "Browser Source".
+4. In OBS Studio or StreamLabs Desktop, add a new "Browser Source".
 5. Set the width and height to appropriate values (recommended: 300x300).
 6. Paste the URL in the URL field.
 7. Check "Refresh browser when scene becomes active" (optional).
