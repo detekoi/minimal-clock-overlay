@@ -1008,6 +1008,21 @@
                 <button class="select-btn theme-btn" data-value="ocean">Ocean</button>
             </div>
         </div>
+        <div class="control-item clock-face-color-control">
+            <span>Clock Face Color</span>
+            <input type="color" id="clock-face-color-picker" value="#FCFCFA">
+            <div class="color-picker-container" id="clock-face-color-container">
+                <div class="color-swatches" id="clock-face-color-swatches">
+                    <!-- Color swatches will be added by JavaScript -->
+                </div>
+                <div class="color-nav">
+                    <button class="color-nav-btn clock-face-palette-btn active" data-palette="main">Main</button>
+                    <button class="color-nav-btn clock-face-palette-btn" data-palette="pastel">Pastel</button>
+                    <button class="color-nav-btn clock-face-palette-btn" data-palette="neon">Neon</button>
+                </div>
+            </div>
+        </div>
+        
         <div class="control-item">
             <span>Background Opacity</span>
             <input type="range" id="opacity-slider" min="0" max="100" value="85">
@@ -1144,6 +1159,7 @@
         const accentColorPicker = document.getElementById('accent-color-picker');
         const accentSizeSlider = document.getElementById('accent-size-slider');
         const secondHandColorPicker = document.getElementById('second-hand-color-picker');
+        const clockFaceColorPicker = document.getElementById('clock-face-color-picker');
         const presetSelect = document.getElementById('preset-select');
         const closeSettingsBtn = document.getElementById('close-settings');
         const controlsToggle = document.querySelector('.controls-toggle');
@@ -1259,17 +1275,17 @@
             // Update accent and second hand colors based on theme
             const theme = this.value;
             
-            // Define theme accent colors and second hand colors
+            // Define theme accent colors, second hand colors, and clock face colors
             const themeColors = {
-                light: { accent: '#85A67B', secondHand: '#787878' },
-                dark: { accent: '#A9CB9F', secondHand: '#DCDCDC' },
-                natural: { accent: '#96785A', secondHand: '#786458' },
-                transparent: { accent: '#85A67B', secondHand: '#B4B4B4' },
-                neon: { accent: '#FF00FF', secondHand: '#00FF00' },
-                pastel: { accent: '#B4DCF0', secondHand: '#F096AA' },
-                forest: { accent: '#C88232', secondHand: '#96AA5A' },
-                sunset: { accent: '#F05A5A', secondHand: '#F08C46' },
-                ocean: { accent: '#50BEDC', secondHand: '#28B4C8' }
+                light: { accent: '#85A67B', secondHand: '#787878', clockFace: '#FCFCFA' },
+                dark: { accent: '#A9CB9F', secondHand: '#DCDCDC', clockFace: '#282828' },
+                natural: { accent: '#96785A', secondHand: '#786458', clockFace: '#F5F0E6' },
+                transparent: { accent: '#85A67B', secondHand: '#B4B4B4', clockFace: '#FFFFFF' },
+                neon: { accent: '#FF00FF', secondHand: '#00FF00', clockFace: '#14141E' },
+                pastel: { accent: '#B4DCF0', secondHand: '#F096AA', clockFace: '#FAF0F5' },
+                forest: { accent: '#C88232', secondHand: '#96AA5A', clockFace: '#EBF0E6' },
+                sunset: { accent: '#F05A5A', secondHand: '#F08C46', clockFace: '#28283C' },
+                ocean: { accent: '#50BEDC', secondHand: '#28B4C8', clockFace: '#E6F0FA' }
             };
             
             if (themeColors[theme]) {
@@ -1282,6 +1298,11 @@
                 secondHandColorPicker.value = themeColors[theme].secondHand;
                 const secondHandEvent = new Event('input');
                 secondHandColorPicker.dispatchEvent(secondHandEvent);
+                
+                // Set clock face color
+                clockFaceColorPicker.value = themeColors[theme].clockFace;
+                const clockFaceEvent = new Event('input');
+                clockFaceColorPicker.dispatchEvent(clockFaceEvent);
                 
                 // Re-apply opacity settings after theme change
                 setTimeout(() => {
@@ -1415,6 +1436,7 @@
                 accentColor: '#85A67B',
                 accentSize: 10,
                 secondHandColor: '#787878',
+                clockFaceColor: '#FCFCFA',
                 digitalStyle: 'rounded',
                 showSeconds: false,
                 showTimezone: false,
@@ -1724,6 +1746,13 @@
                 // Trigger the input event to apply all color settings
                 const secondHandEvent = new Event('input');
                 secondHandColorPicker.dispatchEvent(secondHandEvent);
+            }
+            
+            if (preset.clockFaceColor) {
+                clockFaceColorPicker.value = preset.clockFaceColor;
+                // Trigger the input event to apply the color
+                const clockFaceEvent = new Event('input');
+                clockFaceColorPicker.dispatchEvent(clockFaceEvent);
             }
             
             if (preset.showSeconds !== undefined) {
@@ -2045,6 +2074,7 @@
                 accentColor: accentColorPicker.value,
                 accentSize: accentSizeSlider.value,
                 secondHandColor: secondHandColorPicker.value,
+                clockFaceColor: clockFaceColorPicker.value,
                 timezone: timezoneSelect.value,
                 backgroundOpacity: opacitySlider.value
             };
@@ -2215,6 +2245,13 @@
                     secondHandColorPicker.dispatchEvent(secondHandEvent);
                 }
                 
+                if (settings.clockFaceColor) {
+                    clockFaceColorPicker.value = settings.clockFaceColor;
+                    // Trigger the input event to apply the color
+                    const clockFaceEvent = new Event('input');
+                    clockFaceColorPicker.dispatchEvent(clockFaceEvent);
+                }
+                
                 // Set timezone if saved
                 if (settings.timezone) {
                     // Check if the saved timezone is valid
@@ -2342,12 +2379,16 @@
             const opacityControl = Array.from(controlItems).find(
                 item => item.querySelector('span')?.textContent === 'Background Opacity'
             );
+            const clockFaceColorControl = Array.from(controlItems).find(
+                item => item.querySelector('span')?.textContent === 'Clock Face Color'
+            );
             
             if (secondHandControl) secondHandControl.style.display = isDigitalOnly ? 'none' : 'flex';
             if (clockNumbersControl) clockNumbersControl.style.display = isDigitalOnly ? 'none' : 'flex';
             if (numberStyleControl && isDigitalOnly) numberStyleControl.style.display = 'none';
             if (handThicknessControl) handThicknessControl.style.display = isDigitalOnly ? 'none' : 'flex';
             if (secondHandColorControl) secondHandColorControl.style.display = isDigitalOnly ? 'none' : 'flex';
+            if (clockFaceColorControl) clockFaceColorControl.style.display = isDigitalOnly ? 'none' : 'flex';
             if (opacityControl) opacityControl.style.display = isDigitalOnly ? 'none' : 'flex';
             
             // Hide Digital Style if in Analog only mode
@@ -2367,7 +2408,7 @@
             showDateToggle, dateStyleSelect,
             numbersToggle, numberStyleSelect, digitalStyleSelect, themeSelect,
             scaleSlider, handThicknessSelect, accentColorPicker,
-            accentSizeSlider, secondHandColorPicker, timezoneSelect, opacitySlider
+            accentSizeSlider, secondHandColorPicker, clockFaceColorPicker, timezoneSelect, opacitySlider
         ];
         
         settingsControls.forEach(control => {
@@ -2384,51 +2425,38 @@
         opacitySlider.addEventListener('input', function() {
             const opacityValue = this.value / 100;
             
-            // Update the clock-face-color for the current theme
-            const currentTheme = themeSelect.value;
+            // Get the base color from the clockFaceColorPicker
+            const colorValue = clockFaceColorPicker.value;
             
-            // Get the base color from the current theme
-            let baseColorR, baseColorG, baseColorB;
-            
-            switch(currentTheme) {
-                case 'light':
-                    baseColorR = 252; baseColorG = 252; baseColorB = 250;
-                    break;
-                case 'dark':
-                    baseColorR = 40; baseColorG = 40; baseColorB = 40;
-                    break;
-                case 'natural':
-                    baseColorR = 245; baseColorG = 240; baseColorB = 230;
-                    break;
-                case 'transparent':
-                    baseColorR = 255; baseColorG = 255; baseColorB = 255;
-                    break;
-                case 'neon':
-                    baseColorR = 20; baseColorG = 20; baseColorB = 30;
-                    break;
-                case 'pastel':
-                    baseColorR = 250; baseColorG = 240; baseColorB = 245;
-                    break;
-                case 'forest':
-                    baseColorR = 235; baseColorG = 240; baseColorB = 230;
-                    break;
-                case 'sunset':
-                    baseColorR = 40; baseColorG = 40; baseColorB = 60;
-                    break;
-                case 'ocean':
-                    baseColorR = 230; baseColorG = 240; baseColorB = 250;
-                    break;
-                default:
-                    baseColorR = 252; baseColorG = 252; baseColorB = 250;
-            }
+            // Convert hex to RGB
+            const r = parseInt(colorValue.substr(1, 2), 16);
+            const g = parseInt(colorValue.substr(3, 2), 16);
+            const b = parseInt(colorValue.substr(5, 2), 16);
             
             // Update the opacity value in the CSS variable
             document.documentElement.style.setProperty('--clock-face-opacity', opacityValue);
             
             // Update the clock face color with the new opacity
-            const newColor = `rgba(${baseColorR}, ${baseColorG}, ${baseColorB}, ${opacityValue})`;
+            const newColor = `rgba(${r}, ${g}, ${b}, ${opacityValue})`;
             
             // Apply directly to the clock element to ensure it overrides theme styles
+            document.querySelector('.clock').style.backgroundColor = newColor;
+        });
+        
+        // Add event listener for clock face color picker
+        clockFaceColorPicker.addEventListener('input', function() {
+            const colorValue = this.value;
+            const opacityValue = opacitySlider.value / 100;
+            
+            // Convert hex to RGB
+            const r = parseInt(colorValue.substr(1, 2), 16);
+            const g = parseInt(colorValue.substr(3, 2), 16);
+            const b = parseInt(colorValue.substr(5, 2), 16);
+            
+            // Update the clock face color with the current opacity
+            const newColor = `rgba(${r}, ${g}, ${b}, ${opacityValue})`;
+            
+            // Apply directly to the clock element
             document.querySelector('.clock').style.backgroundColor = newColor;
         });
         
@@ -2667,6 +2695,14 @@
                 'second-hand-color-picker',
                 colorPalettes,
                 '.second-hand-palette-btn'
+            );
+            
+            // Setup clock face color swatches
+            setupColorPickerSwatches(
+                'clock-face-color-swatches',
+                'clock-face-color-picker',
+                colorPalettes,
+                '.clock-face-palette-btn'
             );
         }
         
