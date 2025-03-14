@@ -1440,6 +1440,7 @@
                 digitalStyle: 'rounded',
                 showSeconds: false,
                 showTimezone: false,
+                timezoneStyle: 'rounded',
                 showDate: false,
                 dateStyle: 'rounded',
                 ampm: true,
@@ -1454,8 +1455,11 @@
                 handThickness: 'thin',
                 accentColor: '#dadada', // More subtle, less accent
                 secondHandColor: '#999999',
+                clockFaceColor: '#FCFCFA',
                 digitalStyle: 'simple',
                 showSeconds: false,
+                showTimezone: false,
+                timezoneStyle: 'simple',
                 showDate: false,
                 dateStyle: 'simple',
                 accentSize: 0, // No accent elements for true minimalism
@@ -1470,9 +1474,12 @@
                 handThickness: 'normal',
                 accentColor: '#5cbbf6',
                 secondHandColor: '#4ca484',
+                clockFaceColor: '#FCFCFA',
                 digitalStyle: 'rounded',
                 showDate: true,
                 dateStyle: 'rounded',
+                showTimezone: true,
+                timezoneStyle: 'rounded',
                 showSeconds: false
             },
             artdeco: {
@@ -1484,9 +1491,12 @@
                 handThickness: 'thin',
                 accentColor: '#f1c40f',
                 secondHandColor: '#f39c12',
+                clockFaceColor: '#282828',
                 digitalStyle: 'serif',
                 showDate: true,
                 dateStyle: 'serif',
+                showTimezone: true,
+                timezoneStyle: 'serif',
                 showSeconds: false
             },
             digital: {
@@ -1498,8 +1508,11 @@
                 handThickness: 'normal',
                 accentColor: '#2ecc71',
                 secondHandColor: '#27ae60',
+                clockFaceColor: '#282828',
                 showDate: true,
                 dateStyle: 'lcd',
+                showTimezone: true,
+                timezoneStyle: 'lcd',
                 showSeconds: true
             },
             traditional: {
@@ -1511,9 +1524,12 @@
                 handThickness: 'normal',
                 accentColor: '#8b4513',
                 secondHandColor: '#a52a2a',
+                clockFaceColor: '#F5F0E6',
                 digitalStyle: 'serif',
                 showDate: false,
                 dateStyle: 'serif',
+                showTimezone: false,
+                timezoneStyle: 'serif',
                 showSeconds: false,
                 backgroundOpacity: 95 // More solid for traditional look
             },
@@ -1525,10 +1541,14 @@
                 handThickness: 'thick',
                 accentColor: '#00ff00',
                 secondHandColor: '#ff0000',
+                clockFaceColor: '#FFFFFF',
                 digitalStyle: 'monospace',
                 showDate: true,
                 dateStyle: 'monospace',
-                showSeconds: true
+                showTimezone: true,
+                timezoneStyle: 'monospace',
+                showSeconds: true,
+                backgroundOpacity: 50
             },
             retro: {
                 displayMode: 'both',
@@ -1539,11 +1559,15 @@
                 handThickness: 'thick',
                 accentColor: '#e67e22',
                 secondHandColor: '#d35400',
+                clockFaceColor: '#F5F0E6',
                 digitalStyle: 'monospace',
                 showDate: true,
                 dateStyle: 'monospace',
+                showTimezone: true,
+                timezoneStyle: 'monospace',
                 showSeconds: false,
-                ampm: true
+                ampm: true,
+                backgroundOpacity: 90
             },
             'dark-tech': {
                 displayMode: 'both',
@@ -1554,10 +1578,14 @@
                 handThickness: 'thin',
                 accentColor: '#9b59b6',
                 secondHandColor: '#8e44ad',
+                clockFaceColor: '#282828',
                 digitalStyle: 'monospace',
                 showDate: true,
                 dateStyle: 'monospace',
-                showSeconds: true
+                showTimezone: true,
+                timezoneStyle: 'monospace',
+                showSeconds: true,
+                backgroundOpacity: 80
             },
             elegant: {
                 displayMode: 'both',
@@ -1568,10 +1596,14 @@
                 handThickness: 'thin',
                 accentColor: '#34495e',
                 secondHandColor: '#2c3e50',
+                clockFaceColor: '#FCFCFA',
                 digitalStyle: 'serif',
                 showDate: true,
                 dateStyle: 'serif',
-                showSeconds: false
+                showTimezone: true,
+                timezoneStyle: 'serif',
+                showSeconds: false,
+                backgroundOpacity: 90
             },
             cyberpunk: {
                 displayMode: 'both',
@@ -1582,9 +1614,12 @@
                 handThickness: 'thin',
                 accentColor: '#ff00ff',
                 secondHandColor: '#00ff00',
+                clockFaceColor: '#14141E',
                 digitalStyle: 'lcd',
                 showDate: true,
                 dateStyle: 'lcd',
+                showTimezone: true,
+                timezoneStyle: 'lcd',
                 showSeconds: true,
                 ampm: false,
                 backgroundOpacity: 70 // Semi-transparent for futuristic look
@@ -1595,13 +1630,17 @@
                 secondHand: true,
                 numbers: false,
                 handThickness: 'normal',
-                accentColor: '#aa82b4',
-                secondHandColor: '#f096aa',
-                digitalStyle: 'rounded',
+                accentColor: '#9882b4', // Soft purple
+                secondHandColor: '#82a9b4', // Muted teal 
+                clockFaceColor: '#F0E8EF', // Soft lavender white
+                digitalStyle: 'monospace', // Changed to monospace for lo-fi aesthetic
                 showDate: true,
-                dateStyle: 'rounded',
+                dateStyle: 'monospace',
+                showTimezone: true,
+                timezoneStyle: 'monospace',
                 showSeconds: false,
-                ampm: true
+                ampm: true,
+                backgroundOpacity: 75
             },
             nature: {
                 displayMode: 'both',
@@ -1612,10 +1651,14 @@
                 handThickness: 'normal',
                 accentColor: '#c88232',
                 secondHandColor: '#96aa5a',
+                clockFaceColor: '#EBF0E6',
                 digitalStyle: 'serif',
                 showDate: true,
                 dateStyle: 'serif',
-                showSeconds: false
+                showTimezone: true,
+                timezoneStyle: 'serif',
+                showSeconds: false,
+                backgroundOpacity: 90
             },
             twilight: {
                 displayMode: 'both',
@@ -1626,10 +1669,14 @@
                 handThickness: 'normal',
                 accentColor: '#f05a5a',
                 secondHandColor: '#f08c46',
+                clockFaceColor: '#28283C',
                 digitalStyle: 'simple',
                 showDate: true,
                 dateStyle: 'simple',
-                showSeconds: true
+                showTimezone: true,
+                timezoneStyle: 'simple',
+                showSeconds: true,
+                backgroundOpacity: 85
             },
             candy: {
                 displayMode: 'both',
@@ -1638,13 +1685,17 @@
                 numbers: true,
                 numberStyle: 'simple',
                 handThickness: 'thick',
-                accentColor: '#ff6bd5',
-                secondHandColor: '#6b9dff',
+                accentColor: '#ff55cc', // Bright pink
+                secondHandColor: '#55aaff', // Bright blue
+                clockFaceColor: '#FFECF5', // Soft pink background
                 digitalStyle: 'rounded',
                 showDate: true,
                 dateStyle: 'rounded',
-                showSeconds: false,
-                accentSize: 12
+                showTimezone: true,
+                timezoneStyle: 'rounded',
+                showSeconds: true,
+                accentSize: 12,
+                backgroundOpacity: 90
             }
         };
         
@@ -1782,6 +1833,12 @@
                 showTimezoneToggle.checked = preset.showTimezone;
                 document.querySelector('.timezone-display').style.display = 
                     preset.showTimezone ? 'block' : 'none';
+            }
+            
+            if (preset.timezoneStyle) {
+                timezoneStyleSelect.value = preset.timezoneStyle;
+                document.querySelector('.timezone-display').className = 
+                    'timezone-display ' + preset.timezoneStyle;
             }
             
             if (preset.showDate !== undefined) {

@@ -99,12 +99,12 @@ Use descriptive scene names like:
   - Sunset: Dark night sky with sunset orange and pink accents.
   - Ocean: Calming blue tones with aqua accents.
 - **Scale**: Adjust the overall size of the clock.
-- **Background Opacity**: Adjust the transparency level of the clock face background.
 - **Hand Thickness**: Choose between thin, normal, or thick clock hands.
 - **Accent Color**: Customize the accent color used for highlights.
 - **Accent Size**: Adjust the size of accent elements (center dot, second hand tip) or hide completely.
-- **Background Opacity**: Adjust the transparency level of the clock face background.
 - **Second Hand Color**: Set a custom color for the second hand.
+- **Clock Face Color**: Customize the color of the clock face background.
+- **Background Opacity**: Adjust the transparency level of the clock face background.
 - **OBS/Streamlabs Mode**: Toggle compatibility mode for browser sources with dropdown issues.
 - **Style Presets**: Choose from predefined style combinations:
   - Modern Minimal: Clean, minimalist design with blue accents.
@@ -117,10 +117,10 @@ Use descriptive scene names like:
   - Dark Tech: Modern dark theme with dot markers and purple accents.
   - Elegant Serif: Roman numerals with thin hands for a sophisticated look.
   - Cyberpunk: Futuristic neon design with bright magenta and green.
-  - Lo-Fi: Soft pastel colors for a relaxed, lofi aesthetic.
+  - Lo-Fi: Muted purple and teal tones with monospace fonts for a relaxed aesthetic.
   - Nature: Forest-inspired with earthy greens and wood tones.
   - Twilight: Dark sunset theme with orange and red accents.
-  - Candy Pop: Playful pink and blue with thicker elements.
+  - Candy Pop: Vibrant pink and blue with rounded fonts and playful elements.
 - **Reset to Defaults**: Restore all settings to their default values.
 - **Persistent Settings**: All your customizations are automatically saved between sessions.
 
