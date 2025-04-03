@@ -1,4 +1,4 @@
-# Minimal Clock Overlay for OBS
+# Custom Clock Overlay for OBS
 
 A lightweight, customizable clock overlay for OBS. Perfect for streamers who want to display the time without distracting from their content.
 
