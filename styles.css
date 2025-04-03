@@ -553,6 +553,84 @@ tr:last-child td {
     visibility: visible;
 }
 
+/* Index Page Specific Styles */
+body.index-page {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    text-align: center;
+    padding: 1rem;
+}
+body.index-page h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--primary-dark);
+}
+body.index-page p {
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+    max-width: 600px;
+    line-height: 1.5;
+    color: var(--text-muted);
+}
+body.index-page .buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 2rem;
+}
+body.index-page .btn {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 0.8rem 1.5rem;
+    border-radius: var(--radius);
+    transition: all 0.2s;
+    font-size: 1.1rem;
+    text-align: center;
+    border: 2px solid transparent;
+}
+body.index-page .btn-primary {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+body.index-page .btn-primary:hover {
+    background-color: var(--accent-dark);
+    border-color: var(--accent-dark);
+}
+body.index-page .btn-secondary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+body.index-page .btn-secondary:hover {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+}
+body.index-page .btn-outline {
+    background-color: transparent;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+}
+body.index-page .btn-outline:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+body.index-page footer {
+    margin-top: auto;
+    padding: 1rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
     :root {
@@ -576,16 +654,16 @@ tr:last-child td {
     
     /* Softer button styling for dark mode */
     .btn {
-        background-color: #3d4a5c;
-        color: #e2e8f0;
+        background-color: var(--primary-dark);
+        color: var(--text-color);
     }
     
     .btn:hover {
-        background-color: #4d5b70;
+        background-color: var(--primary-color);
     }
     
     .btn-primary {
-        background-color: #5c7756;
+        background-color: var(--accent-dark);
     }
     
     .btn-primary:hover {
@@ -593,10 +671,54 @@ tr:last-child td {
     }
     
     .btn-danger {
-        background-color: #e53e3e;
+        background-color: var(--danger-color);
     }
     
     .btn-danger:hover {
         background-color: #c53030;
     }
+
+    /* Dark mode overrides for index page */
+    body.index-page h1 {
+        color: var(--primary-light);
+    }
+
+    body.index-page .btn {
+        color: var(--text-color);
+    }
+
+    body.index-page .btn-primary {
+        background-color: var(--accent-color);
+        border-color: var(--accent-color);
+        color: var(--background-color);
+    }
+    body.index-page .btn-primary:hover {
+        background-color: var(--accent-light);
+        border-color: var(--accent-light);
+        color: var(--background-color);
+    }
+
+    body.index-page .btn-secondary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+        color: var(--background-color);
+    }
+     body.index-page .btn-secondary:hover {
+        background-color: var(--primary-light);
+        border-color: var(--primary-light);
+        color: var(--background-color);
+    }
+    
+    body.index-page .btn-outline {
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+    }
+
+    body.index-page .btn-outline:hover {
+        background-color: var(--primary-color);
+        color: var(--background-color);
+    }
+    
+    /* Footer text already uses --text-muted which is updated */
+    /* Background and paragraph text already use variables handled by the root dark mode definitions */
 }
