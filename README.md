@@ -32,7 +32,7 @@ The easiest way to use this clock overlay is with the online version.
 2. Create a new clock scene with a meaningful name (e.g., "Gaming Scene Clock").
 3. Copy the generated URL.
 4. In OBS Studio or StreamLabs Desktop, add a new "Browser Source".
-5. Set the width and height to appropriate values (recommended: 300x300).
+5. Set the width and height to appropriate values (e.g., 300x350 for analog+date+timezone, or up to 400x200 for large digital displays).
 6. Paste the URL in the URL field.
 7. Check "Refresh browser when scene becomes active" (optional).
 
@@ -47,7 +47,7 @@ If you prefer to host the files locally.
 ### Direct Installation (Legacy Method)
 1. After downloading the files, open OBS Studio.
 2. Add a new "Browser Source".
-3. Set the width and height to appropriate values (recommended: 300x300).
+3. Set the width and height to appropriate values (e.g., 300x350 for analog+date+timezone, or up to 400x200 for large digital displays).
 4. Check "Local file" and browse to select the `clock-overlay.html` file.
 5. Check "Refresh browser when scene becomes active" (optional).
 
