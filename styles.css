@@ -561,6 +561,7 @@ body.index-page {
     align-items: center;
     justify-content: center;
     min-height: 100vh;
+    max-width: none;
     margin: 0;
     background-color: var(--background-color);
     color: var(--text-color);
@@ -667,7 +668,7 @@ body.index-page footer {
     }
     
     .btn-primary:hover {
-        background-color: #4a6144;
+        background-color: var(--accent-color);
     }
     
     .btn-danger {
@@ -684,29 +685,30 @@ body.index-page footer {
     }
 
     body.index-page .btn {
-        color: var(--text-color);
+        /* General button text color adjusted if needed, maybe remove this if specific buttons handle it */
+         /* color: var(--text-color); */ 
     }
 
     body.index-page .btn-primary {
-        background-color: var(--accent-color);
-        border-color: var(--accent-color);
-        color: var(--background-color);
+        background-color: var(--accent-dark); /* Darker green */
+        border-color: var(--accent-dark);
+        color: var(--text-color); /* Ensure text is light */
     }
     body.index-page .btn-primary:hover {
-        background-color: var(--accent-light);
-        border-color: var(--accent-light);
-        color: var(--background-color);
+        background-color: var(--accent-color); /* Lighter green on hover */
+        border-color: var(--accent-color);
+        color: var(--background-color); /* Dark text on hover for contrast */
     }
 
     body.index-page .btn-secondary {
-        background-color: var(--primary-color);
-        border-color: var(--primary-color);
-        color: var(--background-color);
+        background-color: var(--primary-dark); /* Darker gray */
+        border-color: var(--primary-dark);
+        color: var(--text-color); /* Ensure text is light */
     }
      body.index-page .btn-secondary:hover {
-        background-color: var(--primary-light);
-        border-color: var(--primary-light);
-        color: var(--background-color);
+        background-color: var(--primary-color); /* Lighter gray on hover */
+        border-color: var(--primary-color);
+        color: var(--background-color); /* Dark text on hover for contrast */
     }
     
     body.index-page .btn-outline {
