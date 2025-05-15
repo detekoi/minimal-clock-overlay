@@ -1393,8 +1393,17 @@
             centerDot.style.height = size + 'px';
             
             // Update second hand dot size
+            // Get current second hand width
+            const handWidthString = secondHand.style.width || '2px'; // Default to 2px if not set via style
+            const W_h = parseFloat(handWidthString); // Actual width of the second hand
+            
+            const W_d = parseFloat(size) * 0.6; // Calculated width of the dot
+            
+            const dotLeft = (W_h / 2) - (W_d / 2); // Calculate left offset for centering
+            const dotTranslateY = -W_d / 2; // Vertical translation to sit on the tip
+            
             const secondHandStyle = document.createElement('style');
-            secondHandStyle.innerHTML = `.second-hand::after { width: ${size * 0.6}px; height: ${size * 0.6}px; left: ${-size * 0.3}px; transform: translateY(${-size * 0.3}px); }`;
+            secondHandStyle.innerHTML = `.second-hand::after { width: ${W_d}px; height: ${W_d}px; left: ${dotLeft}px; transform: translateY(${dotTranslateY}px); }`;
             
             // Replace existing style or add new one
             const existingStyle = document.getElementById('second-hand-dot-style');
