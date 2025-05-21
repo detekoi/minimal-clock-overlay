@@ -392,6 +392,56 @@
             display: flex;
         }
         
+        /* Locale navigation for OBS mode */
+        .locale-navigation {
+            display: none;
+            width: 100%;
+            align-items: center;
+            justify-content: space-between;
+            background-color: rgba(var(--control-bg-r, 240), var(--control-bg-g, 240), var(--control-bg-b, 240), 0.7);
+            border-radius: 4px;
+            border: 1px solid var(--marker-color);
+            padding: 2px 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+            height: 22px;
+        }
+        
+        .obs-mode .locale-navigation {
+            display: flex;
+        }
+
+        .obs-mode #locale-select {
+            display: none; /* Hide dropdown in OBS mode */
+        }
+        
+        .locale-nav-btn {
+            background-color: transparent;
+            border: none;
+            color: var(--text-color);
+            font-size: 14px;
+            cursor: pointer;
+            padding: 0 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        
+        .locale-nav-btn:hover {
+            color: var(--accent-color);
+        }
+        
+        .locale-display {
+            flex: 1;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-color);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 0 5px;
+        }
+        
         .tz-nav-btn {
             background-color: transparent;
             border: none;
@@ -788,6 +838,13 @@
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.3);
         }
+
+        /* Add to the stylesheet for RTL languages like Arabic and Hebrew */
+        .date-display[lang="ar"],
+        .date-display[lang="he"] {
+            direction: rtl;
+            text-align: right;
+        }
     </style>
 </head>
 <body>
@@ -846,6 +903,18 @@
                 <button class="select-btn preset-btn" data-value="nature">Nature</button>
                 <button class="select-btn preset-btn" data-value="twilight">Twilight</button>
                 <button class="select-btn preset-btn" data-value="candy">Candy</button>
+            </div>
+        </div>
+        <div class="control-item">
+            <span>Date Format</span>
+            <select id="locale-select">
+                <!-- Options will be populated by JavaScript -->
+            </select>
+            <!-- OBS-compatible alternative -->
+            <div class="locale-navigation">
+                <button class="locale-nav-btn prev-locale">&lt;</button>
+                <div class="locale-display">American</div>
+                <button class="locale-nav-btn next-locale">&gt;</button>
             </div>
         </div>
         <div class="control-item">
@@ -1118,6 +1187,53 @@
 
         // Populate timezones dropdown
         const timezoneSelect = document.getElementById('timezone-select');
+
+        // Locale options array for the carousel navigation
+        const localeOptions = [
+            'en-US',    // American English
+            'en-GB',    // British English
+            'fr',       // French
+            'de',       // German
+            'es',       // Spanish
+            'ja',       // Japanese
+            'zh',       // Chinese
+            'ko',       // Korean
+            'ru',       // Russian
+            'ar',       // Arabic (RTL support)
+        ];
+
+        // User-friendly display names for locales in the UI
+        const localeNames = {
+            'en-US': 'American (Wednesday, May 21, 2025)',
+            'en-GB': 'British (Wednesday, 21 May 2025)',
+            'fr': 'French (mercredi 21 mai 2025)',
+            'de': 'German (Mittwoch, 21. Mai 2025)',
+            'es': 'Spanish (miércoles, 21 de mayo de 2025)',
+            'ja': 'Japanese (2025年5月21日水曜日)',
+            'zh': 'Chinese (2025年5月21日星期三)',
+            'ko': 'Korean (2025년 5월 21일 수요일)',
+            'ru': 'Russian (среда, 21 мая 2025 г.)',
+            'ar': 'Arabic (الأربعاء، 21 مايو 2025)',
+        };
+
+        // Locale navigation elements
+        const localeSelect = document.getElementById('locale-select');
+        const prevLocaleBtn = document.querySelector('.prev-locale');
+        const nextLocaleBtn = document.querySelector('.next-locale');
+        const localeDisplay = document.querySelector('.locale-display');
+
+        // Populate localeSelect dropdown
+        if (localeSelect && typeof localeOptions !== 'undefined' && typeof localeNames !== 'undefined') {
+            localeOptions.forEach(localeCode => {
+                const option = document.createElement('option');
+                option.value = localeCode;
+                option.textContent = localeNames[localeCode] || localeCode;
+                localeSelect.appendChild(option);
+            });
+        } else {
+            // console.error("Locale elements or options (localeOptions, localeNames) not found for dropdown population. HTML IDs: locale-select, .prev-locale, .next-locale, .locale-display");
+        }
+
         const timezones = [
             { value: 'UTC', label: 'UTC' },
             { value: 'America/New_York', label: 'Eastern Time (ET)' },
@@ -1170,6 +1286,24 @@
         const controlsToggle = document.querySelector('.controls-toggle');
         const digitalControlsToggle = document.querySelector('.digital-controls-toggle');
         const controls = document.querySelector('.controls');
+
+        // Locale navigation elements
+        const localeSelect = document.getElementById('locale-select');
+        const prevLocaleBtn = document.querySelector('.prev-locale');
+        const nextLocaleBtn = document.querySelector('.next-locale');
+        const localeDisplay = document.querySelector('.locale-display');
+
+        // Populate localeSelect dropdown
+        if (localeSelect && localeOptions && localeNames) { // Add null checks
+            localeOptions.forEach(localeCode => {
+                const option = document.createElement('option');
+                option.value = localeCode;
+                option.textContent = localeNames[localeCode] || localeCode;
+                localeSelect.appendChild(option);
+            });
+        } else {
+            // console.error("Locale elements or options not found for dropdown population");
+        }
 
         // Initialize controls
         secondHandToggle.addEventListener('change', function() {
@@ -1459,7 +1593,8 @@
                 dateStyle: 'rounded',
                 ampm: true,
                 scale: 100,
-                backgroundOpacity: 85
+                backgroundOpacity: 85,
+                locale: 'en-US'
             },
             modern: {
                 displayMode: 'both',
@@ -1477,7 +1612,8 @@
                 showDate: false,
                 dateStyle: 'simple',
                 accentSize: 0, // No accent elements for true minimalism
-                backgroundOpacity: 50 // More transparent for modern look
+                backgroundOpacity: 50, // More transparent for modern look
+                locale: 'en-US'
             },
             coastal: {
                 displayMode: 'both',
@@ -1494,7 +1630,8 @@
                 dateStyle: 'rounded',
                 showTimezone: true,
                 timezoneStyle: 'rounded',
-                showSeconds: false
+                showSeconds: false,
+                locale: 'en-GB'
             },
             artdeco: {
                 displayMode: 'both',
@@ -1511,7 +1648,8 @@
                 dateStyle: 'serif',
                 showTimezone: true,
                 timezoneStyle: 'serif',
-                showSeconds: false
+                showSeconds: false,
+                locale: 'en-US'
             },
             digital: {
                 displayMode: 'digital',
@@ -1527,7 +1665,8 @@
                 dateStyle: 'lcd',
                 showTimezone: true,
                 timezoneStyle: 'lcd',
-                showSeconds: true
+                showSeconds: true,
+                locale: 'en-US'
             },
             traditional: {
                 displayMode: 'analog',
@@ -1545,7 +1684,8 @@
                 showTimezone: false,
                 timezoneStyle: 'serif',
                 showSeconds: false,
-                backgroundOpacity: 95 // More solid for traditional look
+                backgroundOpacity: 95, // More solid for traditional look
+                locale: 'en-US'
             },
             gaming: {
                 displayMode: 'both',
@@ -1562,7 +1702,8 @@
                 showTimezone: true,
                 timezoneStyle: 'monospace',
                 showSeconds: true,
-                backgroundOpacity: 50
+                backgroundOpacity: 50,
+                locale: 'en-US'
             },
             retro: {
                 displayMode: 'both',
@@ -1581,7 +1722,8 @@
                 timezoneStyle: 'monospace',
                 showSeconds: false,
                 ampm: true,
-                backgroundOpacity: 90
+                backgroundOpacity: 90,
+                locale: 'en-US'
             },
             'dark-tech': {
                 displayMode: 'both',
@@ -1599,7 +1741,8 @@
                 showTimezone: true,
                 timezoneStyle: 'monospace',
                 showSeconds: true,
-                backgroundOpacity: 80
+                backgroundOpacity: 80,
+                locale: 'en-US'
             },
             elegant: {
                 displayMode: 'both',
@@ -1617,7 +1760,8 @@
                 showTimezone: true,
                 timezoneStyle: 'serif',
                 showSeconds: false,
-                backgroundOpacity: 90
+                backgroundOpacity: 90,
+                locale: 'en-US'
             },
             cyberpunk: {
                 displayMode: 'both',
@@ -1636,7 +1780,8 @@
                 timezoneStyle: 'lcd',
                 showSeconds: true,
                 ampm: false,
-                backgroundOpacity: 70 // Semi-transparent for futuristic look
+                backgroundOpacity: 70, // Semi-transparent for futuristic look
+                locale: 'en-US'
             },
             lofi: {
                 displayMode: 'both',
@@ -1654,7 +1799,8 @@
                 timezoneStyle: 'monospace',
                 showSeconds: false,
                 ampm: true,
-                backgroundOpacity: 75
+                backgroundOpacity: 75,
+                locale: 'en-US'
             },
             nature: {
                 displayMode: 'both',
@@ -1672,7 +1818,8 @@
                 showTimezone: true,
                 timezoneStyle: 'serif',
                 showSeconds: false,
-                backgroundOpacity: 90
+                backgroundOpacity: 90,
+                locale: 'en-US'
             },
             twilight: {
                 displayMode: 'both',
@@ -1690,7 +1837,8 @@
                 showTimezone: true,
                 timezoneStyle: 'simple',
                 showSeconds: true,
-                backgroundOpacity: 85
+                backgroundOpacity: 85,
+                locale: 'en-US'
             },
             candy: {
                 displayMode: 'both',
@@ -1709,7 +1857,8 @@
                 timezoneStyle: 'rounded',
                 showSeconds: true,
                 accentSize: 12,
-                backgroundOpacity: 90
+                backgroundOpacity: 90,
+                locale: 'en-US'
             }
         };
         
@@ -1866,6 +2015,12 @@
                 document.querySelector('.date-display').className = 
                     'date-display ' + preset.dateStyle;
             }
+
+            if (preset.locale && localeSelect) { // localeSelect null check
+                localeSelect.value = preset.locale;
+                const localeChangeEvent = new Event('change'); // Create a new event
+                localeSelect.dispatchEvent(localeChangeEvent); // Dispatch it to trigger listeners
+            }
             
             // Update UI
             updateClockNumbers();
@@ -1976,6 +2131,33 @@
         // Handle settings toggle clicks
         controlsToggle.addEventListener('click', toggleSettingsPanel);
         digitalControlsToggle.addEventListener('click', toggleSettingsPanel);
+
+        // Function to format date with locale support
+        function formatDate(date, locale) {
+            const options = { 
+                weekday: 'long', 
+                month: 'long', 
+                day: 'numeric', 
+                year: 'numeric'
+            };
+            
+            try {
+                // Handle timezone and locale together
+                const selectedTimezone = timezoneSelect.value; // Ensure timezoneSelect is defined and accessible
+                if (selectedTimezone !== 'local') {
+                    return new Intl.DateTimeFormat(locale, {
+                        ...options,
+                        timeZone: selectedTimezone
+                    }).format(date);
+                } else {
+                    return new Intl.DateTimeFormat(locale, options).format(date);
+                }
+            } catch (e) {
+                console.error('Error formatting date:', e);
+                // Fallback to basic locale formatting without timezone
+                return new Intl.DateTimeFormat(locale, options).format(date);
+            }
+        }
 
         // Update the clock hands and digital time
         function updateClock() {
@@ -2090,24 +2272,18 @@
             
             // Update date display
             const dateDisplay = document.querySelector('.date-display');
-            const dateOptions = { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric'
-            };
-            try {
-                if (selectedTimezone === 'local') {
-                    dateDisplay.textContent = now.toLocaleDateString(undefined, dateOptions);
-                } else {
-                    dateDisplay.textContent = now.toLocaleDateString(undefined, {
-                        ...dateOptions,
-                        timeZone: selectedTimezone
-                    });
+            if (dateDisplay && localeSelect) { // Ensure elements exist
+                try {
+                    dateDisplay.textContent = formatDate(now, localeSelect.value);
+                    dateDisplay.setAttribute('lang', localeSelect.value); 
+                } catch (e) {
+                    console.error("Error updating date display with locale: ", e);
+                    // Fallback to a simple, non-localized date if formatDate fails catastrophically
+                    const fallbackOptions = { year: 'numeric', month: 'short', day: 'numeric' };
+                    dateDisplay.textContent = now.toLocaleDateString(undefined, fallbackOptions);
+                    // Also set lang attribute in fallback if possible, or to a default
+                    dateDisplay.setAttribute('lang', localeSelect.value || 'en-US');
                 }
-            } catch (e) {
-                // Fallback if timezone formatting fails
-                dateDisplay.textContent = now.toLocaleDateString(undefined, dateOptions);
             }
             
             // Call requestAnimationFrame for smooth animation
@@ -2147,7 +2323,8 @@
                 secondHandColor: secondHandColorPicker.value,
                 clockFaceColor: clockFaceColorPicker.value,
                 timezone: timezoneSelect.value,
-                backgroundOpacity: opacitySlider.value
+                backgroundOpacity: opacitySlider.value,
+                locale: localeSelect.value, // Added locale saving
             };
             
             // Use scene-specific storage key
@@ -2331,17 +2508,36 @@
                         timezoneSelect.value = settings.timezone;
                     }
                 }
+
+                // Set locale if saved, otherwise default
+                if (localeSelect && typeof localeOptions !== 'undefined') { // Ensure localeSelect and localeOptions exist
+                    if (settings.locale && localeOptions.includes(settings.locale)) {
+                        localeSelect.value = settings.locale;
+                    } else {
+                        // Default to browser locale or fallback to en-US
+                        const browserLocale = navigator.language || 'en-US';
+                        // Find the closest supported locale (exact match, then language part match, then 'en-US')
+                        let supportedLocale = localeOptions.find(lc => lc.toLowerCase() === browserLocale.toLowerCase());
+                        if (!supportedLocale) {
+                            const languagePart = browserLocale.split('-')[0];
+                            supportedLocale = localeOptions.find(lc => lc.toLowerCase().startsWith(languagePart.toLowerCase()));
+                        }
+                        localeSelect.value = supportedLocale || 'en-US'; // Final fallback to en-US
+                    }
+                }
                 
                 // Update UI
                 updateClockNumbers();
                 updateAccentSize();
                 updateTimezoneDisplay(); // Update timezone navigation display
+                updateLocaleDisplay(); // Update locale display after loading settings
             } else {
                 // Default settings if nothing is saved
                 digitalTime.className = 'digital-time rounded';
                 updateClockNumbers();
                 updateAccentSize();
                 updateTimezoneDisplay(); // Update timezone navigation display
+                updateLocaleDisplay(); // Update locale display for defaults
             }
         }
         
@@ -2363,6 +2559,50 @@
             }
             
             tzDisplay.textContent = displayText;
+        }
+
+        // Function to update locale display in the navigation component
+        function updateLocaleDisplay() {
+            if (localeSelect && localeDisplay) { // Add null check for elements
+                const selectedValue = localeSelect.value;
+                // Ensure selectedValue is valid and exists in localeNames
+                if (localeNames[selectedValue]) {
+                    localeDisplay.textContent = localeNames[selectedValue].split('(')[0].trim(); // Show only the name part
+                } else if (typeof localeOptions !== 'undefined' && localeOptions.includes(selectedValue)) {
+                     // Fallback if name is not in localeNames but option exists
+                    localeDisplay.textContent = selectedValue;
+                } else if (typeof localeOptions !== 'undefined' && localeOptions.length > 0) {
+                    // Fallback to the first option if current value is invalid
+                    localeSelect.value = localeOptions[0];
+                    localeDisplay.textContent = localeNames[localeOptions[0]].split('(')[0].trim();
+                } else {
+                    localeDisplay.textContent = 'N/A'; // No options available
+                }
+            } else {
+                // console.error("Locale display elements or localeNames/localeOptions not found for updateLocaleDisplay");
+            }
+        }
+
+        // Navigate through locales
+        function navigateLocales(direction) {
+            if (!localeSelect || typeof localeOptions === 'undefined' || localeOptions.length === 0) return; 
+
+            const currentIndex = localeOptions.indexOf(localeSelect.value);
+            let nextIndex;
+
+            if (direction === 'prev') {
+                nextIndex = (currentIndex - 1 + localeOptions.length) % localeOptions.length;
+            } else { // next
+                nextIndex = (currentIndex + 1) % localeOptions.length;
+            }
+            
+            localeSelect.value = localeOptions[nextIndex];
+            updateLocaleDisplay();
+            
+            // Trigger change event to update the clock and save settings
+            const event = new Event('change');
+            localeSelect.dispatchEvent(event); 
+            // saveSettings(); // saveSettings will be called by the event listener on localeSelect
         }
         
         // Navigate through timezones
@@ -2401,6 +2641,49 @@
         
         // Update timezone display when select changes
         timezoneSelect.addEventListener('change', updateTimezoneDisplay);
+        
+        // Set up event listeners for locale navigation
+        if (prevLocaleBtn && nextLocaleBtn) { // Add null check
+            prevLocaleBtn.addEventListener('click', () => navigateLocales('prev'));
+            nextLocaleBtn.addEventListener('click', () => navigateLocales('next'));
+        }
+
+        // Update locale display when select changes (e.g., by presets or direct interaction)
+        if (localeSelect) { // Add null check
+            localeSelect.addEventListener('change', updateLocaleDisplay);
+        }
+
+        // Function to update locale display in the navigation component
+        function updateLocaleDisplay() {
+            if (localeSelect && localeDisplay && localeNames) { // Add null check for elements
+                const selectedValue = localeSelect.value;
+                localeDisplay.textContent = localeNames[selectedValue] || selectedValue;
+            } else {
+                // console.error("Locale display elements not found for updateLocaleDisplay");
+            }
+        }
+
+        // Navigate through locales
+        function navigateLocales(direction) {
+            if (!localeSelect || !localeOptions || localeOptions.length === 0) return; // Add null/empty check
+
+            const currentIndex = localeOptions.indexOf(localeSelect.value);
+            let nextIndex;
+
+            if (direction === 'prev') {
+                nextIndex = (currentIndex - 1 + localeOptions.length) % localeOptions.length;
+            } else { // next
+                nextIndex = (currentIndex + 1) % localeOptions.length;
+            }
+            
+            localeSelect.value = localeOptions[nextIndex];
+            updateLocaleDisplay();
+            
+            // Trigger change event to update the clock and save settings
+            const event = new Event('change');
+            localeSelect.dispatchEvent(event); 
+            // saveSettings(); // saveSettings will be called by the event listener on localeSelect
+        }
         
         // Function to update control visibility based on settings
         function updateControlVisibility() {
@@ -2476,7 +2759,7 @@
         const settingsControls = [
             secondHandToggle, displayModeSelect, ampmToggle, secondsToggle, 
             showTimezoneToggle, timezoneStyleSelect,
-            showDateToggle, dateStyleSelect,
+            showDateToggle, dateStyleSelect, localeSelect, // Added localeSelect here
             numbersToggle, numberStyleSelect, digitalStyleSelect, themeSelect,
             scaleSlider, handThicknessSelect, accentColorPicker,
             accentSizeSlider, secondHandColorPicker, clockFaceColorPicker, timezoneSelect, opacitySlider
@@ -2589,6 +2872,8 @@
         
         // Load settings on initialization
         loadSettings();
+        // Initial call to set the locale display based on loaded or default settings
+        updateLocaleDisplay(); 
         
         // Setup OBS-compatible buttons
         setupSelectButtons();
