@@ -1287,24 +1287,6 @@
         const digitalControlsToggle = document.querySelector('.digital-controls-toggle');
         const controls = document.querySelector('.controls');
 
-        // Locale navigation elements
-        const localeSelect = document.getElementById('locale-select');
-        const prevLocaleBtn = document.querySelector('.prev-locale');
-        const nextLocaleBtn = document.querySelector('.next-locale');
-        const localeDisplay = document.querySelector('.locale-display');
-
-        // Populate localeSelect dropdown
-        if (localeSelect && localeOptions && localeNames) { // Add null checks
-            localeOptions.forEach(localeCode => {
-                const option = document.createElement('option');
-                option.value = localeCode;
-                option.textContent = localeNames[localeCode] || localeCode;
-                localeSelect.appendChild(option);
-            });
-        } else {
-            // console.error("Locale elements or options not found for dropdown population");
-        }
-
         // Initialize controls
         secondHandToggle.addEventListener('change', function() {
             secondHand.style.display = this.checked ? 'block' : 'none';
@@ -2651,38 +2633,6 @@
         // Update locale display when select changes (e.g., by presets or direct interaction)
         if (localeSelect) { // Add null check
             localeSelect.addEventListener('change', updateLocaleDisplay);
-        }
-
-        // Function to update locale display in the navigation component
-        function updateLocaleDisplay() {
-            if (localeSelect && localeDisplay && localeNames) { // Add null check for elements
-                const selectedValue = localeSelect.value;
-                localeDisplay.textContent = localeNames[selectedValue] || selectedValue;
-            } else {
-                // console.error("Locale display elements not found for updateLocaleDisplay");
-            }
-        }
-
-        // Navigate through locales
-        function navigateLocales(direction) {
-            if (!localeSelect || !localeOptions || localeOptions.length === 0) return; // Add null/empty check
-
-            const currentIndex = localeOptions.indexOf(localeSelect.value);
-            let nextIndex;
-
-            if (direction === 'prev') {
-                nextIndex = (currentIndex - 1 + localeOptions.length) % localeOptions.length;
-            } else { // next
-                nextIndex = (currentIndex + 1) % localeOptions.length;
-            }
-            
-            localeSelect.value = localeOptions[nextIndex];
-            updateLocaleDisplay();
-            
-            // Trigger change event to update the clock and save settings
-            const event = new Event('change');
-            localeSelect.dispatchEvent(event); 
-            // saveSettings(); // saveSettings will be called by the event listener on localeSelect
         }
         
         // Function to update control visibility based on settings
