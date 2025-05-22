@@ -905,18 +905,7 @@
                 <button class="select-btn preset-btn" data-value="candy">Candy</button>
             </div>
         </div>
-        <div class="control-item">
-            <span>Date Format</span>
-            <select id="locale-select">
-                <!-- Options will be populated by JavaScript -->
-            </select>
-            <!-- OBS-compatible alternative -->
-            <div class="locale-navigation">
-                <button class="locale-nav-btn prev-locale">&lt;</button>
-                <div class="locale-display">American</div>
-                <button class="locale-nav-btn next-locale">&gt;</button>
-            </div>
-        </div>
+
         <div class="control-item">
             <span>Second Hand</span>
             <label class="switch">
@@ -996,6 +985,18 @@
                 <input type="checkbox" id="show-date-toggle">
                 <span class="slider"></span>
             </label>
+        </div>
+        <div class="control-item" id="date-format-control">
+            <span>Date Format</span>
+            <select id="locale-select">
+                <!-- Options will be populated by JavaScript -->
+            </select>
+            <!-- OBS-compatible alternative -->
+            <div class="locale-navigation">
+                <button class="locale-nav-btn prev-locale">&lt;</button>
+                <div class="locale-display">American</div>
+                <button class="locale-nav-btn next-locale">&gt;</button>
+            </div>
         </div>
         <div class="control-item">
             <span>Date Style</span>
@@ -1200,6 +1201,7 @@
             'ko',       // Korean
             'ru',       // Russian
             'ar',       // Arabic (RTL support)
+            'iso-8601'  // ISO 8601 format
         ];
 
         // User-friendly display names for locales in the UI
@@ -1214,6 +1216,7 @@
             'ko': 'Korean (2025년 5월 21일 수요일)',
             'ru': 'Russian (среда, 21 мая 2025 г.)',
             'ar': 'Arabic (الأربعاء، 21 مايو 2025)',
+            'iso-8601': 'ISO 8601 (2025-05-21)'
         };
 
         // Locale navigation elements
@@ -1233,6 +1236,58 @@
         } else {
             // console.error("Locale elements or options (localeOptions, localeNames) not found for dropdown population. HTML IDs: locale-select, .prev-locale, .next-locale, .locale-display");
         }
+        
+        // Locale navigation state
+        let currentLocaleIndex = 0;
+        
+        // Initialize locale display
+        function updateLocaleDisplay() {
+            if (localeDisplay && localeNames[localeOptions[currentLocaleIndex]]) {
+                localeDisplay.textContent = localeNames[localeOptions[currentLocaleIndex]].split('(')[0].trim();
+            }
+        }
+        
+        // Locale navigation event listeners
+        if (prevLocaleBtn && nextLocaleBtn) {
+            prevLocaleBtn.addEventListener('click', function() {
+                currentLocaleIndex = (currentLocaleIndex - 1 + localeOptions.length) % localeOptions.length;
+                updateLocaleDisplay();
+                
+                // Update the actual locale select
+                if (localeSelect) {
+                    localeSelect.value = localeOptions[currentLocaleIndex];
+                    localeSelect.dispatchEvent(new Event('change'));
+                }
+            });
+            
+            nextLocaleBtn.addEventListener('click', function() {
+                currentLocaleIndex = (currentLocaleIndex + 1) % localeOptions.length;
+                updateLocaleDisplay();
+                
+                // Update the actual locale select
+                if (localeSelect) {
+                    localeSelect.value = localeOptions[currentLocaleIndex];
+                    localeSelect.dispatchEvent(new Event('change'));
+                }
+            });
+        }
+        
+        // Sync locale navigation with dropdown changes
+        if (localeSelect) {
+            localeSelect.addEventListener('change', function() {
+                currentLocaleIndex = localeOptions.indexOf(this.value);
+                updateLocaleDisplay();
+                
+                // Update timezone display when locale changes for internationalization
+                updateTimezoneDisplay();
+            });
+        }
+        
+        // Initialize locale display
+        updateLocaleDisplay();
+        
+        // Initialize timezone display (after formatTimezoneName function is defined)
+        setTimeout(updateTimezoneDisplay, 0);
 
         const timezones = [
             { value: 'UTC', label: 'UTC' },
@@ -1261,6 +1316,61 @@
             timezoneSelect.appendChild(option);
         });
         
+        // Timezone navigation state
+        let currentTimezoneIndex = 0;
+        
+        // Timezone navigation elements
+        const prevTzBtn = document.querySelector('.prev-tz');
+        const nextTzBtn = document.querySelector('.next-tz');
+        const tzDisplay = document.querySelector('.tz-display');
+        
+        // Initialize timezone display
+        function updateTimezoneDisplay() {
+            if (tzDisplay && timezones[currentTimezoneIndex]) {
+                const currentLocale = localeSelect ? localeSelect.value : 'en-US';
+                const timezoneId = timezones[currentTimezoneIndex].value;
+                
+                // Use the internationalized timezone formatting
+                tzDisplay.textContent = formatTimezoneName(timezoneId, currentLocale);
+            }
+        }
+        
+        // Timezone navigation event listeners
+        if (prevTzBtn && nextTzBtn) {
+            prevTzBtn.addEventListener('click', function() {
+                currentTimezoneIndex = (currentTimezoneIndex - 1 + timezones.length) % timezones.length;
+                updateTimezoneDisplay();
+                
+                // Update the actual timezone select
+                if (timezoneSelect) {
+                    timezoneSelect.value = timezones[currentTimezoneIndex].value;
+                    timezoneSelect.dispatchEvent(new Event('change'));
+                }
+            });
+            
+            nextTzBtn.addEventListener('click', function() {
+                currentTimezoneIndex = (currentTimezoneIndex + 1) % timezones.length;
+                updateTimezoneDisplay();
+                
+                // Update the actual timezone select
+                if (timezoneSelect) {
+                    timezoneSelect.value = timezones[currentTimezoneIndex].value;
+                    timezoneSelect.dispatchEvent(new Event('change'));
+                }
+            });
+        }
+        
+        // Sync timezone navigation with dropdown changes
+        if (timezoneSelect) {
+            timezoneSelect.addEventListener('change', function() {
+                const tzIndex = timezones.findIndex(tz => tz.value === this.value);
+                if (tzIndex !== -1) {
+                    currentTimezoneIndex = tzIndex;
+                    updateTimezoneDisplay();
+                }
+            });
+        }
+        
         // Control elements
         const opacitySlider = document.getElementById('opacity-slider');
         const secondHandToggle = document.getElementById('second-hand-toggle');
@@ -1286,6 +1396,7 @@
         const controlsToggle = document.querySelector('.controls-toggle');
         const digitalControlsToggle = document.querySelector('.digital-controls-toggle');
         const controls = document.querySelector('.controls');
+        const obsModeToggle = document.getElementById('obs-mode-toggle');
 
         // Initialize controls
         secondHandToggle.addEventListener('change', function() {
@@ -1324,6 +1435,7 @@
         
         showDateToggle.addEventListener('change', function() {
             document.querySelector('.date-display').style.display = this.checked ? 'block' : 'none';
+            updateControlVisibility();
         });
         
         dateStyleSelect.addEventListener('change', function() {
@@ -2113,9 +2225,146 @@
         // Handle settings toggle clicks
         controlsToggle.addEventListener('click', toggleSettingsPanel);
         digitalControlsToggle.addEventListener('click', toggleSettingsPanel);
+        
+        // OBS mode toggle functionality
+        if (obsModeToggle) {
+            obsModeToggle.addEventListener('change', function() {
+                if (this.checked) {
+                    document.body.classList.add('obs-mode');
+                } else {
+                    document.body.classList.remove('obs-mode');
+                }
+                
+                // Update timezone and locale displays when switching modes
+                updateTimezoneDisplay();
+                updateLocaleDisplay();
+            });
+        }
+        
+        // Function to update control visibility based on settings
+        function updateControlVisibility() {
+            const dateFormatControl = document.getElementById('date-format-control');
+            const showDate = showDateToggle.checked;
+            
+            // Show/hide Date Format control based on Show Date toggle
+            if (dateFormatControl) {
+                dateFormatControl.style.display = showDate ? 'flex' : 'none';
+            }
+        }
+
+        // Function to format timezone names with internationalization
+        function formatTimezoneName(timezoneId, locale) {
+            if (timezoneId === 'local') {
+                // Handle local timezone
+                try {
+                    const resolvedTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                    return formatTimezoneName(resolvedTimezone, locale);
+                } catch (e) {
+                    return 'Local Time';
+                }
+            }
+            
+            try {
+                // Try to get localized city name using Intl.DateTimeFormat
+                const date = new Date();
+                const formatter = new Intl.DateTimeFormat(locale, {
+                    timeZone: timezoneId,
+                    timeZoneName: 'long'
+                });
+                
+                const parts = formatter.formatToParts(date);
+                const timeZonePart = parts.find(part => part.type === 'timeZoneName');
+                
+                if (timeZonePart && timeZonePart.value) {
+                    // Extract city name from timezone ID if timeZoneName is generic
+                    const cityName = timezoneId.split('/').pop().replace(/_/g, ' ');
+                    
+                    // If we get a generic time zone name, prefer the city name
+                    if (timeZonePart.value.includes('GMT') || timeZonePart.value.includes('UTC') || 
+                        timeZonePart.value.length < 5) {
+                        // Fall back to GMT offset
+                        return getGMTOffset(timezoneId, locale);
+                    }
+                    
+                    // Return the localized timezone name
+                    return timeZonePart.value;
+                }
+            } catch (e) {
+                console.error('Error getting localized timezone name:', e);
+            }
+            
+            // Fallback to GMT offset
+            return getGMTOffset(timezoneId, locale);
+        }
+        
+        // Helper function to get GMT offset
+        function getGMTOffset(timezoneId, locale) {
+            try {
+                const date = new Date();
+                const formatter = new Intl.DateTimeFormat(locale, {
+                    timeZone: timezoneId,
+                    timeZoneName: 'short'
+                });
+                
+                const parts = formatter.formatToParts(date);
+                const timeZonePart = parts.find(part => part.type === 'timeZoneName');
+                
+                if (timeZonePart && timeZonePart.value) {
+                    return timeZonePart.value;
+                }
+                
+                // Manual calculation as final fallback
+                const utc = new Date(date.getTime() + (date.getTimezoneOffset() * 60000));
+                const targetDate = new Date(utc.toLocaleString('en-US', { timeZone: timezoneId }));
+                const offset = (targetDate.getTime() - utc.getTime()) / (1000 * 60 * 60);
+                
+                const sign = offset >= 0 ? '+' : '-';
+                const hours = Math.floor(Math.abs(offset));
+                const minutes = Math.floor((Math.abs(offset) % 1) * 60);
+                
+                return `GMT${sign}${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+            } catch (e) {
+                console.error('Error calculating GMT offset:', e);
+                return timezoneId.replace(/_/g, ' ');
+            }
+        }
 
         // Function to format date with locale support
         function formatDate(date, locale) {
+            // Handle ISO 8601 format
+            if (locale === 'iso-8601') {
+                try {
+                    // Get date in the selected timezone for ISO format
+                    const selectedTimezone = timezoneSelect.value;
+                    let targetDate = date;
+                    
+                    if (selectedTimezone !== 'local') {
+                        // Create a date in the target timezone
+                        const formatter = new Intl.DateTimeFormat('en-CA', {
+                            timeZone: selectedTimezone,
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit'
+                        });
+                        
+                        const parts = formatter.formatToParts(date);
+                        const year = parts.find(part => part.type === 'year').value;
+                        const month = parts.find(part => part.type === 'month').value;
+                        const day = parts.find(part => part.type === 'day').value;
+                        
+                        return `${year}-${month}-${day}`;
+                    } else {
+                        // Local timezone - use simple ISO format
+                        return date.toISOString().split('T')[0];
+                    }
+                } catch (e) {
+                    console.error('Error formatting ISO 8601 date:', e);
+                    // Fallback to basic ISO format
+                    return date.toISOString().split('T')[0];
+                }
+            }
+            
+            // Handle regular locale-based formatting
             const options = { 
                 weekday: 'long', 
                 month: 'long', 
@@ -2236,21 +2485,12 @@
             
             digitalTime.textContent = timeString;
             
-            // Update timezone display
+            // Update timezone display with internationalization
             const timezoneDisplay = document.querySelector('.timezone-display');
-            if (selectedTimezone === 'local') {
-                // Try to get user's timezone name
-                try {
-                    const tzName = Intl.DateTimeFormat().resolvedOptions().timeZone;
-                    timezoneDisplay.textContent = tzName.replace(/_/g, ' ').replace(/\//g, ' / ');
-                } catch (e) {
-                    timezoneDisplay.textContent = 'Local Time';
-                }
-            } else {
-                // Find the timezone label from the options
-                const tzOption = timezones.find(tz => tz.value === selectedTimezone);
-                timezoneDisplay.textContent = tzOption ? tzOption.label : selectedTimezone;
-            }
+            const currentLocale = localeSelect ? localeSelect.value : 'en-US';
+            
+            // Use the new internationalized timezone formatting function
+            timezoneDisplay.textContent = formatTimezoneName(selectedTimezone, currentLocale);
             
             // Update date display
             const dateDisplay = document.querySelector('.date-display');
@@ -2307,6 +2547,7 @@
                 timezone: timezoneSelect.value,
                 backgroundOpacity: opacitySlider.value,
                 locale: localeSelect.value, // Added locale saving
+                obsMode: obsModeToggle ? obsModeToggle.checked : false, // Added OBS mode saving
             };
             
             // Use scene-specific storage key
