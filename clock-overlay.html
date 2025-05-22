@@ -1224,6 +1224,11 @@
         const prevLocaleBtn = document.querySelector('.prev-locale');
         const nextLocaleBtn = document.querySelector('.next-locale');
         const localeDisplay = document.querySelector('.locale-display');
+        
+        // Timezone navigation elements
+        const prevTzBtn = document.querySelector('.prev-tz');
+        const nextTzBtn = document.querySelector('.next-tz');
+        const tzDisplay = document.querySelector('.tz-display');
 
         // Populate localeSelect dropdown
         if (localeSelect && typeof localeOptions !== 'undefined' && typeof localeNames !== 'undefined') {
@@ -1319,10 +1324,7 @@
         // Timezone navigation state
         let currentTimezoneIndex = 0;
         
-        // Timezone navigation elements
-        const prevTzBtn = document.querySelector('.prev-tz');
-        const nextTzBtn = document.querySelector('.next-tz');
-        const tzDisplay = document.querySelector('.tz-display');
+
         
         // Initialize timezone display
         function updateTimezoneDisplay() {
@@ -1662,6 +1664,30 @@
             
             // Directly apply color to the second hand element
             document.querySelector('.second-hand').style.backgroundColor = secondHandColor;
+        });
+        
+        clockFaceColorPicker.addEventListener('input', function() {
+            // Set the clock face color
+            const clockFaceColor = this.value;
+            document.querySelector('.clock').style.backgroundColor = clockFaceColor;
+        });
+        
+        opacitySlider.addEventListener('input', function() {
+            const opacity = this.value / 100;
+            document.documentElement.style.setProperty('--clock-face-opacity', opacity);
+            
+            // Update clock face with new opacity
+            const clockElement = document.querySelector('.clock');
+            if (clockElement) {
+                const currentColor = clockFaceColorPicker.value;
+                const colorValues = currentColor.match(/\w\w/g);
+                if (colorValues && colorValues.length === 3) {
+                    const r = parseInt(colorValues[0], 16);
+                    const g = parseInt(colorValues[1], 16);
+                    const b = parseInt(colorValues[2], 16);
+                    clockElement.style.backgroundColor = `rgba(${r}, ${g}, ${b}, ${opacity})`;
+                }
+            }
         });
         
         // Removed the transparent toggle handler since we now use the theme selector
@@ -3151,6 +3177,12 @@
         
         // Start the clock
         updateClock();
+        
+        // Initialize control visibility
+        updateControlVisibility();
+        
+        // Load saved settings last to ensure all controls are available
+        loadSettings();
 
         // Make the clock and controls draggable
         let isDragging = false;
