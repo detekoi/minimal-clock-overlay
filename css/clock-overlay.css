@@ -1,8 +1,8 @@
         /* Custom Font Definitions */
         @font-face {
             font-family: 'LCD';
-            src: url('fonts/Alarm-Clock.ttf') format('truetype'),
-                 url('fonts/VFD-Nova.otf') format('opentype');
+            src: url('../fonts/Alarm-Clock.ttf') format('truetype'),
+                 url('../fonts/VFD-Nova.otf') format('opentype');
             font-weight: normal;
             font-style: normal;
         }

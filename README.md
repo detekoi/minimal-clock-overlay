@@ -16,7 +16,8 @@ A lightweight, customizable clock overlay for OBS. Perfect for streamers who wan
   - AM/PM or 24-hour time format.
   - Customizable font styles for digital clock, date, and time zone (including serif and LCD display).
   - Color and size customization.
-- **Date & Time Zone Support**: Display date and time zone with customizable styles.
+- **Date & Time Zone Support**: Display date and time zone with customizable styles and full internationalization.
+- **Internationalization**: Supports multiple locales with proper date/time formatting for different regions.
 - **Scene Manager**: Create and manage multiple clock configurations for different scenes.
 - **OBS/Streamlabs Compatibility**: Built-in compatibility mode for browser sources with dropdown issues.
 - **Draggable**: Position anywhere on your stream.
@@ -84,6 +85,7 @@ Use descriptive scene names like:
 - **Show Time Zone**: Display the name of the selected time zone below the clock.
 - **Time Zone Style**: Choose from different font styles (rounded, simple, monospace, serif, LCD).
 - **Show Date**: Toggle the display of the current date.
+- **Date Format**: Select from multiple locale-specific date formats for international audiences.
 - **Date Style**: Choose from different font styles (rounded, simple, monospace, serif, LCD).
 - **Clock Numbers**: Show or hide hour numbers on the clock face.
 - **Number Style**: Choose between simple numbers, Roman numerals, dots, or serif.
@@ -123,6 +125,28 @@ Use descriptive scene names like:
   - Candy Pop: Vibrant pink and blue with rounded fonts and playful elements.
 - **Reset to Defaults**: Restore all settings to their default values.
 - **Persistent Settings**: All your customizations are automatically saved between sessions.
+
+## Internationalization Features
+
+The clock overlay includes comprehensive internationalization support to serve streamers worldwide:
+
+### Supported Locales
+- **English**: US (en-US), UK (en-GB), Australia (en-AU), Canada (en-CA)
+- **European**: German (de-DE), French (fr-FR), Spanish (es-ES), Italian (it-IT), Dutch (nl-NL), Portuguese (pt-PT), Swedish (sv-SE), Norwegian (no-NO), Danish (da-DK), Finnish (fi-FI)
+- **Slavic**: Russian (ru-RU), Polish (pl-PL), Czech (cs-CZ), Ukrainian (uk-UA)
+- **Asian**: Japanese (ja-JP), Korean (ko-KR), Chinese Simplified (zh-CN), Chinese Traditional (zh-TW), Thai (th-TH), Vietnamese (vi-VN), Hindi (hi-IN)
+- **Middle Eastern/African**: Arabic (ar-SA), Hebrew (he-IL), Turkish (tr-TR), Farsi (fa-IR), Swahili (sw-KE)
+- **Americas**: Portuguese Brazil (pt-BR), Spanish Mexico (es-MX), French Canada (fr-CA)
+
+### Date and Time Formatting
+- **Locale-Aware Dates**: Dates automatically format according to the selected locale (e.g., MM/DD/YYYY for US, DD/MM/YYYY for UK, YYYY-MM-DD for ISO format)
+- **Regional Time Zones**: Proper timezone name localization and display formatting
+- **Cultural Conventions**: Respects local conventions for date separators, month/day ordering, and time formatting
+
+### Time Zone Support
+- **Global Coverage**: Support for all major world timezones with automatic daylight saving time adjustments
+- **Localized Names**: Timezone names displayed in the appropriate language and format for the selected locale
+- **Navigation**: Easy timezone switching with both dropdown and OBS-compatible button navigation
 
 ## Clock Scene Manager
 
