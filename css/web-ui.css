@@ -684,10 +684,6 @@ body.index-page footer {
         color: var(--primary-light);
     }
 
-    body.index-page .btn {
-        /* General button text color adjusted if needed, maybe remove this if specific buttons handle it */
-         /* color: var(--text-color); */ 
-    }
 
     body.index-page .btn-primary {
         background-color: var(--accent-dark); /* Darker green */

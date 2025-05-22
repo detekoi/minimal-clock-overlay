@@ -1096,15 +1096,7 @@
         }
         
         // Function to update control visibility based on settings
-        function updateControlVisibility() {
-            const dateFormatControl = document.getElementById('date-format-control');
-            const showDate = showDateToggle.checked;
-            
-            // Show/hide Date Format control based on Show Date toggle
-            if (dateFormatControl) {
-                dateFormatControl.style.display = showDate ? 'flex' : 'none';
-            }
-        }
+        // Note: updateControlVisibility function is defined later with full functionality
 
         // Function to format timezone names with internationalization
         function formatTimezoneName(timezoneId, locale) {
@@ -1733,12 +1725,24 @@
             // Get all control items
             const controlItems = document.querySelectorAll('.control-item');
             
+            // Hide Time Zone control if Show Time Zone is disabled
+            const timezoneControl = document.getElementById('timezone-control');
+            if (timezoneControl) {
+                timezoneControl.style.display = showTimezoneToggle.checked ? 'flex' : 'none';
+            }
+            
             // Hide Time Zone Style if Show Time Zone is disabled
             const timeZoneStyleControl = Array.from(controlItems).find(
                 item => item.querySelector('span')?.textContent === 'Time Zone Style'
             );
             if (timeZoneStyleControl) {
                 timeZoneStyleControl.style.display = showTimezoneToggle.checked ? 'flex' : 'none';
+            }
+            
+            // Hide Date Format control if Show Date is disabled
+            const dateFormatControl = document.getElementById('date-format-control');
+            if (dateFormatControl) {
+                dateFormatControl.style.display = showDateToggle.checked ? 'flex' : 'none';
             }
             
             // Hide Date Style if Show Date is disabled
