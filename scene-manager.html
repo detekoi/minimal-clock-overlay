@@ -15,6 +15,9 @@
     <div class="header">
         <h1>Clock Scene Manager</h1>
         <p>Create and manage multiple clock configurations for your OBS scenes</p>
+        <div class="mt-2">
+            <a href="clock-overlay.html" class="btn btn-primary">Skip to Clock Overlay</a>
+        </div>
     </div>
 
     <div class="container">
@@ -118,6 +121,25 @@
             </div>
             <div class="modal-footer">
                 <button class="btn" id="close-details-btn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- First-run modal (shown when no scenes exist) -->
+    <div id="first-run-modal" class="modal-backdrop">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Get Started</h3>
+                <button class="modal-close" id="first-run-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <p>The Scene Manager is a tool to help you create and manage multiple clock browser source URLs for unique OBS scenes. You don't have any clock scenes yet. Create your first scene to generate a Browser Source URL for OBS.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="clock-overlay.html" class="btn btn-primary">Skip to Overlay</a>
+                <button class="btn" id="first-run-create">Create First Scene</button>
             </div>
         </div>
     </div>

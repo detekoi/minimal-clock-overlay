@@ -21,6 +21,9 @@
         const copyUrlBtn = document.getElementById('copy-url-btn');
         const tooltip = copyUrlBtn.querySelector('.tooltip');
         const detailsContent = document.getElementById('instance-details-content');
+        const firstRunModal = document.getElementById('first-run-modal');
+        const firstRunCloseBtn = document.getElementById('first-run-close');
+        const firstRunCreateBtn = document.getElementById('first-run-create');
         
         // Auto-generate ID from name
         instanceNameInput.addEventListener('input', function() {
@@ -75,6 +78,9 @@
             showAlert(`Clock scene "${name}" created successfully`, 'success');
             
             // Show details modal with URL
+            if (firstRunModal) {
+                firstRunModal.classList.remove('show');
+            }
             showInstanceDetails(newInstance);
         });
         
@@ -120,6 +126,10 @@
             if (filteredInstances.length === 0) {
                 emptyState.style.display = 'block';
                 document.getElementById('instances-table').style.display = 'none';
+                // Show first-run modal if there are truly no instances saved
+                if (data.instances.length === 0) {
+                    firstRunModal.classList.add('show');
+                }
             } else {
                 emptyState.style.display = 'none';
                 document.getElementById('instances-table').style.display = 'table';
@@ -409,6 +419,27 @@
                 this.classList.remove('show');
             }
         });
+
+        // First-run modal interactions
+        if (firstRunCloseBtn) {
+            firstRunCloseBtn.addEventListener('click', function() {
+                firstRunModal.classList.remove('show');
+            });
+        }
+        if (firstRunModal) {
+            firstRunModal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('show');
+                }
+            });
+        }
+        if (firstRunCreateBtn) {
+            firstRunCreateBtn.addEventListener('click', function() {
+                firstRunModal.classList.remove('show');
+                // Focus the name field to guide user to create the first scene
+                instanceNameInput.focus();
+            });
+        }
         
         // Filter and sort instances
         sortBySelect.addEventListener('change', renderInstances);
