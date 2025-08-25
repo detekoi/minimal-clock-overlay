@@ -14,6 +14,8 @@
                 const key = el.getAttribute('data-i18n-placeholder');
                 if (t[key]) el.setAttribute('placeholder', t[key]);
             });
+            // After static text updates, sync OBS-mode button labels with their translated option text
+            updateAllTranslatedLabels();
         }
 
         function setLanguage(lang) {
@@ -29,6 +31,8 @@
             const saved = (typeof localStorage !== 'undefined' && localStorage.getItem('language')) || (navigator.language && navigator.language.startsWith('ru') ? 'ru' : 'en');
             if (languageSelect) languageSelect.value = saved;
             applyTranslations(saved);
+            // Ensure preset and style buttons use translated, shortened labels on first load
+            updateAllTranslatedLabels();
             updateLanguageDisplay();
         });
 
@@ -56,6 +60,38 @@
         if (prevLangBtn && nextLangBtn) {
             prevLangBtn.addEventListener('click', () => navigateLanguage('prev'));
             nextLangBtn.addEventListener('click', () => navigateLanguage('next'));
+        }
+
+        // Re-sync OBS button labels when language changes via select
+        if (languageSelect) {
+            languageSelect.addEventListener('change', () => {
+                updateAllTranslatedLabels();
+            });
+        }
+
+        function updateAllTranslatedLabels() {
+            // Update static elements
+            updateLanguageDisplay();
+            // Update button labels to translated option texts
+            const map = [
+                { buttonClass: 'display-mode-btn', selectId: 'display-mode-select' },
+                { buttonClass: 'timezone-style-btn', selectId: 'timezone-style-select' },
+                { buttonClass: 'date-style-btn', selectId: 'date-style-select' },
+                { buttonClass: 'number-style-btn', selectId: 'number-style-select' },
+                { buttonClass: 'digital-style-btn', selectId: 'digital-style-select' },
+                { buttonClass: 'hand-thickness-btn', selectId: 'hand-thickness-select' },
+                { buttonClass: 'preset-btn', selectId: 'preset-select' },
+                { buttonClass: 'theme-btn', selectId: 'theme-select' }
+            ];
+            map.forEach(({ buttonClass, selectId }) => {
+                const select = document.getElementById(selectId);
+                const buttons = document.querySelectorAll(`.${buttonClass}`);
+                if (!select || !buttons.length) return;
+                buttons.forEach(btn => {
+                    const opt = Array.from(select.options).find(o => o.value === btn.dataset.value);
+                    if (opt) btn.textContent = opt.textContent;
+                });
+            });
         }
 
         // Create clock markers
@@ -1167,7 +1203,14 @@
                     const resolvedTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
                     return formatTimezoneName(resolvedTimezone, locale);
                 } catch (e) {
-                    return 'Local Time';
+                    // Translate "Local Time"
+                    try {
+                        const lang = (typeof localStorage !== 'undefined' && localStorage.getItem('language')) || 'en';
+                        const t = (typeof translations !== 'undefined' && (translations[lang] || translations['en'])) || {};
+                        return t.localTime || 'Local Time';
+                    } catch (e) {
+                        return 'Local Time';
+                    }
                 }
             }
             
@@ -1636,6 +1679,8 @@
                     const allTimezones = ['local', ...timezones.map(tz => tz.value)];
                     if (allTimezones.includes(settings.timezone)) {
                         timezoneSelect.value = settings.timezone;
+                        // Ensure dependent UI (navigation index, display text) is synced
+                        timezoneSelect.dispatchEvent(new Event('change'));
                     }
                 }
 
@@ -1643,6 +1688,9 @@
                 if (localeSelect && typeof localeOptions !== 'undefined') { // Ensure localeSelect and localeOptions exist
                     if (settings.locale && localeOptions.includes(settings.locale)) {
                         localeSelect.value = settings.locale;
+                        // Ensure dependent UI (navigation index, display text) is synced
+                        const localeChangeEvent = new Event('change');
+                        localeSelect.dispatchEvent(localeChangeEvent);
                     } else {
                         // Default to browser locale or fallback to en-US
                         const browserLocale = navigator.language || 'en-US';
@@ -1653,6 +1701,8 @@
                             supportedLocale = localeOptions.find(lc => lc.toLowerCase().startsWith(languagePart.toLowerCase()));
                         }
                         localeSelect.value = supportedLocale || 'en-US'; // Final fallback to en-US
+                        const localeChangeEvent = new Event('change');
+                        localeSelect.dispatchEvent(localeChangeEvent);
                     }
                 }
                 
@@ -1677,7 +1727,13 @@
         // Function to update timezone display in the navigation component
         function updateTimezoneDisplay() {
             const selectedValue = timezoneSelect.value;
-            let displayText = 'Local Time';
+            let displayText = (function(){
+                try {
+                    const lang = (typeof localStorage !== 'undefined' && localStorage.getItem('language')) || 'en';
+                    const t = (typeof translations !== 'undefined' && (translations[lang] || translations['en'])) || {};
+                    return t.localTime || 'Local Time';
+                } catch (e) { return 'Local Time'; }
+            })();
             
             if (selectedValue !== 'local') {
                 const selectedOption = timezones.find(tz => tz.value === selectedValue);
@@ -1941,6 +1997,11 @@
                     if (btn.dataset.value === initialValue) {
                         btn.classList.add('active');
                     }
+                    // Keep button labels in sync with translated option text
+                    const option = Array.from(select.options).find(o => o.value === btn.dataset.value);
+                    if (option && option.textContent) {
+                        btn.textContent = option.textContent;
+                    }
                 });
                 
                 // Add click handler to all buttons
@@ -1983,8 +2044,29 @@
         // Initial call to set the locale display based on loaded or default settings
         updateLocaleDisplay(); 
         
-        // Setup OBS-compatible buttons
+        // Setup OBS-compatible buttons, then sync labels to translated option text
         setupSelectButtons();
+        (function syncInitialButtonLabels(){
+            const groups = [
+                { cls: 'display-mode-btn', sel: 'display-mode-select' },
+                { cls: 'timezone-style-btn', sel: 'timezone-style-select' },
+                { cls: 'date-style-btn', sel: 'date-style-select' },
+                { cls: 'number-style-btn', sel: 'number-style-select' },
+                { cls: 'digital-style-btn', sel: 'digital-style-select' },
+                { cls: 'hand-thickness-btn', sel: 'hand-thickness-select' },
+                { cls: 'preset-btn', sel: 'preset-select' },
+                { cls: 'theme-btn', sel: 'theme-select' }
+            ];
+            groups.forEach(g => {
+                const select = document.getElementById(g.sel);
+                const buttons = document.querySelectorAll(`.${g.cls}`);
+                if (!select || !buttons.length) return;
+                buttons.forEach(btn => {
+                    const opt = Array.from(select.options).find(o => o.value === btn.dataset.value);
+                    if (opt) btn.textContent = opt.textContent;
+                });
+            });
+        })();
         
         // Initialize control visibility based on current settings
         updateControlVisibility();
