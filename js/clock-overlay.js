@@ -216,8 +216,7 @@
         // Initialize locale display
         updateLocaleDisplay();
         
-        // Initialize timezone display (after formatTimezoneName function is defined)
-        setTimeout(updateTimezoneDisplay, 0);
+        // Initialize timezone display will occur after options are populated and settings are loaded
 
         const timezones = [
             { value: 'UTC', label: 'UTC' },
@@ -1536,9 +1535,12 @@
                         digitalContainer.style.display = 'inline-block';
                         digitalControlsToggle.style.display = 'flex'; // Show digital gear in digital-only mode
                     }
+                    // Ensure control visibility reflects mode
+                    displayModeSelect.dispatchEvent(new Event('change'));
                 }
                 
-                ampmToggle.checked = settings.ampm || true; // Default to true if missing
+                // Preserve explicit false; default to true only if missing
+                ampmToggle.checked = (settings.ampm !== undefined) ? settings.ampm : true;
                 
                 if (settings.showSeconds !== undefined) {
                     secondsToggle.checked = settings.showSeconds;
@@ -1548,6 +1550,8 @@
                     showTimezoneToggle.checked = settings.showTimezone;
                     document.querySelector('.timezone-display').style.display = 
                         settings.showTimezone ? 'block' : 'none';
+                    // Trigger dependent control visibility updates
+                    showTimezoneToggle.dispatchEvent(new Event('change'));
                 }
                 
                 if (settings.timezoneStyle) {
@@ -1563,6 +1567,8 @@
                     showDateToggle.checked = settings.showDate;
                     document.querySelector('.date-display').style.display = 
                         settings.showDate ? 'block' : 'none';
+                    // Trigger dependent control visibility updates
+                    showDateToggle.dispatchEvent(new Event('change'));
                 }
                 
                 if (settings.dateStyle) {
@@ -1575,6 +1581,8 @@
                 }
                 
                 numbersToggle.checked = settings.numbers;
+                // Trigger dependent control visibility updates
+                numbersToggle.dispatchEvent(new Event('change'));
                 
                 if (settings.numberStyle) {
                     numberStyleSelect.value = settings.numberStyle;
@@ -1592,17 +1600,9 @@
                     themeSelect.value = settings.theme;
                     
                     // Remove all theme classes first
-                    document.body.classList.remove(
-                        'theme-light', 
-                        'theme-dark', 
-                        'theme-natural', 
-                        'theme-transparent',
-                        'theme-neon',
-                        'theme-pastel',
-                        'theme-forest',
-                        'theme-sunset',
-                        'theme-ocean'
-                    );
+                    // Remove all theme-* classes based on available options
+                    const themeOptions = Array.from(themeSelect.options).map(o => 'theme-' + o.value);
+                    document.body.classList.remove(...themeOptions);
                     
                     // Add the selected theme class
                     document.body.classList.add('theme-' + settings.theme);
@@ -1839,68 +1839,64 @@
         
         // Function to update control visibility based on settings
         function updateControlVisibility() {
-            // Get all control items
-            const controlItems = document.querySelectorAll('.control-item');
-            
-            // Hide Time Zone control if Show Time Zone is disabled
+            // Time zone group: show when Show Time Zone is enabled
             const timezoneControl = document.getElementById('timezone-control');
-            if (timezoneControl) {
-                timezoneControl.style.display = showTimezoneToggle.checked ? 'flex' : 'none';
-            }
-            
-            // Hide Time Zone Style if Show Time Zone is disabled
-            const timeZoneStyleControl = Array.from(controlItems).find(
-                item => item.querySelector('span')?.textContent === 'Time Zone Style'
-            );
-            if (timeZoneStyleControl) {
-                timeZoneStyleControl.style.display = showTimezoneToggle.checked ? 'flex' : 'none';
-            }
-            
-            // Hide Date Format control if Show Date is disabled
+            const timeZoneStyleControl = (function(){
+                const el = document.getElementById('timezone-style-select');
+                return el ? el.closest('.control-item') : null;
+            })();
+            if (timezoneControl) timezoneControl.style.display = showTimezoneToggle.checked ? 'flex' : 'none';
+            if (timeZoneStyleControl) timeZoneStyleControl.style.display = showTimezoneToggle.checked ? 'flex' : 'none';
+
+            // Date group: show when Show Date is enabled
             const dateFormatControl = document.getElementById('date-format-control');
-            if (dateFormatControl) {
-                dateFormatControl.style.display = showDateToggle.checked ? 'flex' : 'none';
-            }
-            
-            // Hide Date Style if Show Date is disabled
-            const dateStyleControl = Array.from(controlItems).find(
-                item => item.querySelector('span')?.textContent === 'Date Style'
-            );
-            if (dateStyleControl) {
-                dateStyleControl.style.display = showDateToggle.checked ? 'flex' : 'none';
-            }
-            
-            // Hide Number Style if Clock Numbers is disabled
-            const numberStyleControl = Array.from(controlItems).find(
-                item => item.querySelector('span')?.textContent === 'Number Style'
-            );
-            if (numberStyleControl) {
-                numberStyleControl.style.display = numbersToggle.checked ? 'flex' : 'none';
-            }
-            
-            // If Display Mode is set to Digital only
+            const dateStyleControl = (function(){
+                const el = document.getElementById('date-style-select');
+                return el ? el.closest('.control-item') : null;
+            })();
+            if (dateFormatControl) dateFormatControl.style.display = showDateToggle.checked ? 'flex' : 'none';
+            if (dateStyleControl) dateStyleControl.style.display = showDateToggle.checked ? 'flex' : 'none';
+
+            // Number style: only when Clock Numbers is enabled
+            const numberStyleControl = (function(){
+                const el = document.getElementById('number-style-select');
+                return el ? el.closest('.control-item') : null;
+            })();
+            if (numberStyleControl) numberStyleControl.style.display = numbersToggle.checked ? 'flex' : 'none';
+
+            // Display mode specific visibility
             const isDigitalOnly = displayModeSelect.value === 'digital';
-            
-            // Hide analog-specific controls if in Digital only mode
-            const secondHandControl = Array.from(controlItems).find(
-                item => item.querySelector('span')?.textContent === 'Second Hand'
-            );
-            const clockNumbersControl = Array.from(controlItems).find(
-                item => item.querySelector('span')?.textContent === 'Clock Numbers'
-            );
-            const handThicknessControl = Array.from(controlItems).find(
-                item => item.querySelector('span')?.textContent === 'Hand Thickness'
-            );
-            const secondHandColorControl = Array.from(controlItems).find(
-                item => item.querySelector('span')?.textContent === 'Second Hand Color'
-            );
-            const opacityControl = Array.from(controlItems).find(
-                item => item.querySelector('span')?.textContent === 'Background Opacity'
-            );
-            const clockFaceColorControl = Array.from(controlItems).find(
-                item => item.querySelector('span')?.textContent === 'Clock Face Color'
-            );
-            
+            const isAnalogOnly = displayModeSelect.value === 'analog';
+
+            const secondHandControl = (function(){
+                const el = document.getElementById('second-hand-toggle');
+                return el ? el.closest('.control-item') : null;
+            })();
+            const clockNumbersControl = (function(){
+                const el = document.getElementById('numbers-toggle');
+                return el ? el.closest('.control-item') : null;
+            })();
+            const handThicknessControl = (function(){
+                const el = document.getElementById('hand-thickness-select');
+                return el ? el.closest('.control-item') : null;
+            })();
+            const secondHandColorControl = (function(){
+                const el = document.getElementById('second-hand-color-picker');
+                return el ? el.closest('.control-item') : null;
+            })();
+            const clockFaceColorControl = (function(){
+                const el = document.getElementById('clock-face-color-picker');
+                return el ? el.closest('.control-item') : null;
+            })();
+            const opacityControl = (function(){
+                const el = document.getElementById('opacity-slider');
+                return el ? el.closest('.control-item') : null;
+            })();
+            const digitalStyleControl = (function(){
+                const el = document.getElementById('digital-style-select');
+                return el ? el.closest('.control-item') : null;
+            })();
+
             if (secondHandControl) secondHandControl.style.display = isDigitalOnly ? 'none' : 'flex';
             if (clockNumbersControl) clockNumbersControl.style.display = isDigitalOnly ? 'none' : 'flex';
             if (numberStyleControl && isDigitalOnly) numberStyleControl.style.display = 'none';
@@ -1908,15 +1904,7 @@
             if (secondHandColorControl) secondHandColorControl.style.display = isDigitalOnly ? 'none' : 'flex';
             if (clockFaceColorControl) clockFaceColorControl.style.display = isDigitalOnly ? 'none' : 'flex';
             if (opacityControl) opacityControl.style.display = isDigitalOnly ? 'none' : 'flex';
-            
-            // Hide Digital Style if in Analog only mode
-            const isAnalogOnly = displayModeSelect.value === 'analog';
-            const digitalStyleControl = Array.from(controlItems).find(
-                item => item.querySelector('span')?.textContent === 'Digital Style'
-            );
-            if (digitalStyleControl) {
-                digitalStyleControl.style.display = isAnalogOnly ? 'none' : 'flex';
-            }
+            if (digitalStyleControl) digitalStyleControl.style.display = isAnalogOnly ? 'none' : 'flex';
         }
 
         // Set up event listeners to save settings when changed
@@ -2039,34 +2027,10 @@
             setupButtonGroup('preset-btn', 'preset-select');
         }
         
-        // Load settings on initialization
-        loadSettings();
-        // Initial call to set the locale display based on loaded or default settings
-        updateLocaleDisplay(); 
-        
         // Setup OBS-compatible buttons, then sync labels to translated option text
         setupSelectButtons();
-        (function syncInitialButtonLabels(){
-            const groups = [
-                { cls: 'display-mode-btn', sel: 'display-mode-select' },
-                { cls: 'timezone-style-btn', sel: 'timezone-style-select' },
-                { cls: 'date-style-btn', sel: 'date-style-select' },
-                { cls: 'number-style-btn', sel: 'number-style-select' },
-                { cls: 'digital-style-btn', sel: 'digital-style-select' },
-                { cls: 'hand-thickness-btn', sel: 'hand-thickness-select' },
-                { cls: 'preset-btn', sel: 'preset-select' },
-                { cls: 'theme-btn', sel: 'theme-select' }
-            ];
-            groups.forEach(g => {
-                const select = document.getElementById(g.sel);
-                const buttons = document.querySelectorAll(`.${g.cls}`);
-                if (!select || !buttons.length) return;
-                buttons.forEach(btn => {
-                    const opt = Array.from(select.options).find(o => o.value === btn.dataset.value);
-                    if (opt) btn.textContent = opt.textContent;
-                });
-            });
-        })();
+        // Keep button labels in sync with translations and options
+        updateAllTranslatedLabels();
         
         // Initialize control visibility based on current settings
         updateControlVisibility();

@@ -52,19 +52,7 @@
     </div>
     <div class="controls">
         <h3 style="margin-top: 0; margin-bottom: 14px; color: var(--text-color); font-size: 14px; text-align: center; background-color: rgba(var(--control-bg-r, 240), var(--control-bg-g, 240), var(--control-bg-b, 240), 0.6); padding: 6px 0; border-radius: 4px; backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(1px); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);" data-i18n-key="clockSettingsTitle">Clock Settings</h3>
-        <div class="control-item">
-            <span data-i18n-key="languageLabelOverlay">Language</span>
-            <select id="language-select">
-                <option value="en">English</option>
-                <option value="ru">Русский</option>
-            </select>
-            <!-- OBS-compatible alternative (reuse timezone nav styles) -->
-            <div class="timezone-navigation language-navigation">
-                <button class="tz-nav-btn prev-lang">&lt;</button>
-                <div class="tz-display language-display">English</div>
-                <button class="tz-nav-btn next-lang">&gt;</button>
-            </div>
-        </div>
+        
         <div class="control-item">
             <span data-i18n-key="stylePresetsLabel">Style Presets</span>
             <select id="preset-select">
@@ -358,10 +346,23 @@
                 <span class="slider"></span>
             </label>
         </div>
+        <div class="control-item">
+            <span data-i18n-key="languageLabelOverlay">Language</span>
+            <select id="language-select">
+                <option value="en">English</option>
+                <option value="ru">Русский</option>
+            </select>
+            <!-- OBS-compatible alternative (reuse timezone nav styles) -->
+            <div class="timezone-navigation language-navigation">
+                <button class="tz-nav-btn prev-lang">&lt;</button>
+                <div class="tz-display language-display">English</div>
+                <button class="tz-nav-btn next-lang">&gt;</button>
+            </div>
+        </div>
         <div class="obs-preview-window" style="display: none; margin: 0; width: 100%; background: transparent; position: relative; min-height: 250px;">
             <span style="position: absolute; top: 0; left: 10px; left: 50%; transform: translateX(-50%); font-size: 10px; color: var(--text-color); background-color:
   rgba(var(--control-bg-r, 240), var(--control-bg-g, 240), var(--control-bg-b, 240), 0.6); padding: 3px 6px; border-radius: 3px; white-space: nowrap;
-  backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(1px);">Preview Area</span>
+  backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(1px);" data-i18n-key="previewArea">Preview Area</span>
         </div>
         <div style="display: flex; gap: 10px; margin-top: 10px;">
             <button id="close-settings" style="flex: 1; padding: 4px; background: var(--accent-color); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 3px; color: white; cursor: pointer; font-weight: bold; box-shadow: 0 1px 3px rgba(0,0,0,0.2); backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(1px); height: var(--button-height);" data-i18n-key="closeSettingsButton">Close Settings</button>

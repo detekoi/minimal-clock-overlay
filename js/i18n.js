@@ -121,6 +121,7 @@ const translations = {
       'secondHandColorLabel': 'Second Hand Color',
       'obsModeLabel': 'OBS/Streamlabs Mode',
       'closeSettingsButton': 'Close Settings',
+      'previewArea': 'Preview Area',
       // Palette tabs
       'paletteMain': 'Main',
       'palettePastel': 'Pastel',
@@ -248,6 +249,7 @@ const translations = {
       'secondHandColorLabel': 'Цвет секундной стрелки',
       'obsModeLabel': 'Режим OBS/Streamlabs',
       'closeSettingsButton': 'Закрыть настройки',
+      'previewArea': 'Область предпросмотра',
       // Palette tabs
       'paletteMain': 'Основная',
       'palettePastel': 'Пастель',
