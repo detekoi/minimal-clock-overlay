@@ -51,26 +51,39 @@
         <div class="timezone-display" style="display: none;"></div>
     </div>
     <div class="controls">
-        <h3 style="margin-top: 0; margin-bottom: 14px; color: var(--text-color); font-size: 14px; text-align: center; background-color: rgba(var(--control-bg-r, 240), var(--control-bg-g, 240), var(--control-bg-b, 240), 0.6); padding: 6px 0; border-radius: 4px; backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(1px); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);">Clock Settings</h3>
+        <h3 style="margin-top: 0; margin-bottom: 14px; color: var(--text-color); font-size: 14px; text-align: center; background-color: rgba(var(--control-bg-r, 240), var(--control-bg-g, 240), var(--control-bg-b, 240), 0.6); padding: 6px 0; border-radius: 4px; backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(1px); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);" data-i18n-key="clockSettingsTitle">Clock Settings</h3>
         <div class="control-item">
-            <span>Style Presets</span>
+            <span data-i18n-key="languageLabelOverlay">Language</span>
+            <select id="language-select">
+                <option value="en">English</option>
+                <option value="ru">Русский</option>
+            </select>
+            <!-- OBS-compatible alternative (reuse timezone nav styles) -->
+            <div class="timezone-navigation language-navigation">
+                <button class="tz-nav-btn prev-lang">&lt;</button>
+                <div class="tz-display language-display">English</div>
+                <button class="tz-nav-btn next-lang">&gt;</button>
+            </div>
+        </div>
+        <div class="control-item">
+            <span data-i18n-key="stylePresetsLabel">Style Presets</span>
             <select id="preset-select">
-                <option value="none">Choose a preset...</option>
-                <option value="default">Default Settings</option>
-                <option value="modern">Modern Minimal</option>
-                <option value="coastal">Coastal Calm</option>
-                <option value="artdeco">Art Deco</option>
-                <option value="digital">Digital Display</option>
-                <option value="traditional">Traditional</option>
-                <option value="gaming">Gaming HUD</option>
-                <option value="retro">Retro Vibe</option>
-                <option value="dark-tech">Dark Tech</option>
-                <option value="elegant">Elegant Serif</option>
-                <option value="cyberpunk">Cyberpunk</option>
-                <option value="lofi">Lo-Fi Beats</option>
-                <option value="nature">Nature Watch</option>
-                <option value="twilight">Twilight Hour</option>
-                <option value="candy">Candy Pop</option>
+                <option value="none" data-i18n-key="choosePreset">Choose a preset...</option>
+                <option value="default" data-i18n-key="defaultPreset">Default Settings</option>
+                <option value="modern" data-i18n-key="modernPreset">Modern Minimal</option>
+                <option value="coastal" data-i18n-key="coastalPreset">Coastal Calm</option>
+                <option value="artdeco" data-i18n-key="artDecoPreset">Art Deco</option>
+                <option value="digital" data-i18n-key="digitalPreset">Digital Display</option>
+                <option value="traditional" data-i18n-key="traditionalPreset">Traditional</option>
+                <option value="gaming" data-i18n-key="gamingPreset">Gaming HUD</option>
+                <option value="retro" data-i18n-key="retroPreset">Retro Vibe</option>
+                <option value="dark-tech" data-i18n-key="darkTechPreset">Dark Tech</option>
+                <option value="elegant" data-i18n-key="elegantPreset">Elegant Serif</option>
+                <option value="cyberpunk" data-i18n-key="cyberpunkPreset">Cyberpunk</option>
+                <option value="lofi" data-i18n-key="lofiPreset">Lo-Fi Beats</option>
+                <option value="nature" data-i18n-key="naturePreset">Nature Watch</option>
+                <option value="twilight" data-i18n-key="twilightPreset">Twilight Hour</option>
+                <option value="candy" data-i18n-key="candyPreset">Candy Pop</option>
             </select>
             <!-- OBS-compatible alternative -->
             <div class="select-buttons preset-buttons" style="--buttons-per-row: 3">
@@ -93,18 +106,18 @@
         </div>
 
         <div class="control-item">
-            <span>Second Hand</span>
+            <span data-i18n-key="secondHandLabel">Second Hand</span>
             <label class="switch">
                 <input type="checkbox" id="second-hand-toggle" checked>
                 <span class="slider"></span>
             </label>
         </div>
         <div class="control-item">
-            <span>Display Mode</span>
+            <span data-i18n-key="displayModeLabel">Display Mode</span>
             <select id="display-mode-select">
-                <option value="both">Both</option>
-                <option value="analog">Analog Only</option>
-                <option value="digital">Digital Only</option>
+                <option value="both" data-i18n-key="bothMode">Both</option>
+                <option value="analog" data-i18n-key="analogMode">Analog Only</option>
+                <option value="digital" data-i18n-key="digitalMode">Digital Only</option>
             </select>
             <!-- OBS-compatible alternative -->
             <div class="select-buttons display-mode-buttons" style="--buttons-per-row: 3">
@@ -114,30 +127,30 @@
             </div>
         </div>
         <div class="control-item">
-            <span>Show AM/PM</span>
+            <span data-i18n-key="showAmPmLabel">Show AM/PM</span>
             <label class="switch">
                 <input type="checkbox" id="ampm-toggle" checked>
                 <span class="slider"></span>
             </label>
         </div>
         <div class="control-item">
-            <span>Show Seconds</span>
+            <span data-i18n-key="showSecondsLabel">Show Seconds</span>
             <label class="switch">
                 <input type="checkbox" id="seconds-toggle">
                 <span class="slider"></span>
             </label>
         </div>
         <div class="control-item">
-            <span>Show Time Zone</span>
+            <span data-i18n-key="showTimeZoneLabel">Show Time Zone</span>
             <label class="switch">
                 <input type="checkbox" id="show-timezone-toggle">
                 <span class="slider"></span>
             </label>
         </div>
         <div class="control-item" id="timezone-control">
-            <span>Time Zone</span>
+            <span data-i18n-key="timeZoneLabel">Time Zone</span>
             <select id="timezone-select">
-                <option value="local">Local Time</option>
+                <option value="local" data-i18n-key="localTime">Local Time</option>
                 <!-- Added timezones will be populated by JavaScript -->
             </select>
             <!-- OBS-compatible alternative -->
@@ -148,13 +161,13 @@
             </div>
         </div>
         <div class="control-item">
-            <span>Time Zone Style</span>
+            <span data-i18n-key="timeZoneStyleLabel">Time Zone Style</span>
             <select id="timezone-style-select">
-                <option value="rounded">Rounded</option>
-                <option value="simple">Simple</option>
-                <option value="monospace">Monospace</option>
-                <option value="serif">Serif</option>
-                <option value="lcd">LCD</option>
+                <option value="rounded" data-i18n-key="roundedStyle">Rounded</option>
+                <option value="simple" data-i18n-key="simpleStyle">Simple</option>
+                <option value="monospace" data-i18n-key="monospaceStyle">Monospace</option>
+                <option value="serif" data-i18n-key="serifStyle">Serif</option>
+                <option value="lcd" data-i18n-key="lcdStyle">LCD</option>
             </select>
             <!-- OBS-compatible alternative -->
             <div class="select-buttons timezone-style-buttons" style="--buttons-per-row: 3">
@@ -166,14 +179,14 @@
             </div>
         </div>
         <div class="control-item">
-            <span>Show Date</span>
+            <span data-i18n-key="showDateLabel">Show Date</span>
             <label class="switch">
                 <input type="checkbox" id="show-date-toggle">
                 <span class="slider"></span>
             </label>
         </div>
         <div class="control-item" id="date-format-control">
-            <span>Date Format</span>
+            <span data-i18n-key="dateFormatLabel">Date Format</span>
             <select id="locale-select">
                 <!-- Options will be populated by JavaScript -->
             </select>
@@ -185,13 +198,13 @@
             </div>
         </div>
         <div class="control-item">
-            <span>Date Style</span>
+            <span data-i18n-key="dateStyleLabel">Date Style</span>
             <select id="date-style-select">
-                <option value="rounded">Rounded</option>
-                <option value="simple">Simple</option>
-                <option value="monospace">Monospace</option>
-                <option value="serif">Serif</option>
-                <option value="lcd">LCD</option>
+                <option value="rounded" data-i18n-key="roundedStyle">Rounded</option>
+                <option value="simple" data-i18n-key="simpleStyle">Simple</option>
+                <option value="monospace" data-i18n-key="monospaceStyle">Monospace</option>
+                <option value="serif" data-i18n-key="serifStyle">Serif</option>
+                <option value="lcd" data-i18n-key="lcdStyle">LCD</option>
             </select>
             <!-- OBS-compatible alternative -->
             <div class="select-buttons date-style-buttons" style="--buttons-per-row: 3">
@@ -203,19 +216,19 @@
             </div>
         </div>
         <div class="control-item">
-            <span>Clock Numbers</span>
+            <span data-i18n-key="clockNumbersLabel">Clock Numbers</span>
             <label class="switch">
                 <input type="checkbox" id="numbers-toggle">
                 <span class="slider"></span>
             </label>
         </div>
         <div class="control-item">
-            <span>Number Style</span>
+            <span data-i18n-key="numberStyleLabel">Number Style</span>
             <select id="number-style-select">
-                <option value="simple">Simple</option>
-                <option value="roman">Roman</option>
-                <option value="dots">Dots</option>
-                <option value="serif">Serif</option>
+                <option value="simple" data-i18n-key="simpleStyle">Simple</option>
+                <option value="roman" data-i18n-key="romanStyle">Roman</option>
+                <option value="dots" data-i18n-key="dotsStyle">Dots</option>
+                <option value="serif" data-i18n-key="serifStyle">Serif</option>
             </select>
             <!-- OBS-compatible alternative -->
             <div class="select-buttons number-style-buttons" style="--buttons-per-row: 2">
@@ -226,13 +239,13 @@
             </div>
         </div>
         <div class="control-item">
-            <span>Digital Style</span>
+            <span data-i18n-key="digitalStyleLabel">Digital Style</span>
             <select id="digital-style-select">
-                <option value="rounded">Rounded</option>
-                <option value="simple">Simple</option>
-                <option value="monospace">Monospace</option>
-                <option value="serif">Serif</option>
-                <option value="lcd">LCD</option>
+                <option value="rounded" data-i18n-key="roundedStyle">Rounded</option>
+                <option value="simple" data-i18n-key="simpleStyle">Simple</option>
+                <option value="monospace" data-i18n-key="monospaceStyle">Monospace</option>
+                <option value="serif" data-i18n-key="serifStyle">Serif</option>
+                <option value="lcd" data-i18n-key="lcdStyle">LCD</option>
             </select>
             <!-- OBS-compatible alternative -->
             <div class="select-buttons digital-style-buttons" style="--buttons-per-row: 3">
@@ -244,17 +257,17 @@
             </div>
         </div>
         <div class="control-item">
-            <span>Theme</span>
+            <span data-i18n-key="themeLabel">Theme</span>
             <select id="theme-select">
-                <option value="light">Light</option>
-                <option value="dark">Dark</option>
-                <option value="natural">Natural</option>
-                <option value="transparent">Transparent</option>
-                <option value="neon">Neon</option>
-                <option value="pastel">Pastel</option>
-                <option value="forest">Forest</option>
-                <option value="sunset">Sunset</option>
-                <option value="ocean">Ocean</option>
+                <option value="light" data-i18n-key="lightTheme">Light</option>
+                <option value="dark" data-i18n-key="darkTheme">Dark</option>
+                <option value="natural" data-i18n-key="naturalTheme">Natural</option>
+                <option value="transparent" data-i18n-key="transparentTheme">Transparent</option>
+                <option value="neon" data-i18n-key="neonTheme">Neon</option>
+                <option value="pastel" data-i18n-key="pastelTheme">Pastel</option>
+                <option value="forest" data-i18n-key="forestTheme">Forest</option>
+                <option value="sunset" data-i18n-key="sunsetTheme">Sunset</option>
+                <option value="ocean" data-i18n-key="oceanTheme">Ocean</option>
             </select>
             <!-- OBS-compatible alternative -->
             <div class="select-buttons theme-buttons" style="--buttons-per-row: 3">
@@ -270,7 +283,7 @@
             </div>
         </div>
         <div class="control-item clock-face-color-control">
-            <span>Clock Face Color</span>
+            <span data-i18n-key="clockFaceColorLabel">Clock Face Color</span>
             <input type="color" id="clock-face-color-picker" value="#FCFCFA">
             <div class="color-picker-container" id="clock-face-color-container">
                 <div class="color-swatches" id="clock-face-color-swatches">
@@ -285,19 +298,19 @@
         </div>
         
         <div class="control-item">
-            <span>Background Opacity</span>
+            <span data-i18n-key="backgroundOpacityLabel">Background Opacity</span>
             <input type="range" id="opacity-slider" min="0" max="100" value="85">
         </div>
         <div class="control-item">
-            <span>Scale</span>
+            <span data-i18n-key="scaleLabel">Scale</span>
             <input type="range" id="scale-slider" min="50" max="300" value="100">
         </div>
         <div class="control-item">
-            <span>Hand Thickness</span>
+            <span data-i18n-key="handThicknessLabel">Hand Thickness</span>
             <select id="hand-thickness-select">
-                <option value="normal">Normal</option>
-                <option value="thin">Thin</option>
-                <option value="thick">Thick</option>
+                <option value="normal" data-i18n-key="normalThickness">Normal</option>
+                <option value="thin" data-i18n-key="thinThickness">Thin</option>
+                <option value="thick" data-i18n-key="thickThickness">Thick</option>
             </select>
             <!-- OBS-compatible alternative -->
             <div class="select-buttons hand-thickness-buttons" style="--buttons-per-row: 3">
@@ -307,7 +320,7 @@
             </div>
         </div>
         <div class="control-item">
-            <span>Accent Color</span>
+            <span data-i18n-key="accentColorLabel">Accent Color</span>
             <input type="color" id="accent-color-picker" value="#85A67B">
             <div class="color-picker-container" id="accent-color-container">
                 <div class="color-swatches" id="accent-color-swatches">
@@ -321,11 +334,11 @@
             </div>
         </div>
         <div class="control-item">
-            <span>Accent Size</span>
+            <span data-i18n-key="accentSizeLabel">Accent Size</span>
             <input type="range" id="accent-size-slider" min="0" max="15" value="10">
         </div>
         <div class="control-item">
-            <span>Second Hand Color</span>
+            <span data-i18n-key="secondHandColorLabel">Second Hand Color</span>
             <input type="color" id="second-hand-color-picker" value="#787878">
             <div class="color-picker-container" id="second-hand-color-container">
                 <div class="color-swatches" id="second-hand-color-swatches">
@@ -339,7 +352,7 @@
             </div>
         </div>
         <div class="control-item">
-            <span>OBS/Streamlabs Mode</span>
+            <span data-i18n-key="obsModeLabel">OBS/Streamlabs Mode</span>
             <label class="switch">
                 <input type="checkbox" id="obs-mode-toggle">
                 <span class="slider"></span>
@@ -351,10 +364,11 @@
   backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(1px);">Preview Area</span>
         </div>
         <div style="display: flex; gap: 10px; margin-top: 10px;">
-            <button id="close-settings" style="flex: 1; padding: 4px; background: var(--accent-color); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 3px; color: white; cursor: pointer; font-weight: bold; box-shadow: 0 1px 3px rgba(0,0,0,0.2); backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(1px); height: var(--button-height);">Close Settings</button>
+            <button id="close-settings" style="flex: 1; padding: 4px; background: var(--accent-color); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 3px; color: white; cursor: pointer; font-weight: bold; box-shadow: 0 1px 3px rgba(0,0,0,0.2); backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(1px); height: var(--button-height);" data-i18n-key="closeSettingsButton">Close Settings</button>
         </div>
     </div>
 
+    <script src="js/i18n.js"></script>
     <script src="js/clock-overlay.js"></script>
 </body>
 </html>

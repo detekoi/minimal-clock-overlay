@@ -5,6 +5,52 @@
             instances: []
         };
         
+        // i18n setup
+        const languageSelect = document.getElementById('language-select');
+
+        function applyTranslations(lang) {
+            const t = (translations && translations[lang]) ? translations[lang] : (translations && translations['en']) || {};
+            document.querySelectorAll('[data-i18n-key]').forEach(el => {
+                const key = el.getAttribute('data-i18n-key');
+                if (t[key]) el.innerHTML = t[key];
+            });
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (t[key]) el.setAttribute('placeholder', t[key]);
+            });
+        }
+
+        function setLanguage(lang) {
+            try { localStorage.setItem('language', lang); } catch (e) {}
+            applyTranslations(lang);
+            setupValidationMessages(lang);
+            // Refresh dynamic content so buttons/labels reflect the new language
+            try { renderInstances(); } catch (e) {}
+        }
+
+        if (languageSelect) {
+            languageSelect.addEventListener('change', (e) => setLanguage(e.target.value));
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const saved = (typeof localStorage !== 'undefined' && localStorage.getItem('language')) || (navigator.language && navigator.language.startsWith('ru') ? 'ru' : 'en');
+            if (languageSelect) languageSelect.value = saved;
+            applyTranslations(saved);
+            setupValidationMessages(saved);
+        });
+
+        function setupValidationMessages(lang) {
+            const t = (typeof translations !== 'undefined' && (translations[lang] || translations['en'])) || {};
+            if (instanceNameInput) {
+                instanceNameInput.oninvalid = function() { this.setCustomValidity(t.requiredFieldMessage || 'Please fill out this field'); };
+                instanceNameInput.oninput = function() { this.setCustomValidity(''); };
+            }
+            if (instanceIdInput) {
+                instanceIdInput.oninvalid = function() { this.setCustomValidity(t.requiredFieldMessage || 'Please fill out this field'); };
+                instanceIdInput.oninput = function() { this.setCustomValidity(''); };
+            }
+        }
+
         // DOM Elements
         const createForm = document.getElementById('create-instance-form');
         const instanceNameInput = document.getElementById('instance-name');
@@ -43,10 +89,7 @@
             const id = instanceIdInput.value.trim();
             const description = instanceDescriptionInput.value.trim();
             
-            if (!name || !id) {
-                showAlert('Please enter a name and ID for your clock instance', 'danger');
-                return;
-            }
+            // With native validation active, the submit event won't fire when invalid.
             
             // Check if ID already exists
             const instances = getData().instances;
@@ -75,7 +118,9 @@
             renderInstances();
             
             // Show success message
-            showAlert(`Clock scene "${name}" created successfully`, 'success');
+            const lang = (typeof localStorage !== 'undefined' && localStorage.getItem('language')) || 'en';
+            const t = (typeof translations !== 'undefined' && (translations[lang] || translations['en'])) || {};
+            showAlert((t.sceneCreatedTitle || 'Scene Created Successfully!'), 'success');
             
             // Show details modal with URL
             if (firstRunModal) {
@@ -147,6 +192,8 @@
                     const baseUrl = window.location.href.replace(/\/[^\/]*$/, '/clock-overlay.html');
                     const url = `${baseUrl}?scene=${instance.instanceId}`;
                     
+                    const lang = (typeof localStorage !== 'undefined' && localStorage.getItem('language')) || 'en';
+                    const t = (typeof translations !== 'undefined' && (translations[lang] || translations['en'])) || {};
                     row.innerHTML = `
                         <td>
                             <div>${instance.name}</div>
@@ -159,20 +206,20 @@
                             <div class="url-display table-url-display">
                                 <span class="truncate">${url}</span>
                                 <button class="copy-btn row-copy-btn" data-url="${url}">
-                                    Copy
-                                    <span class="tooltip">Copied!</span>
+                                    ${t.copyButton || 'Copy'}
+                                    <span class="tooltip">${t.copiedTooltip || 'Copied!'}</span>
                                 </button>
                             </div>
                         </td>
                         <td>
                             <div class="actions">
-                                <button class="btn btn-sm view-btn" data-id="${instance.instanceId}">Details</button>
+                                <button class="btn btn-sm view-btn" data-id="${instance.instanceId}">${t.detailsButton || 'Details'}</button>
                                 <div class="confirm-wrapper">
-                                    <button class="btn btn-sm btn-danger delete-btn" data-id="${instance.instanceId}">Delete</button>
+                                    <button class="btn btn-sm btn-danger delete-btn" data-id="${instance.instanceId}">${t.deleteButton || 'Delete'}</button>
                                     <div class="confirm-message" id="confirm-${instance.instanceId}">
-                                        <span class="confirm-text">Are you sure?</span>
-                                        <button class="btn btn-sm confirm-yes" data-id="${instance.instanceId}">Yes</button>
-                                        <button class="btn btn-sm confirm-no" data-id="${instance.instanceId}">No</button>
+                                        <span class="confirm-text">${t.confirmAreYouSure || 'Are you sure?'}</span>
+                                        <button class="btn btn-sm confirm-yes" data-id="${instance.instanceId}">${t.confirmYes || 'Yes'}</button>
+                                        <button class="btn btn-sm confirm-no" data-id="${instance.instanceId}">${t.confirmNo || 'No'}</button>
                                     </div>
                                 </div>
                             </div>
@@ -265,25 +312,27 @@
             
             // Set modal title to reflect whether this is a new instance
             const isNewInstance = new Date().getTime() - new Date(instance.createdAt).getTime() < 5000;
-            document.querySelector('.modal-title').textContent = isNewInstance ? "Scene Created Successfully!" : "Scene Details";
+            const lang = (typeof localStorage !== 'undefined' && localStorage.getItem('language')) || 'en';
+            const t = (typeof translations !== 'undefined' && (translations[lang] || translations['en'])) || {};
+            document.querySelector('.modal-title').textContent = isNewInstance ? (t.sceneCreatedTitle || "Scene Created Successfully!") : (t.sceneDetailsTitle || "Scene Details");
             
             detailsContent.innerHTML = `
                 <div class="form-group">
-                    <label>Name</label>
+                    <label>${t.nameLabel || 'Name'}</label>
                     <div class="form-control">${instance.name}</div>
                 </div>
                 <div class="form-group">
-                    <label>Scene ID</label>
+                    <label>${t.sceneIdLabel || 'Scene ID'}</label>
                     <div class="form-control">${instance.instanceId}</div>
                 </div>
                 ${instance.description ? `
                 <div class="form-group">
-                    <label>Description</label>
+                    <label>${t.descriptionLabel || 'Description (optional)'}</label>
                     <div class="form-control">${instance.description}</div>
                 </div>
                 ` : ''}
                 <div class="form-group">
-                    <label>Created</label>
+                    <label>${t.createdLabel || 'Created'}</label>
                     <div class="form-control">${formatDateTime(instance.createdAt)}</div>
                 </div>
             `;
@@ -295,11 +344,11 @@
                 instructionEl.innerHTML = `
                     <span class="alert-icon">✓</span>
                     <div>
-                        <strong>Next steps:</strong>
+                        <strong>${t.nextStepsTitle || 'Next steps:'}</strong>
                         <ol class="mt-2">
-                            <li>Copy the URL above</li>
-                            <li>In OBS, add a Browser Source (size: 300x300)</li>
-                            <li>Paste this URL in the Browser Source URL field</li>
+                            <li>${t.nextStep1 || 'Copy the URL above'}</li>
+                            <li>${t.nextStep2 || 'In OBS, add a Browser Source (size: 300x300)'}</li>
+                            <li>${t.nextStep3 || 'Paste this URL in the Browser Source URL field'}</li>
                         </ol>
                     </div>
                 `;

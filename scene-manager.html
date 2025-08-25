@@ -13,64 +13,64 @@
 </head>
 <body>
     <div class="header">
-        <h1>Clock Scene Manager</h1>
-        <p>Create and manage multiple clock configurations for your OBS scenes</p>
+        <h1 data-i18n-key="sceneManagerTitle">Clock Scene Manager</h1>
+        <p data-i18n-key="sceneManagerDescription">Create and manage multiple clock configurations for your OBS scenes</p>
         <div class="mt-2">
-            <a href="clock-overlay.html" class="btn btn-primary">Skip to Clock Overlay</a>
+            <a href="clock-overlay.html" class="btn btn-primary" data-i18n-key="skipToClockOverlay">Skip to Clock Overlay</a>
         </div>
     </div>
 
     <div class="container">
         <div class="card">
             <div class="card-header">
-                <h2>Create New Clock Scene</h2>
+                <h2 data-i18n-key="createNewClockScene">Create New Clock Scene</h2>
             </div>
             <form id="create-instance-form">
                 <div class="form-group">
-                    <label for="instance-name">Name</label>
-                    <input type="text" id="instance-name" class="form-control" placeholder="e.g., Gaming Scene Clock" required>
-                    <span class="form-hint">Give your clock scene a descriptive name</span>
+                    <label for="instance-name" data-i18n-key="nameLabel">Name</label>
+                    <input type="text" id="instance-name" class="form-control" placeholder="e.g., Gaming Scene Clock" data-i18n-placeholder="namePlaceholder" required>
+                    <span class="form-hint" data-i18n-key="nameHint">Give your clock scene a descriptive name</span>
                 </div>
                 <div class="form-group">
-                    <label for="instance-id">Scene ID</label>
-                    <input type="text" id="instance-id" class="form-control" placeholder="e.g., gaming-scene-clock" required>
-                    <span class="form-hint">A unique identifier with no spaces (auto-generated from name)</span>
+                    <label for="instance-id" data-i18n-key="sceneIdLabel">Scene ID</label>
+                    <input type="text" id="instance-id" class="form-control" placeholder="e.g., gaming-scene-clock" data-i18n-placeholder="sceneIdPlaceholder" required>
+                    <span class="form-hint" data-i18n-key="sceneIdHint">A unique identifier with no spaces (auto-generated from name)</span>
                 </div>
                 <div class="form-group">
-                    <label for="instance-description">Description (optional)</label>
-                    <input type="text" id="instance-description" class="form-control" placeholder="e.g., Transparent clock for gameplay">
-                    <span class="form-hint">Add details to help remember this scene's purpose</span>
+                    <label for="instance-description" data-i18n-key="descriptionLabel">Description (optional)</label>
+                    <input type="text" id="instance-description" class="form-control" placeholder="e.g., Transparent clock for gameplay" data-i18n-placeholder="descriptionPlaceholder">
+                    <span class="form-hint" data-i18n-key="descriptionHint">Add details to help remember this scene's purpose</span>
                 </div>
-                <button type="submit" class="btn btn-primary btn-full">Create Scene</button>
+                <button type="submit" class="btn btn-primary btn-full" data-i18n-key="createSceneButton">Create Scene</button>
             </form>
 
             <div class="instructions mt-4">
-                <h3>How to Use Clock Scenes</h3>
+                <h3 data-i18n-key="howToUseTitle">How to Use Clock Scenes</h3>
                 <ol>
-                    <li>Create a clock scene with a meaningful name</li>
-                    <li>Copy the generated URL</li>
-                    <li>In OBS, add a Browser Source (e.g., 300x350 for analog+date+timezone, or up to 400x200 for large digital displays)</li>
-                    <li>Paste the URL and click OK</li>
-                    <li>Configure the clock's appearance directly in OBS using the settings panel</li>
+                    <li data-i18n-key="howToUseStep1">Create a clock scene with a meaningful name</li>
+                    <li data-i18n-key="howToUseStep2">Copy the generated URL</li>
+                    <li data-i18n-key="howToUseStep3">In OBS, add a Browser Source (e.g., 300x350 for analog+date+timezone, or up to 400x200 for large digital displays)</li>
+                    <li data-i18n-key="howToUseStep4">Paste the URL and click OK</li>
+                    <li data-i18n-key="howToUseStep5">Configure the clock's appearance directly in OBS using the settings panel</li>
                 </ol>
             </div>
         </div>
 
         <div class="card">
             <div class="card-header">
-                <h2>Your Clock Scenes</h2>
+                <h2 data-i18n-key="yourClockScenesTitle">Your Clock Scenes</h2>
             </div>
             <div class="controls">
                 <div class="control-group">
-                    <label for="sort-by">Sort by</label>
+                    <label for="sort-by" data-i18n-key="sortByLabel">Sort by</label>
                     <select id="sort-by" class="form-control">
-                        <option value="name">Name</option>
-                        <option value="createdAt">Date Created</option>
+                        <option value="name" data-i18n-key="sortByName">Name</option>
+                        <option value="createdAt" data-i18n-key="sortByDateCreated">Date Created</option>
                     </select>
                 </div>
                 <div class="control-group">
-                    <label for="search-instances">Search</label>
-                    <input type="text" id="search-instances" class="form-control" placeholder="Search instances...">
+                    <label for="search-instances" data-i18n-key="searchLabel">Search</label>
+                    <input type="text" id="search-instances" class="form-control" placeholder="Search instances..." data-i18n-placeholder="searchPlaceholder">
                 </div>
             </div>
 
@@ -78,9 +78,9 @@
                 <table id="instances-table">
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>URL</th>
-                            <th>Actions</th>
+                            <th data-i18n-key="nameHeader">Name</th>
+                            <th data-i18n-key="urlHeader">URL</th>
+                            <th data-i18n-key="actionsHeader">Actions</th>
                         </tr>
                     </thead>
                     <tbody id="instances-list">
@@ -91,8 +91,8 @@
 
             <div id="empty-state" class="empty-state">
                 <div class="empty-state-icon">⏰</div>
-                <p>You haven't created any clock scenes yet</p>
-                <p class="text-sm mt-2">Create your first scene using the form on the left</p>
+                <p data-i18n-key="emptyStateMessage">You haven't created any clock scenes yet</p>
+                <p class="text-sm mt-2" data-i18n-key="emptyStateHint">Create your first scene using the form on the left</p>
             </div>
         </div>
     </div>
@@ -101,17 +101,17 @@
     <div id="instance-details-modal" class="modal-backdrop">
         <div class="modal">
             <div class="modal-header">
-                <h3 class="modal-title">Scene Details</h3>
+                <h3 class="modal-title" data-i18n-key="sceneDetailsTitle">Scene Details</h3>
                 <button class="modal-close" id="close-modal">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="form-group highlighted-url">
-                    <label>Browser Source URL <span class="text-muted text-sm">(Copy this URL to OBS)</span></label>
+                    <label><span data-i18n-key="browserSourceUrlLabel">Browser Source URL</span> <span class="text-muted text-sm" data-i18n-key="copyUrlHint">(Copy this URL to OBS)</span></label>
                     <div class="url-display url-display-highlight">
                         <span id="instance-url" class="truncate"></span>
                         <button id="copy-url-btn" class="copy-btn">
-                            Copy
-                            <span class="tooltip">Copied!</span>
+                            <span data-i18n-key="copyButton">Copy</span>
+                            <span class="tooltip" data-i18n-key="copiedTooltip">Copied!</span>
                         </button>
                     </div>
                 </div>
@@ -120,7 +120,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn" id="close-details-btn">Close</button>
+                <button class="btn" id="close-details-btn" data-i18n-key="closeButton">Close</button>
             </div>
         </div>
     </div>
@@ -129,25 +129,32 @@
     <div id="first-run-modal" class="modal-backdrop">
         <div class="modal">
             <div class="modal-header">
-                <h3 class="modal-title">Get Started</h3>
+                <h3 class="modal-title" data-i18n-key="getStartedTitle">Get Started</h3>
                 <button class="modal-close" id="first-run-close">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <p>The Scene Manager is a tool to help you create and manage multiple clock browser source URLs for unique OBS scenes. You don't have any clock scenes yet. Create your first scene to generate a Browser Source URL for OBS.</p>
+                    <p data-i18n-key="firstRunMessage">The Scene Manager is a tool to help you create and manage multiple clock browser source URLs for unique OBS scenes. You don't have any clock scenes yet. Create your first scene to generate a Browser Source URL for OBS.</p>
                 </div>
             </div>
             <div class="modal-footer">
-                <a href="clock-overlay.html" class="btn btn-primary">Skip to Overlay</a>
-                <button class="btn" id="first-run-create">Create First Scene</button>
+                <a href="clock-overlay.html" class="btn btn-primary" data-i18n-key="skipToClockOverlay">Skip to Overlay</a>
+                <button class="btn" id="first-run-create" data-i18n-key="createFirstSceneButton">Create First Scene</button>
             </div>
         </div>
     </div>
 
     <div class="footer">
         <p>Minimal Clock Overlay Scene Manager | <a href="https://github.com/detekoi/minimal-clock-overlay">Documentation</a></p>
+        <div class="language-selector">
+            <label for="language-select">Language:</label>
+            <select id="language-select">
+                <option value="en">English</option>
+                <option value="ru">Русский</option>
+            </select>
+        </div>
     </div>
-
+    <script src="js/i18n.js"></script>
     <script src="js/scene-manager.js"></script>
 </body>
 </html>

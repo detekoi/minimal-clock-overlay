@@ -1,3 +1,63 @@
+        // i18n setup
+        const languageSelect = document.getElementById('language-select');
+        const prevLangBtn = document.querySelector('.prev-lang');
+        const nextLangBtn = document.querySelector('.next-lang');
+        const languageDisplay = document.querySelector('.language-display');
+
+        function applyTranslations(lang) {
+            const t = (typeof translations !== 'undefined' && translations[lang]) ? translations[lang] : (typeof translations !== 'undefined' && translations['en']) || {};
+            document.querySelectorAll('[data-i18n-key]').forEach(el => {
+                const key = el.getAttribute('data-i18n-key');
+                if (t[key]) el.innerHTML = t[key];
+            });
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (t[key]) el.setAttribute('placeholder', t[key]);
+            });
+        }
+
+        function setLanguage(lang) {
+            try { localStorage.setItem('language', lang); } catch (e) {}
+            applyTranslations(lang);
+        }
+
+        if (languageSelect) {
+            languageSelect.addEventListener('change', (e) => setLanguage(e.target.value));
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const saved = (typeof localStorage !== 'undefined' && localStorage.getItem('language')) || (navigator.language && navigator.language.startsWith('ru') ? 'ru' : 'en');
+            if (languageSelect) languageSelect.value = saved;
+            applyTranslations(saved);
+            updateLanguageDisplay();
+        });
+
+        function updateLanguageDisplay() {
+            if (!languageDisplay) return;
+            const lang = (typeof localStorage !== 'undefined' && localStorage.getItem('language')) || (languageSelect && languageSelect.value) || 'en';
+            languageDisplay.textContent = lang === 'ru' ? 'Русский' : 'English';
+        }
+
+        function navigateLanguage(direction) {
+            const options = ['en', 'ru'];
+            const current = (typeof localStorage !== 'undefined' && localStorage.getItem('language')) || (languageSelect && languageSelect.value) || 'en';
+            const idx = options.indexOf(current);
+            const nextIdx = direction === 'prev' ? (idx - 1 + options.length) % options.length : (idx + 1) % options.length;
+            const nextLang = options[nextIdx];
+            if (languageSelect) {
+                languageSelect.value = nextLang;
+                languageSelect.dispatchEvent(new Event('change'));
+            } else {
+                setLanguage(nextLang);
+            }
+            updateLanguageDisplay();
+        }
+
+        if (prevLangBtn && nextLangBtn) {
+            prevLangBtn.addEventListener('click', () => navigateLanguage('prev'));
+            nextLangBtn.addEventListener('click', () => navigateLanguage('next'));
+        }
+
         // Create clock markers
         const clock = document.querySelector('.clock');
         for (let i = 0; i < 12; i++) {
@@ -53,10 +113,11 @@
         const nextLocaleBtn = document.querySelector('.next-locale');
         const localeDisplay = document.querySelector('.locale-display');
         
-        // Timezone navigation elements
-        const prevTzBtn = document.querySelector('.prev-tz');
-        const nextTzBtn = document.querySelector('.next-tz');
-        const tzDisplay = document.querySelector('.tz-display');
+        // Timezone navigation elements (scoped to timezone control to avoid conflicts with language nav)
+        const timezoneControlEl = document.getElementById('timezone-control');
+        const prevTzBtn = timezoneControlEl ? timezoneControlEl.querySelector('.prev-tz') : null;
+        const nextTzBtn = timezoneControlEl ? timezoneControlEl.querySelector('.next-tz') : null;
+        const tzDisplay = timezoneControlEl ? timezoneControlEl.querySelector('.tz-display') : null;
 
         // Populate localeSelect dropdown
         if (localeSelect && typeof localeOptions !== 'undefined' && typeof localeNames !== 'undefined') {
@@ -1944,6 +2005,10 @@
                 document.querySelectorAll('input[type="color"]').forEach(input => {
                     input.style.display = 'none';
                 });
+                // Language control: show carousel, hide select
+                const langNav = document.querySelector('.language-navigation');
+                if (langNav) langNav.style.display = 'flex';
+                if (languageSelect) languageSelect.style.display = 'none';
             } else {
                 document.body.classList.remove('obs-mode');
                 // Hide swatch containers
@@ -1954,6 +2019,10 @@
                 document.querySelectorAll('input[type="color"]').forEach(input => {
                     input.style.display = 'block';
                 });
+                // Language control: hide carousel, show select
+                const langNav = document.querySelector('.language-navigation');
+                if (langNav) langNav.style.display = 'none';
+                if (languageSelect) languageSelect.style.display = 'block';
             }
         }
         
@@ -1969,9 +2038,9 @@
         if (savedObsMode === null || savedObsMode === 'true') {
             obsToggle.checked = true;
             document.querySelector('.obs-preview-window').style.display = 'block';
-            // Apply OBS mode changes
-            updateObsMode();
         }
+        // Apply mode-specific UI at startup
+        updateObsMode();
         
         // Update OBS preview window when toggle changes
         obsToggle.addEventListener('change', function() {
