@@ -33,7 +33,13 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            const saved = (typeof localStorage !== 'undefined' && localStorage.getItem('language')) || (navigator.language && navigator.language.startsWith('ru') ? 'ru' : 'en');
+            const saved = (function(){
+                if (typeof localStorage !== 'undefined' && localStorage.getItem('language')) return localStorage.getItem('language');
+                const nav = navigator.language || navigator.userLanguage || '';
+                if (nav.toLowerCase().startsWith('ru')) return 'ru';
+                if (nav.toLowerCase().startsWith('pl')) return 'pl';
+                return 'en';
+            })();
             if (languageSelect) languageSelect.value = saved;
             applyTranslations(saved);
             setupValidationMessages(saved);

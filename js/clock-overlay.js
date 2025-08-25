@@ -28,7 +28,13 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            const saved = (typeof localStorage !== 'undefined' && localStorage.getItem('language')) || (navigator.language && navigator.language.startsWith('ru') ? 'ru' : 'en');
+            const saved = (function(){
+                if (typeof localStorage !== 'undefined' && localStorage.getItem('language')) return localStorage.getItem('language');
+                const nav = navigator.language || navigator.userLanguage || '';
+                if (nav.toLowerCase().startsWith('ru')) return 'ru';
+                if (nav.toLowerCase().startsWith('pl')) return 'pl';
+                return 'en';
+            })();
             if (languageSelect) languageSelect.value = saved;
             applyTranslations(saved);
             // Ensure preset and style buttons use translated, shortened labels on first load
@@ -39,11 +45,17 @@
         function updateLanguageDisplay() {
             if (!languageDisplay) return;
             const lang = (typeof localStorage !== 'undefined' && localStorage.getItem('language')) || (languageSelect && languageSelect.value) || 'en';
-            languageDisplay.textContent = lang === 'ru' ? 'Русский' : 'English';
+            languageDisplay.textContent = (function(){
+                switch(lang){
+                    case 'ru': return 'Русский';
+                    case 'pl': return 'Polski';
+                    default: return 'English';
+                }
+            })();
         }
 
         function navigateLanguage(direction) {
-            const options = ['en', 'ru'];
+            const options = ['en', 'ru', 'pl'];
             const current = (typeof localStorage !== 'undefined' && localStorage.getItem('language')) || (languageSelect && languageSelect.value) || 'en';
             const idx = options.indexOf(current);
             const nextIdx = direction === 'prev' ? (idx - 1 + options.length) % options.length : (idx + 1) % options.length;
