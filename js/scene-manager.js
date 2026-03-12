@@ -38,6 +38,7 @@
                 const nav = navigator.language || navigator.userLanguage || '';
                 if (nav.toLowerCase().startsWith('ru')) return 'ru';
                 if (nav.toLowerCase().startsWith('pl')) return 'pl';
+                if (nav.toLowerCase().startsWith('ja')) return 'ja';
                 return 'en';
             })();
             if (languageSelect) languageSelect.value = saved;
