@@ -33,6 +33,7 @@
                 const nav = navigator.language || navigator.userLanguage || '';
                 if (nav.toLowerCase().startsWith('ru')) return 'ru';
                 if (nav.toLowerCase().startsWith('pl')) return 'pl';
+                if (nav.toLowerCase().startsWith('ja')) return 'ja';
                 return 'en';
             })();
             if (languageSelect) languageSelect.value = saved;
@@ -49,13 +50,14 @@
                 switch(lang){
                     case 'ru': return 'Русский';
                     case 'pl': return 'Polski';
+                    case 'ja': return '日本語';
                     default: return 'English';
                 }
             })();
         }
 
         function navigateLanguage(direction) {
-            const options = ['en', 'ru', 'pl'];
+            const options = ['en', 'ru', 'pl', 'ja'];
             const current = (typeof localStorage !== 'undefined' && localStorage.getItem('language')) || (languageSelect && languageSelect.value) || 'en';
             const idx = options.indexOf(current);
             const nextIdx = direction === 'prev' ? (idx - 1 + options.length) % options.length : (idx + 1) % options.length;
