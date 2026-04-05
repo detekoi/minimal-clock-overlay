@@ -136,6 +136,17 @@
             showInstanceDetails(newInstance);
         });
         
+        // Utility for HTML escaping to prevent XSS
+        function escapeHTML(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+        
         // Get data from localStorage
         function getData() {
             const storedData = localStorage.getItem(STORAGE_KEY);
@@ -203,16 +214,16 @@
                     const t = (typeof translations !== 'undefined' && (translations[lang] || translations['en'])) || {};
                     row.innerHTML = `
                         <td>
-                            <div>${instance.name}</div>
-                            ${instance.description ? `<div class="text-sm text-muted">${instance.description}</div>` : ''}
+                            <div>${escapeHTML(instance.name)}</div>
+                            ${instance.description ? `<div class="text-sm text-muted">${escapeHTML(instance.description)}</div>` : ''}
                             <div class="text-xs mt-1">
-                                <span class="badge">${instance.instanceId}</span>
+                                <span class="badge">${escapeHTML(instance.instanceId)}</span>
                             </div>
                         </td>
                         <td>
                             <div class="url-display table-url-display">
-                                <span class="truncate">${url}</span>
-                                <button class="copy-btn row-copy-btn" data-url="${url}">
+                                <span class="truncate">${escapeHTML(url)}</span>
+                                <button class="copy-btn row-copy-btn" data-url="${escapeHTML(url)}">
                                     ${t.copyButton || 'Copy'}
                                     <span class="tooltip">${t.copiedTooltip || 'Copied!'}</span>
                                 </button>
@@ -220,13 +231,13 @@
                         </td>
                         <td>
                             <div class="actions">
-                                <button class="btn btn-sm view-btn" data-id="${instance.instanceId}">${t.detailsButton || 'Details'}</button>
+                                <button class="btn btn-sm view-btn" data-id="${escapeHTML(instance.instanceId)}">${t.detailsButton || 'Details'}</button>
                                 <div class="confirm-wrapper">
-                                    <button class="btn btn-sm btn-danger delete-btn" data-id="${instance.instanceId}">${t.deleteButton || 'Delete'}</button>
-                                    <div class="confirm-message" id="confirm-${instance.instanceId}">
+                                    <button class="btn btn-sm btn-danger delete-btn" data-id="${escapeHTML(instance.instanceId)}">${t.deleteButton || 'Delete'}</button>
+                                    <div class="confirm-message" id="confirm-${escapeHTML(instance.instanceId)}">
                                         <span class="confirm-text">${t.confirmAreYouSure || 'Are you sure?'}</span>
-                                        <button class="btn btn-sm confirm-yes" data-id="${instance.instanceId}">${t.confirmYes || 'Yes'}</button>
-                                        <button class="btn btn-sm confirm-no" data-id="${instance.instanceId}">${t.confirmNo || 'No'}</button>
+                                        <button class="btn btn-sm confirm-yes" data-id="${escapeHTML(instance.instanceId)}">${t.confirmYes || 'Yes'}</button>
+                                        <button class="btn btn-sm confirm-no" data-id="${escapeHTML(instance.instanceId)}">${t.confirmNo || 'No'}</button>
                                     </div>
                                 </div>
                             </div>
@@ -326,16 +337,16 @@
             detailsContent.innerHTML = `
                 <div class="form-group">
                     <label>${t.nameLabel || 'Name'}</label>
-                    <div class="form-control">${instance.name}</div>
+                    <div class="form-control">${escapeHTML(instance.name)}</div>
                 </div>
                 <div class="form-group">
                     <label>${t.sceneIdLabel || 'Scene ID'}</label>
-                    <div class="form-control">${instance.instanceId}</div>
+                    <div class="form-control">${escapeHTML(instance.instanceId)}</div>
                 </div>
                 ${instance.description ? `
                 <div class="form-group">
                     <label>${t.descriptionLabel || 'Description (optional)'}</label>
-                    <div class="form-control">${instance.description}</div>
+                    <div class="form-control">${escapeHTML(instance.description)}</div>
                 </div>
                 ` : ''}
                 <div class="form-group">
@@ -447,7 +458,7 @@
             alert.className = `alert alert-${type}`;
             alert.innerHTML = `
                 <span class="alert-icon">${type === 'success' ? '✓' : '!'}</span>
-                <span>${message}</span>
+                <span>${escapeHTML(message)}</span>
             `;
             
             // Insert after header
