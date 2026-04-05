@@ -526,12 +526,12 @@
             
             // Apply to second hand dot
             const secondHandDotStyle = document.createElement('style');
-            secondHandDotStyle.innerHTML = `.second-hand::after { background-color: ${accentColor}; }`;
+            secondHandDotStyle.textContent = `.second-hand::after { background-color: ${accentColor}; }`;
             
             // Replace existing style or add new one
             const existingDotStyle = document.getElementById('second-hand-dot-accent-style');
             if (existingDotStyle) {
-                existingDotStyle.innerHTML = secondHandDotStyle.innerHTML;
+                existingDotStyle.textContent = secondHandDotStyle.textContent;
             } else {
                 secondHandDotStyle.id = 'second-hand-dot-accent-style';
                 document.head.appendChild(secondHandDotStyle);
@@ -576,12 +576,12 @@
             const dotTranslateY = -W_d / 2; // Vertical translation to sit on the tip
             
             const secondHandStyle = document.createElement('style');
-            secondHandStyle.innerHTML = `.second-hand::after { width: ${W_d}px; height: ${W_d}px; left: ${dotLeft}px; transform: translateY(${dotTranslateY}px); }`;
+            secondHandStyle.textContent = `.second-hand::after { width: ${W_d}px; height: ${W_d}px; left: ${dotLeft}px; transform: translateY(${dotTranslateY}px); }`;
             
             // Replace existing style or add new one
             const existingStyle = document.getElementById('second-hand-dot-style');
             if (existingStyle) {
-                existingStyle.innerHTML = secondHandStyle.innerHTML;
+                existingStyle.textContent = secondHandStyle.textContent;
             } else {
                 secondHandStyle.id = 'second-hand-dot-style';
                 document.head.appendChild(secondHandStyle);

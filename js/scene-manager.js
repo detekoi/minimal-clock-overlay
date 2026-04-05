@@ -224,20 +224,20 @@
                             <div class="url-display table-url-display">
                                 <span class="truncate">${escapeHTML(url)}</span>
                                 <button class="copy-btn row-copy-btn" data-url="${escapeHTML(url)}">
-                                    ${t.copyButton || 'Copy'}
-                                    <span class="tooltip">${t.copiedTooltip || 'Copied!'}</span>
+                                    ${escapeHTML(t.copyButton || 'Copy')}
+                                    <span class="tooltip">${escapeHTML(t.copiedTooltip || 'Copied!')}</span>
                                 </button>
                             </div>
                         </td>
                         <td>
                             <div class="actions">
-                                <button class="btn btn-sm view-btn" data-id="${escapeHTML(instance.instanceId)}">${t.detailsButton || 'Details'}</button>
+                                <button class="btn btn-sm view-btn" data-id="${escapeHTML(instance.instanceId)}">${escapeHTML(t.detailsButton || 'Details')}</button>
                                 <div class="confirm-wrapper">
-                                    <button class="btn btn-sm btn-danger delete-btn" data-id="${escapeHTML(instance.instanceId)}">${t.deleteButton || 'Delete'}</button>
+                                    <button class="btn btn-sm btn-danger delete-btn" data-id="${escapeHTML(instance.instanceId)}">${escapeHTML(t.deleteButton || 'Delete')}</button>
                                     <div class="confirm-message" id="confirm-${escapeHTML(instance.instanceId)}">
-                                        <span class="confirm-text">${t.confirmAreYouSure || 'Are you sure?'}</span>
-                                        <button class="btn btn-sm confirm-yes" data-id="${escapeHTML(instance.instanceId)}">${t.confirmYes || 'Yes'}</button>
-                                        <button class="btn btn-sm confirm-no" data-id="${escapeHTML(instance.instanceId)}">${t.confirmNo || 'No'}</button>
+                                        <span class="confirm-text">${escapeHTML(t.confirmAreYouSure || 'Are you sure?')}</span>
+                                        <button class="btn btn-sm confirm-yes" data-id="${escapeHTML(instance.instanceId)}">${escapeHTML(t.confirmYes || 'Yes')}</button>
+                                        <button class="btn btn-sm confirm-no" data-id="${escapeHTML(instance.instanceId)}">${escapeHTML(t.confirmNo || 'No')}</button>
                                     </div>
                                 </div>
                             </div>
@@ -336,22 +336,22 @@
             
             detailsContent.innerHTML = `
                 <div class="form-group">
-                    <label>${t.nameLabel || 'Name'}</label>
+                    <label>${escapeHTML(t.nameLabel || 'Name')}</label>
                     <div class="form-control">${escapeHTML(instance.name)}</div>
                 </div>
                 <div class="form-group">
-                    <label>${t.sceneIdLabel || 'Scene ID'}</label>
+                    <label>${escapeHTML(t.sceneIdLabel || 'Scene ID')}</label>
                     <div class="form-control">${escapeHTML(instance.instanceId)}</div>
                 </div>
                 ${instance.description ? `
                 <div class="form-group">
-                    <label>${t.descriptionLabel || 'Description (optional)'}</label>
+                    <label>${escapeHTML(t.descriptionLabel || 'Description (optional)')}</label>
                     <div class="form-control">${escapeHTML(instance.description)}</div>
                 </div>
                 ` : ''}
                 <div class="form-group">
-                    <label>${t.createdLabel || 'Created'}</label>
-                    <div class="form-control">${formatDateTime(instance.createdAt)}</div>
+                    <label>${escapeHTML(t.createdLabel || 'Created')}</label>
+                    <div class="form-control">${escapeHTML(formatDateTime(instance.createdAt))}</div>
                 </div>
             `;
             
@@ -362,11 +362,11 @@
                 instructionEl.innerHTML = `
                     <span class="alert-icon">✓</span>
                     <div>
-                        <strong>${t.nextStepsTitle || 'Next steps:'}</strong>
+                        <strong>${escapeHTML(t.nextStepsTitle || 'Next steps:')}</strong>
                         <ol class="mt-2">
-                            <li>${t.nextStep1 || 'Copy the URL above'}</li>
-                            <li>${t.nextStep2 || 'In OBS, add a Browser Source (size: 300x300)'}</li>
-                            <li>${t.nextStep3 || 'Paste this URL in the Browser Source URL field'}</li>
+                            <li>${escapeHTML(t.nextStep1 || 'Copy the URL above')}</li>
+                            <li>${escapeHTML(t.nextStep2 || 'In OBS, add a Browser Source (size: 300x300)')}</li>
+                            <li>${escapeHTML(t.nextStep3 || 'Paste this URL in the Browser Source URL field')}</li>
                         </ol>
                     </div>
                 `;
